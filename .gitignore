@@ -1,4 +1,11 @@
 *.DS_Store
 *.suo
-Poengrenn.Web/.vs/
-Poengrenn.Web/.vscode/
+*.user
+bin/
+obj/
+.vs/
+.vscode/
+packages/
+*.min.css
+*.min.js
+*.map
