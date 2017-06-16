@@ -1,0 +1,133 @@
+<div class="card">
+  <div class="card-block">
+    <h4 class="card-title">Opprett konkurranseklasse</h4>
+
+    <form #createCompetitionClassForm="ngForm" class="">
+      <div class="form-group">
+        <label class="font-weight-bold">Velg konkurransetype</label>
+        <div class="row">
+          <div class="col">
+            <select [(ngModel)]="model.typeID" class="form-control" name="typeID" (change)="updateClassID()">
+              <option *ngFor="let t of competitionTypes" [ngValue]="t.typeID">
+                {{t?.navn}}
+              </option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="row mt-3">
+          <div class="form-group col">
+            <label class="font-weight-bold" for="Tittel">Tittel</label>
+            <input [(ngModel)]="model.navn" type="text" class="form-control" name="tittel" placeholder="">
+          </div>
+          <div class="form-group col">
+            <label class="font-weight-bold">Kjønn</label>
+            <select [(ngModel)]="model.kjonn" class="form-control" required name="kjonn" (change)="updateClassID()">
+              <option *ngFor="let kjonn of genders" [ngValue]="kjonn?.id">{{kjonn?.navn}}</option>
+            </select>
+          </div>
+        </div>
+
+        <label class="font-weight-bold">Alder</label>
+        <div class="row">
+          <div class="form-group col">
+            <label class="sr-only" for="minAlder">Alder (min)</label>
+            <div class="input-group">
+              <div class="input-group-addon">Fra</div>
+              <input [(ngModel)]="model.minAlder" (change)="updateClassID()" required type="number" class="form-control" name="minAlder" placeholder="">
+              <div class="input-group-addon">år</div>
+            </div>
+          </div>
+          <div class="form-group col">
+            <label class="sr-only" for="maxAlder">Alder (max)</label>
+            <div class="input-group">
+              <div class="input-group-addon">Til og med</div>
+              <input [(ngModel)]="model.maxAlder" (change)="updateClassID()" required type="number" class="form-control" name="maxAlder" placeholder="">
+              <div class="input-group-addon">år</div>
+            </div>
+          </div>
+        </div>
+
+        <label class="font-weight-bold">Startnummer</label>
+        <div class="row">
+          <div class="form-group col">
+            <label class="sr-only" for="forsteStartnummer">Første startnummer</label>
+            <div class="input-group">
+              <div class="input-group-addon">Fra</div>
+              <input [(ngModel)]="model.forsteStartnummer" type="number" required class="form-control" name="forsteStartnummer" placeholder="">
+            </div>
+          </div>
+          <div class="form-group col">
+            <label class="sr-only" for="sisteStartnummer">Siste startnummer</label>
+            <div class="input-group">
+              <div class="input-group-addon">Til og med</div>
+              <input [(ngModel)]="model.sisteStartnummer" type="number" required class="form-control" name="sisteStartnummer" placeholder="">
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col">
+            <div class="row">
+              <div class="col">
+                <label class="font-weight-bold" for="distanseKm">Distanse</label>
+                <div class="input-group">
+                  <input [(ngModel)]="model.distanseKm" (change)="updateClassID()" type="number" required class="form-control" name="distanseKm" placeholder="">
+                  <div class="input-group-addon">km</div>
+                </div>
+              </div>
+              <div class="col">
+                <label class="font-weight-bold">Med tidtaking</label>
+                <div>
+                <label class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" [(ngModel)]="model.medTidtaking" name="medTidtaking">
+                  <span class="custom-control-indicator"></span>
+                  <span class="custom-control-description"></span>
+                </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <label class="font-weight-bold" for="klasseID">KlasseID</label>
+            <input [(ngModel)]="model.klasseID" type="text" class="form-control" disabled name="klasseID">
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="!createCompetitionClassForm.valid || model.kjonn === '0'" (click)="createCompetitionClass()">Opprett konkurranseklasse</button>
+
+    </form>
+
+    <div class="row font-weight-bold mt-5">
+      <div class="col">Tittel</div>
+      <div class="col">TypeID</div>
+      <div class="col">Min alder</div>
+      <div class="col">Max alder </div>
+      <div class="col">Kjønn</div>
+      <div class="col">Første startnummer</div>
+      <div class="col">Siste startnummer</div>
+      <div class="col">Distanse</div>
+      <div class="col">Med tidtaking</div>
+      <div class="col"></div>
+    </div>
+    <div class="row" *ngFor="let class of filterByTypeID(competitionClasses); let i = index; let isEven = even;" [class.evenRow]="isEven">
+      <div class="col">{{class?.navn}}</div><br/>
+      <div class="col"><span *ngIf="class.typeID != '0'">{{class.typeID}}</span></div>
+      <div class="col">{{class?.minAlder}}</div>
+      <div class="col">{{class?.maxAlder}}</div>
+      <div class="col">{{class?.kjonn}}</div>
+      <div class="col">{{class?.forsteStartnummer}}</div>
+      <div class="col">{{class?.sisteStartnummer}}</div>
+      <div class="col"><span *ngIf="class.distanseKm">{{class?.distanseKm}} km</span></div>
+      <div class="col">
+        <label class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" name="medTidtaking" [checked]="class.medTidtaking">
+          <span class="custom-control-indicator"></span>
+          <span class="custom-control-description"></span>
+        </label>
+      </div>
+      <div class="col"><button type="submit" class="btn btn-primary btn-sm" (click)="openEditCompetitionClassModal(class)" name="editBtn"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></div>   
+    </div>
+  </div>
+</div>

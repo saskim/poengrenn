@@ -1,0 +1,16 @@
+<div class="d-flex flex-row align-items-center">
+  <div class="input-group pt-2 pb-2 w-75">
+    <input class="form-control form-control-sm" placeholder="yyyy-mm-dd" name="dp" 
+          [(ngModel)]="dateTemp" (ngModelChange)="modelChange()" [minDate]="minDate" [maxDate]="maxDate" 
+          (navigate)="monthChanged($event.next)" ngbDatepicker #d="ngbDatepicker">
+    <div class="input-group-addon" (click)="d.toggle()">
+      <i class="fa fa-calendar" aria-hidden="true"></i>
+    </div>
+    <div class="input-group-addon" (click)="onDateDelete()">
+      <i class="fa fa-remove text-danger" aria-hidden="true"></i>
+    </div>
+  </div>
+  <div class="p-2">
+    <ngb-timepicker [(ngModel)]="timeTemp" [meridian]="meridian" [spinners]="true" [size]="timeSize"></ngb-timepicker>
+  </div>
+</div>

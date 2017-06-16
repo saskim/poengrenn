@@ -1,0 +1,72 @@
+<div class="modal-header">
+  <h4 class="modal-title">
+    Opprett person 
+  </h4>
+  <button type="button" class="close" aria-label="Lukk" (click)="_activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form #editCompetitionParticipantForm="ngForm" class="">
+    <div class="form-group">
+        
+        <div class="row">
+          <div class="form-group col">
+            <label class="font-weight-bold"></label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col">
+            <label class="font-weight-bold" for="navn">Navn</label>
+            <input [(ngModel)]="personModel.navn" type="number" class="form-control" name="navn" placeholder="">
+          </div>
+
+          <div class="col">
+            <!--<label class="font-weight-bold">Konkurranseklasse</label>
+            <select [(ngModel)]="participant.klasseID" class="form-control" name="klasseID">
+              <option *ngFor="let c of matchingCompetitionClasses" [ngValue]="c.klasseID">
+                {{c?.navn}}
+              </option>
+            </select>-->
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col">
+            <label class="font-weight-bold" for="fornavn">Fornavn</label>
+            <input [(ngModel)]="personModel.fornavn" type="text" class="form-control" name="fornavn" placeholder="">
+          </div>
+
+          <div class="form-group col">
+            <label class="font-weight-bold" for="etternavn">Etternavn</label>
+            <input [(ngModel)]="personModel.etternavn" type="text" class="form-control" name="etternavn" placeholder="">
+          </div>
+
+          <div class="form-group col">
+            <label class="font-weight-bold" for="kjonn">Kjønn</label>
+            <input [(ngModel)]="personModel.kjonn" type="number" class="form-control" name="kjonn" placeholder="">
+          </div>
+
+          <div class="form-group col">
+            <label class="font-weight-bold" for="fodselsar">Fødselsår</label>
+            <input [(ngModel)]="personModel.fodselsar" type="number" class="form-control" name="fodselsar" placeholder="">
+          </div>
+
+          <div class="form-group col">
+            <label class="font-weight-bold" for="epost">E-post</label>
+            <input [(ngModel)]="personModel.epost" type="number" class="form-control" name="epost" placeholder="">
+          </div>
+
+          <div class="form-group col">
+            <label class="font-weight-bold" for="telefon">Telefon</label>
+            <input [(ngModel)]="personModel.telefon" type="number" class="form-control" name="telefon" placeholder="">
+          </div>
+          
+        </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="submit" class="btn btn-primary" (click)="deleteCompetitionParticipant()">Slett</button>
+  <button type="submit" class="btn btn-primary" [disabled]="!editCompetitionParticipantForm.valid" (click)="saveCompetitionParticipant()">Lagre</button>
+  <button type="button" class="btn btn-secondary" (click)="_activeModal.close('Close click')">Lukk</button>
+</div>

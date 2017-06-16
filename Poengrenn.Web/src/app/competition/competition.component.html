@@ -1,0 +1,41 @@
+
+<app-competition-create onCompetitionCreated="onCompetitionCreated()"></app-competition-create>
+
+<h4 class="mt-5">Kommende konkurranser</h4>
+<div class="card mt-3">
+  <div *ngIf="openCompetitions?.length == 0" class="p-2 text-muted">Ingen kommende konkurranser å vise</div>
+  <div class="list-group">
+    <a routerLink="/konkurranse/{{comp?.konkurranseID}}" *ngFor="let comp of openCompetitions" class="list-group-item list-group-item-action flex-column align-items-start">
+      <div class="d-flex justify-content-between w-100">
+        <div><h5 class="">{{comp?.navn}}</h5></div>
+        
+        <div><h5 class="" *ngIf="comp">{{comp?.dato | amDateFormat:'DD.MM.YYYY'}}</h5></div>
+      
+        <div class="">
+          kl. {{comp?.dato | amDateFormat:'HH:mm'}}
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+
+<div class="mt-5">
+  <h4>Resultater</h4>
+  <div class="card mt-3">
+    <div *ngIf="doneCompetitions?.length == 0" class="p-2 text-muted">Ingen ferdige konkurranser å vise</div>
+    <div class="list-group">
+      <a routerLink="/konkurranse/{{comp?.konkurranseID}}" *ngFor="let comp of doneCompetitions" class="list-group-item list-group-item-action flex-column align-items-start">
+        <div class="d-flex justify-content-between w-100">
+          <div><h5 class="">{{comp?.navn}}</h5></div>
+          
+          <div><h5 class="" *ngIf="comp">{{comp?.dato | amDateFormat:'DD.MM.YYYY'}}</h5></div>
+        
+          <div class="">
+            kl. {{comp?.dato | amDateFormat:'HH:mm'}}
+          </div>
+        </div>
+      </a>
+    </div>
+</div>
+</div>

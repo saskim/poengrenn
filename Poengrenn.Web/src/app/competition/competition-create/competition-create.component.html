@@ -1,0 +1,56 @@
+<div class="card">
+  <div class="card-block">
+    <h4 class="card-title">Opprett konkurranse</h4>
+
+    <form #createCompetitionForm="ngForm" class="">
+      <div class="form-group">
+        <select [(ngModel)]="model.typeID" class="form-control" name="type" (change)="setDefaultCompetitionName()">
+          <option *ngFor="let ct of competitionTypes" [ngValue]="ct.typeID" [hidden]="ct.typeID == defaultCompetitionType.typeID">
+            {{ct?.navn}}
+          </option>
+        </select>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <app-date-selector [index]="0" [date]="model.datoer[0]" [minDate]="minDate" 
+            (onMonthChange)="onMonthChange(0, $event)"
+            (onDateChange)="setTempDato(0, $event)">
+          </app-date-selector>
+        </div>
+
+        <div class="col-12 col-md-6"></div>
+
+        <div class="col-12 col-md-6" *ngFor="let dato of model.datoer; let i = index;">
+
+          <app-date-selector *ngIf="i > 0" [index]="i" [date]="dato" [minDate]="minDate" 
+            (onDateChange)="setTempDato(i, $event)"
+            (onDelete)="removeTempDato(i)">
+          </app-date-selector>
+          
+          
+          <!--<div *ngIf="i > 0" class="d-md-inline-flex">
+            <button type="submit" class="btn btn-secondary btn-sm" (click)="removeTempDato(i)"><i class="fa fa-remove text-danger" aria-hidden="true"></i> Fjern dato</button>
+          </div>-->
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col pb-3">
+          <button class="btn btn-secondary" type="button" (click)="addTempDato()"><i class="fa fa-plus" aria-hidden="true"></i> Legg til flere datoer</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col">
+          <label class="sr-only" for="navn">Navn</label>
+          <input [(ngModel)]="model.navn" type="text" class="form-control" name="navn" placeholder="Navn">
+        </div>
+      </div>
+      
+      
+      <button type="submit" class="btn btn-primary" (click)="createCompetition()">Opprett konkurranse</button>
+
+    </form>
+  </div>
+</div>
