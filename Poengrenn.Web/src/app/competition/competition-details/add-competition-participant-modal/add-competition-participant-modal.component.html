@@ -7,7 +7,7 @@
   </button>
 </div>
 <div class="modal-body">
-  <form #editCompetitionParticipantForm="ngForm" class="">
+  <form #addCompetitionParticipantForm="ngForm" class="">
     <div class="form-group">
         
         <div class="row">
@@ -16,11 +16,6 @@
           </div>
         </div>
         <div class="row">
-          <div class="form-group col">
-            <label class="font-weight-bold" for="navn">Navn</label>
-            <input [(ngModel)]="personModel.navn" type="number" class="form-control" name="navn" placeholder="">
-          </div>
-
           <div class="col">
             <!--<label class="font-weight-bold">Konkurranseklasse</label>
             <select [(ngModel)]="participant.klasseID" class="form-control" name="klasseID">
@@ -33,27 +28,31 @@
         <div class="row">
           <div class="form-group col">
             <label class="font-weight-bold" for="fornavn">Fornavn</label>
-            <input [(ngModel)]="personModel.fornavn" type="text" class="form-control" name="fornavn" placeholder="">
+            <input [(ngModel)]="personModel.fornavn" type="text" required class="form-control" name="fornavn" placeholder="">
           </div>
 
           <div class="form-group col">
             <label class="font-weight-bold" for="etternavn">Etternavn</label>
-            <input [(ngModel)]="personModel.etternavn" type="text" class="form-control" name="etternavn" placeholder="">
+            <input [(ngModel)]="personModel.etternavn" type="text" required class="form-control" name="etternavn" placeholder="">
           </div>
-
+        </div>
+        <div class="row">
           <div class="form-group col">
             <label class="font-weight-bold" for="kjonn">Kjønn</label>
-            <input [(ngModel)]="personModel.kjonn" type="number" class="form-control" name="kjonn" placeholder="">
+            <select [(ngModel)]="personModel.kjonn" class="form-control" required name="kjonn">
+              <option *ngFor="let kjonn of genders" [ngValue]="kjonn?.id">{{kjonn?.navn}}</option>
+            </select>
           </div>
 
           <div class="form-group col">
             <label class="font-weight-bold" for="fodselsar">Fødselsår</label>
-            <input [(ngModel)]="personModel.fodselsar" type="number" class="form-control" name="fodselsar" placeholder="">
+            <input [(ngModel)]="personModel.fodselsar" type="number" required class="form-control" name="fodselsar" placeholder="">
           </div>
-
+        </div>
+        <div class="row">
           <div class="form-group col">
             <label class="font-weight-bold" for="epost">E-post</label>
-            <input [(ngModel)]="personModel.epost" type="number" class="form-control" name="epost" placeholder="">
+            <input [(ngModel)]="personModel.epost" type="text" required class="form-control" name="epost" placeholder="">
           </div>
 
           <div class="form-group col">
@@ -66,7 +65,6 @@
   </form>
 </div>
 <div class="modal-footer">
-  <button type="submit" class="btn btn-primary" (click)="deleteCompetitionParticipant()">Slett</button>
-  <button type="submit" class="btn btn-primary" [disabled]="!editCompetitionParticipantForm.valid" (click)="saveCompetitionParticipant()">Lagre</button>
+  <button type="submit" class="btn btn-primary" [disabled]="!addCompetitionParticipantForm.valid" (click)="saveCompetitionParticipant()">Opprett</button>
   <button type="button" class="btn btn-secondary" (click)="_activeModal.close('Close click')">Lukk</button>
 </div>

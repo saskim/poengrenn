@@ -59,25 +59,8 @@ export class CompetitionDetailsComponent implements OnInit {
       competitionClasses: new Array<string>()
     }
   }
-
   onPersonSelected(selectedItemEvent) {
-    this.selectedPerson = selectedItemEvent.item;
-    console.log(this.selectedPerson);
-
-    this.canRegister = true;
-    this.errorMessage = "Velg konkurranseklasse";
-    this.selectedCompetitionClass = new KonkurranseKlasse();
-
-    let deltaker = this.competition.konkurranseDeltakere.find(d => d.personID == this.selectedPerson.personID);
-    if (deltaker) {
-      this.canRegister = false;
-      this.errorMessage = "Du er allerede påmeldt i klassen '" + this.getKonkurranseKlasseNavn(deltaker.klasseID) + "'";
-    }
-      
-
-    this.matchingCompetitionClasses = this.findBestMatchingClass(this.selectedPerson);
-    if (this.matchingCompetitionClasses.length == 1 && this.canRegister)
-      this.onCompetitionClassChange(this.matchingCompetitionClasses[0]);
+    this.setSelectedPerson(selectedItemEvent.item);
   }
   onCompetitionClassChange(competitionClass: KonkurranseKlasse) {
     this.selectedCompetitionClass = competitionClass;
@@ -165,7 +148,13 @@ export class CompetitionDetailsComponent implements OnInit {
     const modalRef = this._modalService.open(AddCompetitionParticipantModalComponent, options);
 
     modalRef.result.then((result) => {
-      // TODO
+      if (typeof result == "object" && result.personID) {
+        let person = result as Person;
+        this.getPersonsForSearch();
+        this.setSelectedPerson(person);
+        
+        this.searchModel = person;
+      }
     });
   }
   openEditResultsModal() {
@@ -177,6 +166,25 @@ export class CompetitionDetailsComponent implements OnInit {
     modalRef.result.then((result) => {
       // TODO
     });
+  }
+
+  private setSelectedPerson(person: Person) {
+    this.selectedPerson = person;
+    console.log(this.selectedPerson);
+
+    this.canRegister = true;
+    this.errorMessage = "Velg konkurranseklasse";
+    this.selectedCompetitionClass = new KonkurranseKlasse();
+
+    let deltaker = this.competition.konkurranseDeltakere.find(d => d.personID == this.selectedPerson.personID);
+    if (deltaker) {
+      this.canRegister = false;
+      this.errorMessage = "Du er allerede påmeldt i klassen '" + this.getKonkurranseKlasseNavn(deltaker.klasseID) + "'";
+    }
+
+    this.matchingCompetitionClasses = this.findBestMatchingClass(this.selectedPerson);
+    if (this.matchingCompetitionClasses.length == 1 && this.canRegister)
+      this.onCompetitionClassChange(this.matchingCompetitionClasses[0]);
   }
 
   private filterCompetitionParticipants(participants: KonkurranseDeltaker[]) {

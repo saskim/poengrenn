@@ -82,6 +82,10 @@ export class ApiService {
     return this.get(Endpoints.Person.GetAll);
   }
 
+  public AddPerson(person: Person) : Observable<Person> {
+    return this.post(Endpoints.Person.Post, person);
+  }
+
   /* PRIVATE methods */
   private post(url: string, body: any) : Observable<any> {
     console.log("--------- POST " + url);
