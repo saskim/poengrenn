@@ -5,3 +5,7 @@
 .form-check-inline {
     margin-left: 0;
 }
+
+.input-group-btn:not(:first-child) > .btn {
+    margin-right: 10px;
+}

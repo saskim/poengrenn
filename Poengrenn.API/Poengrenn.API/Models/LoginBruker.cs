@@ -14,4 +14,10 @@ namespace Poengrenn.API.Models
         [DataType(DataType.Password)]
         public string Passord { get; set; }
     }
+    public class LoginResponse
+    {
+        public string Brukernavn { get; set; }
+        public string Rolle { get; set; }
+        public string Token { get; set; }
+    }
 }

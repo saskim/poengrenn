@@ -6,7 +6,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MomentModule } from 'angular2-moment';
 
-import { AuthGuard } from './_guards/auth-guard';
+import { AdminGuard } from './_guards/auth-guard';
+import { ApiService } from './_services/api.service';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -21,8 +22,11 @@ import { DateSelectorComponent } from './_shared/components/date-selector/date-s
 import { CompetitionClassesComponent } from './competition/competition-classes/competition-classes.component';
 import { EditCompetitionClassModalComponent } from './competition/competition-classes/edit-competition-class-modal/edit-competition-class-modal.component';
 import { EditCompetitionParticipantModalComponent } from './competition/competition-details/edit-competition-participant-modal/edit-competition-participant-modal.component';
-import { AddCompetitionParticipantModalComponent } from './competition/competition-details/add-competition-participant-modal/add-competition-participant-modal.component';
+import { PersonModalComponent } from './competition/competition-details/person-modal/person-modal.component';
 import { RegisterCompetitionResultsModalComponent } from './competition/competition-details/register-competition-results-modal/register-competition-results-modal.component';
+import { AdminLoginComponent } from './auth/login/admin-login.component';
+import { LogoutComponent } from './auth/logout/logout.component';
+import { UserLoginComponent } from './auth/login/user-login.component';
 
 @NgModule({
   declarations: [
@@ -38,13 +42,16 @@ import { RegisterCompetitionResultsModalComponent } from './competition/competit
     CompetitionClassesComponent,
     EditCompetitionClassModalComponent,
     EditCompetitionParticipantModalComponent,
-    AddCompetitionParticipantModalComponent,
-    RegisterCompetitionResultsModalComponent
+    PersonModalComponent,
+    RegisterCompetitionResultsModalComponent,
+    AdminLoginComponent,
+    LogoutComponent,
+    UserLoginComponent
   ],
   entryComponents: [
     EditCompetitionClassModalComponent,
     EditCompetitionParticipantModalComponent,
-    AddCompetitionParticipantModalComponent,
+    PersonModalComponent,
     RegisterCompetitionResultsModalComponent
   ],
   imports: [
@@ -56,7 +63,8 @@ import { RegisterCompetitionResultsModalComponent } from './competition/competit
     MomentModule
   ],
   providers: [
-    AuthGuard
+    AdminGuard,
+    ApiService
   ],
   bootstrap: [AppComponent]
 })

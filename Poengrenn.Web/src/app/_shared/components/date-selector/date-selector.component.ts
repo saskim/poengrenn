@@ -19,6 +19,7 @@ export class DateSelectorComponent implements OnInit {
   
   dateTemp: NgbDateStruct;
   timeTemp = { hour: 17, minute: 0 };
+  meridian;
 
   timeSize = "small";
 

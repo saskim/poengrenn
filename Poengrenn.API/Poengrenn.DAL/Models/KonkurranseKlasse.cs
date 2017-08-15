@@ -17,7 +17,7 @@ namespace Poengrenn.DAL.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public KonkurranseKlasse()
         {
-            this.KonkurranseDeltakere = new HashSet<KonkurranseDeltaker>();
+            this.KonkurranseDeltaker = new HashSet<KonkurranseDeltaker>();
         }
     
         public string KlasseID { get; set; }
@@ -33,6 +33,6 @@ namespace Poengrenn.DAL.Models
     
         public virtual KonkurranseType KonkurranseType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<KonkurranseDeltaker> KonkurranseDeltakere { get; set; }
+        public virtual ICollection<KonkurranseDeltaker> KonkurranseDeltaker { get; set; }
     }
 }

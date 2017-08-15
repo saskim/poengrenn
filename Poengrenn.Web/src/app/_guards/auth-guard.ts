@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, CanActivate } from '@angular/router';
+import { AuthService } from 'app/_services/auth.service';
 
 @Injectable()
-export class AuthGuard {
+export class AdminGuard {
 
-  constructor() { }
+  constructor(private _authService: AuthService) { }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
-    return true;
+    return this._authService.isAdmin();
+    //return this._authService.isAuthenticated();
   }
 }

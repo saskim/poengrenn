@@ -16,15 +16,17 @@ namespace Poengrenn.DAL.Models
     {
         public int KonkurranseID { get; set; }
         public string KlasseID { get; set; }
+        public string TypeID { get; set; }
         public int PersonID { get; set; }
         public Nullable<int> StartNummer { get; set; }
         public Nullable<System.TimeSpan> StartTid { get; set; }
         public Nullable<System.TimeSpan> SluttTid { get; set; }
         public Nullable<System.TimeSpan> Tidsforbruk { get; set; }
-        public string TypeID { get; set; }
+        public Nullable<bool> Betalt { get; set; }
+        public Nullable<bool> Tilstede { get; set; }
     
         public virtual Konkurranse Konkurranse { get; set; }
-        public virtual Person Person { get; set; }
         public virtual KonkurranseKlasse KonkurranseKlasse { get; set; }
+        public virtual Person Person { get; set; }
     }
 }

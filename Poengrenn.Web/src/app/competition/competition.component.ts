@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ApiService } from 'app/_services/api.service';
+import { AuthService } from 'app/_services/auth.service';
 
 import { Konkurranse } from 'app/_models/models';
 
@@ -8,7 +9,7 @@ import { Konkurranse } from 'app/_models/models';
   selector: 'app-competition',
   templateUrl: './competition.component.html',
   styleUrls: ['./competition.component.scss'],
-  providers: [ ApiService ]
+  providers: [ ]
 })
 export class CompetitionComponent implements OnInit {
 
@@ -16,7 +17,9 @@ export class CompetitionComponent implements OnInit {
   openCompetitions: Konkurranse[];
   doneCompetitions: Konkurranse[];
 
-  constructor(private _apiService: ApiService) { }
+  constructor(
+    private _apiService: ApiService,
+    private _authService: AuthService) { }
 
   ngOnInit() {
     this.getOpenCompetitions();
@@ -25,6 +28,10 @@ export class CompetitionComponent implements OnInit {
 
   onCompetitionCreated() {
     this.getOpenCompetitions();
+  }
+
+  isAdmin() {
+    return this._authService.isAdmin();
   }
 
   getOpenCompetitions() {

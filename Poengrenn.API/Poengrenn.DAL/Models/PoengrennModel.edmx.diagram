@@ -4,21 +4,21 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9cbec3f080fc4c9491f8a48e8853450c" Name="Diagram1">
+      <Diagram DiagramId="9cbec3f080fc4c9491f8a48e8853450c" Name="Diagram1" ZoomLevel="86">
         <EntityTypeShape EntityType="PoengrennModel.Klubbmesterskap" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="PoengrennModel.Poengrenn" Width="1.5" PointX="6.625" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="PoengrennModel.PoengrennSerie" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="PoengrennModel.Startnummere" Width="1.5" PointX="8.375" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="PoengrennModel.Konkurranse" Width="1.5" PointX="0.75" PointY="3.875" />
-        <EntityTypeShape EntityType="PoengrennModel.KonkurranseDeltaker" Width="1.5" PointX="4.75" PointY="3.75" />
         <EntityTypeShape EntityType="PoengrennModel.KonkurranseType" Width="1.5" PointX="0.75" PointY="7.125" />
         <AssociationConnector Association="PoengrennModel.FK_Konkurranse_KonkurranseType" />
-        <AssociationConnector Association="PoengrennModel.FK_KonkurranseDeltaker_Konkurranse" />
         <EntityTypeShape EntityType="PoengrennModel.Person" Width="1.5" PointX="6.75" PointY="4.125" />
-        <AssociationConnector Association="PoengrennModel.FK_KonkurranseDeltaker_PersonInfo" />
         <EntityTypeShape EntityType="PoengrennModel.KonkurranseKlasse" Width="1.5" PointX="2.875" PointY="5.75" />
         <AssociationConnector Association="PoengrennModel.FK_KonkurranseKlasse_KonkurranseType" />
+        <EntityTypeShape EntityType="PoengrennModel.KonkurranseDeltaker" Width="1.5" PointX="4.75" PointY="3.875" />
+        <AssociationConnector Association="PoengrennModel.FK_KonkurranseDeltaker_Konkurranse" />
         <AssociationConnector Association="PoengrennModel.FK_KonkurranseDeltaker_KonkurranseKlasse" />
+        <AssociationConnector Association="PoengrennModel.FK_KonkurranseDeltaker_PersonInfo" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
 import { Endpoints } from 'app/_shared/constants/endpoints';
-import { Konkurranse, KonkurranseOpprett, KonkurranseKlasse, KonkurranseDeltaker, NyKonkurranseDeltaker, KonkurranseType, Person } from 'app/_models/models';
+import { Konkurranse, KonkurranseOpprett, KonkurranseKlasse, KonkurranseDeltaker, NyKonkurranseDeltaker, KonkurranseType, Person, LoginModel, LoginResponse } from 'app/_models/models';
 
 @Injectable()
 export class ApiService {
@@ -84,6 +84,15 @@ export class ApiService {
 
   public AddPerson(person: Person) : Observable<Person> {
     return this.post(Endpoints.Person.Post, person);
+  }
+
+  public UpdatePerson(person: Person) : Observable<Person> {
+    return this.put(Endpoints.Person.Put, person);
+  }
+
+    /* ----- USER ----- */
+  public Login(loginData: LoginModel) : Observable<LoginResponse> {
+    return this.post(Endpoints.User.Login, loginData);
   }
 
   /* PRIVATE methods */

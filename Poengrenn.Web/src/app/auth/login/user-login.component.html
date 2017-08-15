@@ -1,0 +1,43 @@
+<div class="col-md-10 col-md-offset-2">
+    <h2>Logg inn</h2>
+    <form name="form" (ngSubmit)="loginform.form.valid && login()" #loginform="ngForm" novalidate>
+        <div class="form-group" [ngClass]="{ 'has-error': loginform.submitted && !model.brukernavn }">
+            <!-- <label for="brukernavn">Brukernavn</label>
+            <input type="text" class="form-control" name="brukernavn" [(ngModel)]="model.brukernavn" #brukernavn="ngModel" required /> -->
+            <div class="mt-3">
+              <ng-template #searchResultFormatter let-r="result" let-t="term">
+                {{ r?.fornavn }} {{r?.etternavn}} ({{r?.fodselsar}}) <small class="text-muted">ID={{r.personID}}</small>
+              </ng-template>
+              <div class="input-group">
+                <div class="input-group-addon hidden-sm-down">Finn person</div>
+                <input id="typeahead-search" type="text" class="form-control" name="person"
+                  [(ngModel)]="searchModel" 
+                  [ngbTypeahead]="search" 
+                  [resultTemplate]="searchResultFormatter" 
+                  [inputFormatter]="searchFormatter" 
+                  (selectItem)="onPersonSelected($event)"
+                  placeholder="Søk etter fornavn eller etternavn" />
+                <span class="input-group-btn">
+                  <button class="btn btn-secondary" type="button" (click)="setSelectedPerson(null)"><i class="fa fa-times" aria-hidden="true"></i></button>
+                </span>
+                <!-- <span class="input-group-btn" *ngIf="!selectedPerson">
+                  <button type="submit" class="btn btn-primary" (click)="openPersonModal()">Opprett person...</button>
+                </span> -->
+              </div>
+              
+            </div>
+            <div *ngIf="loginform.submitted && !model.brukernavn" class="help-block">Brukernavn må fylles ut</div>
+        </div>
+        <div class="form-group" [ngClass]="{ 'has-error': loginform.submitted && !passord.valid }">
+            <label for="passord">E-post / mobil</label>
+            <input type="text" class="form-control" name="passord" [(ngModel)]="model.passord" #passord="ngModel" required />
+            <div *ngIf="loginform.submitted && !passord.valid" class="help-block">E-post/mobilnr. må fylles ut</div>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary">Logg inn</button>
+        </div>
+        <div class="alert alert-danger" *ngIf="errorMessage">
+          {{errorMessage}}
+        </div>
+    </form>
+</div>

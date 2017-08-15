@@ -4,7 +4,7 @@
 
     <form #createCompetitionForm="ngForm" class="">
       <div class="form-group">
-        <select [(ngModel)]="model.typeID" class="form-control" name="type" (change)="setDefaultCompetitionName()">
+        <select [(ngModel)]="model.typeID" class="form-control" name="type" (change)="setDefaultCompetitionName(0)">
           <option *ngFor="let ct of competitionTypes" [ngValue]="ct.typeID" [hidden]="ct.typeID == defaultCompetitionType.typeID">
             {{ct?.navn}}
           </option>

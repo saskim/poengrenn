@@ -6,9 +6,10 @@ import 'rxjs/add/operator/map';
 import { NgbModal, NgbModalOptions  } from '@ng-bootstrap/ng-bootstrap';
 
 import { ApiService } from 'app/_services/api.service';
+import { AuthService } from 'app/_services/auth.service';
 import { Konkurranse, KonkurranseKlasse, KonkurranseDeltaker, NyKonkurranseDeltaker, Person } from 'app/_models/models';
 import { EditCompetitionParticipantModalComponent } from './edit-competition-participant-modal/edit-competition-participant-modal.component';
-import { AddCompetitionParticipantModalComponent } from './add-competition-participant-modal/add-competition-participant-modal.component';
+import { PersonModalComponent } from './person-modal/person-modal.component';
 import { RegisterCompetitionResultsModalComponent } from './register-competition-results-modal/register-competition-results-modal.component';
 import { GENDERS } from 'app/_shared/constants/constants';
 
@@ -16,7 +17,7 @@ import { GENDERS } from 'app/_shared/constants/constants';
   selector: 'app-competition-details',
   templateUrl: './competition-details.component.html',
   styleUrls: ['./competition-details.component.scss'],
-  providers: [ApiService]
+  providers: []
 })
 export class CompetitionDetailsComponent implements OnInit {
 
@@ -30,6 +31,8 @@ export class CompetitionDetailsComponent implements OnInit {
   matchingCompetitionClasses: KonkurranseKlasse[];
   errorMessage: string;
   canRegister: boolean;
+  
+  lastAddedPerson: Person;
 
   filteredParticpants: KonkurranseDeltaker[];
   filter : {
@@ -44,6 +47,7 @@ export class CompetitionDetailsComponent implements OnInit {
   constructor(
     private _route: ActivatedRoute, 
     private _apiService: ApiService,
+    private _authService: AuthService,
     private _modalService: NgbModal) { }
 
   ngOnInit() {
@@ -87,6 +91,35 @@ export class CompetitionDetailsComponent implements OnInit {
     this.filterCompetitionParticipants(this.competition.konkurranseDeltakere);
   }
 
+  isAdmin() {
+    return this._authService.isAdmin();
+  }
+  isMe() {
+    if (!this.selectedPerson)
+      return false;
+    
+    let loggedInUser = this._authService.loggedInUser();
+    return loggedInUser && loggedInUser.brukernavn == this.selectedPerson.personID.toString();
+  }
+
+  updateTilstede(participant: KonkurranseDeltaker) {
+    participant.tilstede = !participant.tilstede;
+    this.saveCompetitionParticipant(participant);
+  }
+
+  updateBetalt(participant: KonkurranseDeltaker) {
+    participant.betalt = !participant.betalt;
+    this.saveCompetitionParticipant(participant);
+  }
+
+  private saveCompetitionParticipant(participant: KonkurranseDeltaker) {
+    this._apiService.UpdateCompetitionParticipant(participant)
+      .subscribe((result: KonkurranseDeltaker) => {
+        console.log(result);
+    });
+  }
+
+
   registerForCompetition() {
     let nyKonkurranseDeltaker = new NyKonkurranseDeltaker();
     nyKonkurranseDeltaker.personID = this.selectedPerson.personID;
@@ -97,6 +130,8 @@ export class CompetitionDetailsComponent implements OnInit {
         console.log(result);
         
         this.getCompetitionParticipants();
+        this.lastAddedPerson = this.selectedPerson;
+        this.setSelectedPerson(null);
       });
   }
 
@@ -121,11 +156,13 @@ export class CompetitionDetailsComponent implements OnInit {
     return (klasse) ? klasse.navn : '';
   }
 
+
+  // TODO: Create component of the searchbox
   search = (text$: Observable<string>) =>
     text$
       .debounceTime(200)
       .map(term => {
-        return term == '' ? [] :  this.persons.filter(p => p.fornavn.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10);
+        return term == '' ? [] :  this.persons.filter(p => p.fornavn.toLowerCase().indexOf(term.toLowerCase()) > -1 || p.etternavn.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10);
       });
 
   searchFormatter(p: {fornavn: string, etternavn: string, fodselsar: number, personID: string}) {
@@ -143,9 +180,10 @@ export class CompetitionDetailsComponent implements OnInit {
       this.getCompetitionParticipants();
     });
   }
-  openAddPersonModal() {
+  openPersonModal(editPerson: Person) {
     let options: NgbModalOptions = { size: "lg" };
-    const modalRef = this._modalService.open(AddCompetitionParticipantModalComponent, options);
+    const modalRef = this._modalService.open(PersonModalComponent, options);
+    modalRef.componentInstance.editPerson = editPerson;
 
     modalRef.result.then((result) => {
       if (typeof result == "object" && result.personID) {
@@ -161,17 +199,24 @@ export class CompetitionDetailsComponent implements OnInit {
     let options: NgbModalOptions = { size: "lg" };
     const modalRef = this._modalService.open(RegisterCompetitionResultsModalComponent, options);
     
-    modalRef.componentInstance.participants = this.competition.konkurranseDeltakere;
+    modalRef.componentInstance.competition = this.competition;
+    modalRef.componentInstance.competition.konkurranseKlasser = this.competitionClasses;
 
     modalRef.result.then((result) => {
       // TODO
     });
   }
 
-  private setSelectedPerson(person: Person) {
+  setSelectedPerson(person: Person) {
     this.selectedPerson = person;
     console.log(this.selectedPerson);
 
+    if (!person) {
+      this.searchModel = null;
+      this.matchingCompetitionClasses = null;
+      this.errorMessage = "";
+      return;
+    }
     this.canRegister = true;
     this.errorMessage = "Velg konkurranseklasse";
     this.selectedCompetitionClass = new KonkurranseKlasse();
@@ -203,8 +248,6 @@ export class CompetitionDetailsComponent implements OnInit {
 
       if (participantsResult)
         this.filteredParticpants = participantsResult;
-        
-      console.log(this.filteredParticpants);
     }
   }
 
@@ -234,11 +277,15 @@ export class CompetitionDetailsComponent implements OnInit {
 
   private findBestMatchingClass(person: Person) {
     let alder = new Date().getFullYear() - person.fodselsar;
-    return this.competitionClasses.filter(function (item) {
-      let matchingAge = (item.minAlder <= alder && item.maxAlder >= alder);
+    
+    let compClasses = this.competitionClasses.filter(function (item) {
+      let matchingAge = person.fodselsar == 1900 || (item.minAlder <= alder && item.maxAlder >= alder);
       let matchingGender = (item.kjonn.toLowerCase() === person.kjonn.toLowerCase() || item.kjonn.toLowerCase() === 'mix');
       
       return (matchingAge && matchingGender);
     });
+    
+    if (compClasses && compClasses.length > 0)
+      return compClasses;
   }
 }

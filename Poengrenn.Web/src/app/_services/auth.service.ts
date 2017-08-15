@@ -1,27 +1,46 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import { LoginModel, LoginResponse } from 'app/_models/models';
+
+import { ApiService } from 'app/_services/api.service';
+
 
 @Injectable()
 export class AuthService {
 
-  constructor(private http: Http) { }
+  constructor(private _apiService: ApiService) { }
 
-    login(username: string, password: string) {
-        return this.http.post('/api/bruker/login', JSON.stringify({ username: username, password: password }))
-            .map((response: Response) => {
-                // login successful if there's a jwt token in the response
-                let user = response.json();
-                if (user) {
-                //if (user && user.token) {
-                    // store user details and jwt token in local storage to keep user logged in between page refreshes
-                    //localStorage.setItem('currentUser', JSON.stringify(user));
-                }
+    loggedInUser() : LoginResponse {
+        return this.getUserFromLocalStorage();
+    }
+    isAuthenticated() : boolean {
+        let user: LoginResponse = this.getUserFromLocalStorage();
+        return (user && (user.rolle == "admin" || user.rolle == "user"));
+    }
+    isAdmin() : boolean {
+        let user: LoginResponse = this.getUserFromLocalStorage();
+        return (user && user.rolle == "admin");
+    }
+
+    authenticate(loginData: LoginModel) : Observable<LoginResponse> {
+        return this._apiService.Login(loginData)
+            .map(response => {
+                localStorage.setItem('currentUser', JSON.stringify(response));
+                return response;
             });
     }
 
     logout() {
         // remove user from local storage to log user out
-        //localStorage.removeItem('currentUser');
+        localStorage.removeItem('currentUser');
     }
 
+    private getUserFromLocalStorage() : LoginResponse {
+        let user: LoginResponse
+        let value : string = localStorage.getItem('currentUser');
+        if (value && value != "undefined" && value != "null") {
+            return <LoginResponse>JSON.parse(value);
+        }
+        return null;
+    }
 }
