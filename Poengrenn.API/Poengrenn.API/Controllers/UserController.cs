@@ -9,32 +9,41 @@ using System.Web.Http;
 namespace Poengrenn.API.Controllers
 {
     [RoutePrefix("api/bruker")]
-    [AllowAnonymous]
     public class UserController : ApiController
     {
-        // GET api/user
-        public IEnumerable<string> Get()
+        public UserController()
         {
-            return new string[] { "value1", "value2" };
+            
         }
-
-        // GET api/user/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        [Route("registrer")]
-        [HttpPost]
-        public void Post([FromBody]RegistrerBruker bruker)
-        {
-        }
-
+        
         [Route("login")]
         [HttpPost]
-        public string Post(LoginBruker bruker)
+        public LoginResponse Post(LoginBruker bruker)
         {
-            return "jwt token";
+            var loginResponse = new LoginResponse();
+            loginResponse.Brukernavn = bruker.Brukernavn;
+
+            if (bruker.Brukernavn == "admin" && bruker.Passord == "klabbe333")
+            {
+                loginResponse.Rolle = "admin";
+                loginResponse.Token = "jwtadmintoken"; // TODO
+            }
+            else
+            {
+                int personId = 0;
+                Int32.TryParse(bruker.Brukernavn, out personId);
+                if (personId == 0)
+                    return null;
+
+                var personCtrl = new PersonController();
+                var person = personCtrl.Get(personId);
+                if (person != null && (person.Epost == bruker.Passord || person.Telefon == bruker.Passord))
+                {
+                    loginResponse.Rolle = "user";
+                    loginResponse.Token = "jwtusertoken"; // TODO
+                }
+            }
+            return loginResponse;
         }
 
         [Route("logout")]

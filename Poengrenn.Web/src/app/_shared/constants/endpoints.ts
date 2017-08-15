@@ -1,6 +1,9 @@
 import { environment } from 'environments/environment';
 
 export const Endpoints = {
+    User: {
+        Login:                      environment.restApiUrl + 'bruker/login'
+    },
     Competition: {
         GetAll:                     environment.restApiUrl + 'konkurranse/',
         GetOpen:                    environment.restApiUrl + 'konkurranse/open',

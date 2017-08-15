@@ -1,3 +1,77 @@
-<p>
-  register-competition-results-modal works!
-</p>
+<div class="modal-header">
+  <h4 class="modal-title">
+    Registrer resultater 
+    <small class="text-muted">{{competition?.navn}}</small>
+  </h4>
+  <button type="button" class="close" aria-label="Lukk" (click)="_activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <!--<label class="font-weight-bold">Konkurranseklasse</label>
+  <select [(ngModel)]="selectedCompetitionClass" class="form-control" name="klasseID">
+    <option *ngFor="let c of competitionClasses" [ngValue]="c.klasseID">
+      {{c?.navn}}
+    </option>
+  </select>-->
+  <form #registerResultsForm="ngForm" class="">
+    
+    <div class="form-group">
+        <div class="row pt-2">
+          <div class="col">
+            <button type="button" class="btn btn-primary" (click)="getParticipant(prevParticipantWithoutTime())">Forrige uten tid</button>
+            <button type="button" class="btn btn-primary" (click)="getParticipant(participantIdx - 1)">Forrige</button>
+            <button type="button" class="btn btn-primary" (click)="getParticipant(participantIdx + 1)">Neste</button>
+            <button type="button" class="btn btn-primary" (click)="getParticipant(nextParticipantWithoutTime())">Neste uten tid</button>
+          </div>
+        </div>
+
+        <div class="row pt-3">
+          <div class="form-group col">
+            <label class="font-weight-bold" for="startnummer">Startnummer</label>
+            <input [ngModel]="currentParticipant.startNummer" (change)="getParticipantByStartnummer($event)" type="number" class="form-control w-50" name="startnummer" placeholder="">
+          </div>
+          <div class="col">
+            <label class="" for="startdiff">Standard startdiff.</label>
+            <div class="input-group w-50">
+              <input [(ngModel)]="defaultStartDiffInSeconds" type="number" class="form-control w-50" name="startdiff" placeholder="">
+              <div class="input-group-addon hidden-sm-down">sekund(er)</div>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="findParticipantMessage">
+            <div class="text-danger">{{findParticipantMessage}}</div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="font-weight-bold text-muted">{{currentParticipant?.person?.fornavn}} {{currentParticipant?.person?.etternavn}} ({{currentParticipant?.person?.fodselsar}})</div>
+            <div class="text-muted">{{currentParticipant?.klasseID}}</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col">
+            <label class="font-weight-bold" for="starttid">Starttid</label>
+            <input [(ngModel)]="currentParticipant.startTid" (change)="updateTidsforbruk()" type="time" step="1" class="form-control" name="starttid" placeholder="">
+          </div>
+          <div class="form-group col">
+            <label class="font-weight-bold" for="sluttid">Sluttid</label>
+            <input [(ngModel)]="currentParticipant.sluttTid" (change)="updateTidsforbruk()" type="time" step="1" class="form-control" name="sluttid" placeholder="">
+          </div>
+          <div class="form-group col">
+            <label class="font-weight-bold" for="tidsforbruk">Tid</label>
+            <input [(ngModel)]="currentParticipant.tidsforbruk" disabled type="time" step="1" class="form-control" name="tidsforbruk" placeholder="">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <button type="button" class="btn btn-primary" (click)="addSeconds(15)">+15 sek</button>
+            <button type="button" class="btn btn-primary" (click)="addSeconds(30)">+30 sek</button>
+          </div>
+        </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="submit" class="btn btn-primary" [disabled]="!registerResultsForm.valid || disableSave" (click)="saveParticipantResult()">Oppdater</button>
+  <button type="button" class="btn btn-secondary" (click)="_activeModal.close('Close click')">Lukk</button>
+</div>

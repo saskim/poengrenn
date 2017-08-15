@@ -43,6 +43,8 @@
           <Property Name="StartTid" Type="time" Precision="7" />
           <Property Name="SluttTid" Type="time" Precision="7" />
           <Property Name="Tidsforbruk" Type="time" Precision="7" />
+          <Property Name="Betalt" Type="bit" />
+          <Property Name="Tilstede" Type="bit" />
         </EntityType>
         <EntityType Name="KonkurranseKlasse">
           <Key>
@@ -277,28 +279,28 @@
           <EntitySet Name="PoengrennSerie" EntityType="Self.PoengrennSerie" />
           <EntitySet Name="Startnummere" EntityType="Self.Startnummere" />
           <EntitySet Name="Konkurranse" EntityType="PoengrennModel.Konkurranse" />
-          <EntitySet Name="KonkurranseDeltaker" EntityType="PoengrennModel.KonkurranseDeltaker" />
           <EntitySet Name="KonkurranseType" EntityType="PoengrennModel.KonkurranseType" />
           <AssociationSet Name="FK_Konkurranse_KonkurranseType" Association="PoengrennModel.FK_Konkurranse_KonkurranseType">
             <End Role="KonkurranseType" EntitySet="KonkurranseType" />
             <End Role="Konkurranse" EntitySet="Konkurranse" />
           </AssociationSet>
-          <AssociationSet Name="FK_KonkurranseDeltaker_Konkurranse" Association="PoengrennModel.FK_KonkurranseDeltaker_Konkurranse">
-            <End Role="Konkurranse" EntitySet="Konkurranse" />
-            <End Role="KonkurranseDeltaker" EntitySet="KonkurranseDeltaker" />
-          </AssociationSet>
           <EntitySet Name="Person" EntityType="PoengrennModel.Person" />
-          <AssociationSet Name="FK_KonkurranseDeltaker_PersonInfo" Association="PoengrennModel.FK_KonkurranseDeltaker_PersonInfo">
-            <End Role="Person" EntitySet="Person" />
-            <End Role="KonkurranseDeltaker" EntitySet="KonkurranseDeltaker" />
-          </AssociationSet>
           <EntitySet Name="KonkurranseKlasse" EntityType="PoengrennModel.KonkurranseKlasse" />
           <AssociationSet Name="FK_KonkurranseKlasse_KonkurranseType" Association="PoengrennModel.FK_KonkurranseKlasse_KonkurranseType">
             <End Role="KonkurranseType" EntitySet="KonkurranseType" />
             <End Role="KonkurranseKlasse" EntitySet="KonkurranseKlasse" />
           </AssociationSet>
+          <EntitySet Name="KonkurranseDeltaker" EntityType="PoengrennModel.KonkurranseDeltaker" />
+          <AssociationSet Name="FK_KonkurranseDeltaker_Konkurranse" Association="PoengrennModel.FK_KonkurranseDeltaker_Konkurranse">
+            <End Role="Konkurranse" EntitySet="Konkurranse" />
+            <End Role="KonkurranseDeltaker" EntitySet="KonkurranseDeltaker" />
+          </AssociationSet>
           <AssociationSet Name="FK_KonkurranseDeltaker_KonkurranseKlasse" Association="PoengrennModel.FK_KonkurranseDeltaker_KonkurranseKlasse">
             <End Role="KonkurranseKlasse" EntitySet="KonkurranseKlasse" />
+            <End Role="KonkurranseDeltaker" EntitySet="KonkurranseDeltaker" />
+          </AssociationSet>
+          <AssociationSet Name="FK_KonkurranseDeltaker_PersonInfo" Association="PoengrennModel.FK_KonkurranseDeltaker_PersonInfo">
+            <End Role="Person" EntitySet="Person" />
             <End Role="KonkurranseDeltaker" EntitySet="KonkurranseDeltaker" />
           </AssociationSet>
           </EntityContainer>
@@ -314,24 +316,6 @@
           <Property Name="Status" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="KonkurranseType" Relationship="PoengrennModel.FK_Konkurranse_KonkurranseType" FromRole="Konkurranse" ToRole="KonkurranseType" />
           <NavigationProperty Name="KonkurranseDeltakere" Relationship="PoengrennModel.FK_KonkurranseDeltaker_Konkurranse" FromRole="Konkurranse" ToRole="KonkurranseDeltaker" />
-        </EntityType>
-        <EntityType Name="KonkurranseDeltaker">
-          <Key>
-            <PropertyRef Name="KonkurranseID" />
-            <PropertyRef Name="KlasseID" />
-            <PropertyRef Name="PersonID" />
-          </Key>
-          <Property Name="KonkurranseID" Type="Int32" Nullable="false" />
-          <Property Name="KlasseID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PersonID" Type="Int32" Nullable="false" />
-          <Property Name="StartNummer" Type="Int32" />
-          <Property Name="StartTid" Type="Time" Precision="7" />
-          <Property Name="SluttTid" Type="Time" Precision="7" />
-          <Property Name="Tidsforbruk" Type="Time" Precision="7" />
-          <NavigationProperty Name="Konkurranse" Relationship="PoengrennModel.FK_KonkurranseDeltaker_Konkurranse" FromRole="KonkurranseDeltaker" ToRole="Konkurranse" />
-          <NavigationProperty Name="Person" Relationship="PoengrennModel.FK_KonkurranseDeltaker_PersonInfo" FromRole="KonkurranseDeltaker" ToRole="Person" />
-          <Property Name="TypeID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="KonkurranseKlasse" Relationship="PoengrennModel.FK_KonkurranseDeltaker_KonkurranseKlasse" FromRole="KonkurranseDeltaker" ToRole="KonkurranseKlasse" />
         </EntityType>
         <EntityType Name="KonkurranseType">
           <Key>
@@ -356,18 +340,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_KonkurranseDeltaker_Konkurranse">
-          <End Type="PoengrennModel.Konkurranse" Role="Konkurranse" Multiplicity="1" />
-          <End Type="PoengrennModel.KonkurranseDeltaker" Role="KonkurranseDeltaker" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Konkurranse">
-              <PropertyRef Name="KonkurranseID" />
-            </Principal>
-            <Dependent Role="KonkurranseDeltaker">
-              <PropertyRef Name="KonkurranseID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="Person">
           <Key>
             <PropertyRef Name="PersonID" />
@@ -379,20 +351,8 @@
           <Property Name="Kjonn" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="Epost" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Telefon" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="KonkurranseDeltakere" Relationship="PoengrennModel.FK_KonkurranseDeltaker_PersonInfo" FromRole="Person" ToRole="KonkurranseDeltaker" />
+          <NavigationProperty Name="KonkurranseDeltaker" Relationship="PoengrennModel.FK_KonkurranseDeltaker_PersonInfo" FromRole="Person" ToRole="KonkurranseDeltaker" />
         </EntityType>
-        <Association Name="FK_KonkurranseDeltaker_PersonInfo">
-          <End Type="PoengrennModel.Person" Role="Person" Multiplicity="1" />
-          <End Type="PoengrennModel.KonkurranseDeltaker" Role="KonkurranseDeltaker" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Person">
-              <PropertyRef Name="PersonID" />
-            </Principal>
-            <Dependent Role="KonkurranseDeltaker">
-              <PropertyRef Name="PersonID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="KonkurranseKlasse">
           <Key>
             <PropertyRef Name="KlasseID" />
@@ -409,7 +369,7 @@
           <Property Name="MedTidtaking" Type="Boolean" Nullable="false" />
           <Property Name="DistanseKm" Type="Decimal" Precision="5" Scale="2" />
           <NavigationProperty Name="KonkurranseType" Relationship="PoengrennModel.FK_KonkurranseKlasse_KonkurranseType" FromRole="KonkurranseKlasse" ToRole="KonkurranseType" />
-          <NavigationProperty Name="KonkurranseDeltakere" Relationship="PoengrennModel.FK_KonkurranseDeltaker_KonkurranseKlasse" FromRole="KonkurranseKlasse" ToRole="KonkurranseDeltaker" />
+          <NavigationProperty Name="KonkurranseDeltaker" Relationship="PoengrennModel.FK_KonkurranseDeltaker_KonkurranseKlasse" FromRole="KonkurranseKlasse" ToRole="KonkurranseDeltaker" />
         </EntityType>
         <Association Name="FK_KonkurranseKlasse_KonkurranseType">
           <End Type="PoengrennModel.KonkurranseType" Role="KonkurranseType" Multiplicity="1" />
@@ -420,6 +380,38 @@
             </Principal>
             <Dependent Role="KonkurranseKlasse">
               <PropertyRef Name="TypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="KonkurranseDeltaker">
+          <Key>
+            <PropertyRef Name="KonkurranseID" />
+            <PropertyRef Name="KlasseID" />
+            <PropertyRef Name="PersonID" />
+          </Key>
+          <Property Name="KonkurranseID" Type="Int32" Nullable="false" />
+          <Property Name="KlasseID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TypeID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PersonID" Type="Int32" Nullable="false" />
+          <Property Name="StartNummer" Type="Int32" />
+          <Property Name="StartTid" Type="Time" Precision="7" />
+          <Property Name="SluttTid" Type="Time" Precision="7" />
+          <Property Name="Tidsforbruk" Type="Time" Precision="7" />
+          <Property Name="Betalt" Type="Boolean" />
+          <Property Name="Tilstede" Type="Boolean" />
+          <NavigationProperty Name="Konkurranse" Relationship="PoengrennModel.FK_KonkurranseDeltaker_Konkurranse" FromRole="KonkurranseDeltaker" ToRole="Konkurranse" />
+          <NavigationProperty Name="KonkurranseKlasse" Relationship="PoengrennModel.FK_KonkurranseDeltaker_KonkurranseKlasse" FromRole="KonkurranseDeltaker" ToRole="KonkurranseKlasse" />
+          <NavigationProperty Name="Person" Relationship="PoengrennModel.FK_KonkurranseDeltaker_PersonInfo" FromRole="KonkurranseDeltaker" ToRole="Person" />
+        </EntityType>
+        <Association Name="FK_KonkurranseDeltaker_Konkurranse">
+          <End Type="PoengrennModel.Konkurranse" Role="Konkurranse" Multiplicity="1" />
+          <End Type="PoengrennModel.KonkurranseDeltaker" Role="KonkurranseDeltaker" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Konkurranse">
+              <PropertyRef Name="KonkurranseID" />
+            </Principal>
+            <Dependent Role="KonkurranseDeltaker">
+              <PropertyRef Name="KonkurranseID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -434,6 +426,18 @@
             <Dependent Role="KonkurranseDeltaker">
               <PropertyRef Name="KlasseID" />
               <PropertyRef Name="TypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_KonkurranseDeltaker_PersonInfo">
+          <End Type="PoengrennModel.Person" Role="Person" Multiplicity="1" />
+          <End Type="PoengrennModel.KonkurranseDeltaker" Role="KonkurranseDeltaker" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="KonkurranseDeltaker">
+              <PropertyRef Name="PersonID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -507,20 +511,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="KonkurranseDeltaker">
-            <EntityTypeMapping TypeName="PoengrennModel.KonkurranseDeltaker">
-              <MappingFragment StoreEntitySet="KonkurranseDeltaker">
-                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
-                <ScalarProperty Name="Tidsforbruk" ColumnName="Tidsforbruk" />
-                <ScalarProperty Name="SluttTid" ColumnName="SluttTid" />
-                <ScalarProperty Name="StartTid" ColumnName="StartTid" />
-                <ScalarProperty Name="StartNummer" ColumnName="StartNummer" />
-                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
-                <ScalarProperty Name="KlasseID" ColumnName="KlasseID" />
-                <ScalarProperty Name="KonkurranseID" ColumnName="KonkurranseID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="KonkurranseType">
             <EntityTypeMapping TypeName="PoengrennModel.KonkurranseType">
               <MappingFragment StoreEntitySet="KonkurranseType">
@@ -557,6 +547,22 @@
                 <ScalarProperty Name="Navn" ColumnName="Navn" />
                 <ScalarProperty Name="TypeID" ColumnName="TypeID" />
                 <ScalarProperty Name="KlasseID" ColumnName="KlasseID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="KonkurranseDeltaker">
+            <EntityTypeMapping TypeName="PoengrennModel.KonkurranseDeltaker">
+              <MappingFragment StoreEntitySet="KonkurranseDeltaker">
+                <ScalarProperty Name="Tilstede" ColumnName="Tilstede" />
+                <ScalarProperty Name="Betalt" ColumnName="Betalt" />
+                <ScalarProperty Name="Tidsforbruk" ColumnName="Tidsforbruk" />
+                <ScalarProperty Name="SluttTid" ColumnName="SluttTid" />
+                <ScalarProperty Name="StartTid" ColumnName="StartTid" />
+                <ScalarProperty Name="StartNummer" ColumnName="StartNummer" />
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+                <ScalarProperty Name="KlasseID" ColumnName="KlasseID" />
+                <ScalarProperty Name="KonkurranseID" ColumnName="KonkurranseID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

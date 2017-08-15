@@ -1,6 +1,5 @@
 <div class="card">
   <div class="card-block">
-    <button type="submit" class="btn btn-primary float-right" (click)="openEditResultsModal()">Registrer resultater...</button>
     <h4 class="card-title">{{competition?.navn}}</h4>
     <h6 class="card-subtitle mb-2 text-muted">{{competition?.dato | amDateFormat:'DD.MM.YYYY'}} kl. {{competition?.dato | amDateFormat:'HH:mm'}}</h6>
 
@@ -8,7 +7,7 @@
       <ng-template #searchResultFormatter let-r="result" let-t="term">
         {{ r?.fornavn }} {{r?.etternavn}} ({{r?.fodselsar}}) <small class="text-muted">ID={{r.personID}}</small>
       </ng-template>
-      <div class="input-group w-75">
+      <div class="input-group">
         <div class="input-group-addon hidden-sm-down">Finn person</div>
         <input id="typeahead-search" type="text" class="form-control" 
           [(ngModel)]="searchModel" 
@@ -18,33 +17,43 @@
           (selectItem)="onPersonSelected($event)"
           placeholder="Søk etter fornavn eller etternavn" />
         <span class="input-group-btn">
-          <button class="btn btn-secondary" type="button" (click)="searchModel = ''"><i class="fa fa-times" aria-hidden="true"></i></button>
+          <button class="btn btn-secondary" type="button" (click)="setSelectedPerson(null)"><i class="fa fa-times" aria-hidden="true"></i></button>
         </span>
-        <span class="input-group-btn">
-          <button type="submit" class="btn btn-primary" (click)="openAddPersonModal()">Opprett person...</button>
+        <span class="input-group-btn" *ngIf="selectedPerson && isMe()">
+          <button type="submit" class="btn btn-primary" (click)="openPersonModal(selectedPerson)"><i class="fa fa-pencil" aria-hidden="true"></i> Rediger person...</button>
+        </span>
+        <span class="input-group-btn" >
+          <button type="submit" class="btn btn-primary" (click)="openPersonModal()"><i class="fa fa-plus" aria-hidden="true"></i> Opprett person...</button>
         </span>
       </div>
       
     </div>
-
+    <div *ngIf="!isAdmin() && !isMe() && selectedPerson" class="alert alert-danger">
+      Du må logge inn for å kunne melde deg på. <a class="nav-link" routerLink="/login"><i class="fa fa-user" aria-hidden="true"></i> Logg inn her</a>
+    </div>
+    <div class="mt-3" *ngIf="lastAddedPerson">
+      <div class="alert alert-success">Sist lagt til: {{lastAddedPerson?.fornavn}} {{lastAddedPerson?.etternavn}}</div>
+    </div>
     
-    <div class="mt-3" *ngIf="matchingCompetitionClasses">
-      <label class="font-weight-bold" for="radio1">Tilgjengelige klasser</label>
+    <div *ngIf="isAdmin() || isMe()">
+      <div class="mt-3" *ngIf="matchingCompetitionClasses">
+        <label class="font-weight-bold" for="radio1">Tilgjengelige klasser</label>
 
-      <div>
-        <label class="custom-control custom-radio" *ngFor="let compClass of matchingCompetitionClasses">
-          <input id="radio1" name="competitionClassesRadiogroup" type="radio" class="custom-control-input" 
-            [disabled]="!canRegister" 
-            [checked]="selectedCompetitionClass.klasseID == compClass.klasseID"
-            [value]="compClass.klasseID"
-            (change)="onCompetitionClassChange(compClass)">
-          <span class="custom-control-indicator"></span>
-          <span class="custom-control-description">{{(compClass?.navn) ? compClass?.navn : compClass?.klasseID}}</span>
-        </label>
+        <div>
+          <label class="custom-control custom-radio" *ngFor="let compClass of matchingCompetitionClasses">
+            <input id="radio1" name="competitionClassesRadiogroup" type="radio" class="custom-control-input" 
+              [disabled]="!canRegister" 
+              [checked]="selectedCompetitionClass.klasseID == compClass.klasseID"
+              [value]="compClass.klasseID"
+              (change)="onCompetitionClassChange(compClass)">
+            <span class="custom-control-indicator"></span>
+            <span class="custom-control-description">{{(compClass?.navn) ? compClass?.navn : compClass?.klasseID}}</span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary" [disabled]="!selectedCompetitionClass.klasseID || !canRegister" (click)="registerForCompetition()">Meld på</button>
+        <span *ngIf="!selectedCompetitionClass.klasseID || !canRegister" class="text-danger">{{errorMessage}}</span>
       </div>
-
-      <button type="submit" class="btn btn-primary" [disabled]="!selectedCompetitionClass.klasseID || !canRegister" (click)="registerForCompetition()">Meld på</button>
-      <span *ngIf="!selectedCompetitionClass.klasseID || !canRegister" class="text-danger">{{errorMessage}}</span>
     </div>
 
     <div class="deltakere mt-3">
@@ -78,16 +87,20 @@
           </div>
         </div>
       </div>
+
+      <button *ngIf="isAdmin()" type="submit" class="btn btn-primary float-right" (click)="openEditResultsModal()">Registrer resultater...</button>
       
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>Startnummer</th>
+            <th>#</th>
             <th>Fornavn</th>
             <th>Etternavn</th>
             <th>Kjønn</th>
             <th>Klasse</th>
-            <th *ngIf="isDone">Tid<th>
+            <th>Tid</th>
+            <th *ngIf="isAdmin()">Tilstede</th>
+            <th *ngIf="isAdmin()">Bet.</th>
             <th></th>
           </tr>
         </thead>
@@ -98,8 +111,18 @@
             <td>{{deltaker?.person?.etternavn}}</td>
             <td>{{deltaker?.person?.kjonn}}</td>
             <td>{{getKonkurranseKlasseNavn(deltaker?.klasseID)}}</td>
-            <td *ngIf="isDone">{{deltaker?.tidsforbruk}}</td>
-            <td>
+            <td>{{deltaker?.tidsforbruk}}</td>
+            <td *ngIf="isAdmin()">
+              <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" [checked]="deltaker?.tilstede" (change)="updateTilstede(deltaker)"/>
+              </label>
+            </td>
+            <td *ngIf="isAdmin()">
+              <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" [checked]="deltaker?.betalt" (change)="updateBetalt(deltaker)"/>
+              </label>
+            </td>
+            <td *ngIf="isAdmin()">
               <div class="col"><button type="submit" class="btn btn-primary btn-sm" (click)="openEditCompetitionParticipant(deltaker)" name="editBtn">
                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
               </div> 

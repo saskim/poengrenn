@@ -17,7 +17,7 @@ namespace Poengrenn.DAL.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Person()
         {
-            this.KonkurranseDeltakere = new HashSet<KonkurranseDeltaker>();
+            this.KonkurranseDeltaker = new HashSet<KonkurranseDeltaker>();
         }
     
         public int PersonID { get; set; }
@@ -29,6 +29,6 @@ namespace Poengrenn.DAL.Models
         public string Telefon { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<KonkurranseDeltaker> KonkurranseDeltakere { get; set; }
+        public virtual ICollection<KonkurranseDeltaker> KonkurranseDeltaker { get; set; }
     }
 }

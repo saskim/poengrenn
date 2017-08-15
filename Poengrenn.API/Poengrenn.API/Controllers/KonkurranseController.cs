@@ -157,6 +157,8 @@ namespace Poengrenn.API.Controllers
                 deltakerUpdate.SluttTid = deltaker.SluttTid;
                 deltakerUpdate.Tidsforbruk = deltaker.SluttTid - deltaker.StartTid;
                 deltakerUpdate.KlasseID = deltaker.KlasseID;
+                deltakerUpdate.Tilstede = deltaker.Tilstede;
+                deltakerUpdate.Betalt = deltaker.Betalt;
 
                 return _konkurranseDeltagerRepo.Update(deltakerUpdate);
             }

@@ -30,9 +30,11 @@ export class KonkurranseDeltaker {
     klasseID: string;
     personID: number;
     startNummer: number;
-    startTid: Date;
-    sluttTid: Date;
-    tidsforbruk: Date;
+    startTid: string;
+    sluttTid: string;
+    tidsforbruk: string;
+    tilstede: boolean;
+    betalt: boolean;
     konkurranse: Konkurranse;
     konkurranseKlasse: KonkurranseKlasse;
     person: Person;
@@ -65,4 +67,12 @@ export class Person {
     telefon: string;
 }
 
-
+export class LoginResponse {
+    brukernavn: string;
+    rolle: string;
+    token: string;
+}
+export class LoginModel {
+    brukernavn: string;
+    passord: string;
+}

@@ -13,11 +13,19 @@
       <li class="nav-item">
         <a class="nav-link" routerLink="/konkurranser">Konkurranser</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/resultater">Resultater</a>
-      </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="isAdmin()">
         <a class="nav-link" routerLink="/konkurranseklasser">Konkurranseklasser</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item" *ngIf="!isAuth()">
+        <a class="nav-link" routerLink="/login"><i class="fa fa-user" aria-hidden="true"></i> Logg inn</a>
+      </li>
+      <li class="nav-item" *ngIf="!isAuth()">
+        <a class="nav-link" routerLink="/adminlogin"><i class="fa fa-lock" aria-hidden="true"></i> Admin</a>
+      </li>
+      <li class="nav-item" *ngIf="isAuth()">
+        <a class="nav-link" routerLink="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Logg ut</a>
       </li>
     </ul>
   </div>

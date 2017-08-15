@@ -30,9 +30,9 @@ namespace Poengrenn.DAL.Models
         public virtual DbSet<PoengrennSerie> PoengrennSerie { get; set; }
         public virtual DbSet<Startnummere> Startnummere { get; set; }
         public virtual DbSet<Konkurranse> Konkurranse { get; set; }
-        public virtual DbSet<KonkurranseDeltaker> KonkurranseDeltaker { get; set; }
         public virtual DbSet<KonkurranseType> KonkurranseType { get; set; }
         public virtual DbSet<Person> Person { get; set; }
         public virtual DbSet<KonkurranseKlasse> KonkurranseKlasse { get; set; }
+        public virtual DbSet<KonkurranseDeltaker> KonkurranseDeltaker { get; set; }
     }
 }
