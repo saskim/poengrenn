@@ -11,13 +11,13 @@ namespace Poengrenn.DAL.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.Data.Entity.ModelConfiguration;
+
     public partial class Person
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Person()
         {
-            this.KonkurranseDeltaker = new HashSet<KonkurranseDeltaker>();
+            this.KonkurranseDeltakere = new HashSet<KonkurranseDeltaker>();
         }
     
         public int PersonID { get; set; }
@@ -28,7 +28,23 @@ namespace Poengrenn.DAL.Models
         public string Epost { get; set; }
         public string Telefon { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<KonkurranseDeltaker> KonkurranseDeltaker { get; set; }
+        public virtual ICollection<KonkurranseDeltaker> KonkurranseDeltakere { get; set; }
+    }
+
+    class PersonMapper : EntityTypeConfiguration<Person>
+    {
+        public PersonMapper()
+        {
+            ToTable("Person");
+
+            HasKey(k => k.PersonID);
+
+            Property(k => k.PersonID).IsRequired();
+            Property(k => k.Fornavn).IsRequired().HasMaxLength(100);
+            Property(k => k.Etternavn).IsRequired().HasMaxLength(100);
+            Property(k => k.Kjonn).HasMaxLength(10);
+            Property(k => k.Epost).HasMaxLength(255);
+            Property(k => k.Telefon).HasMaxLength(10);
+        }
     }
 }

@@ -9,5 +9,6 @@ namespace Poengrenn.API.Models
     {
         public int PersonID { get; set; }
         public string KlasseID { get; set; }
+        public string TypeID { get; set; }
     }
 }

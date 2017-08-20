@@ -132,6 +132,7 @@ namespace Poengrenn.API.Controllers
             {
                 KonkurranseID = id,
                 KlasseID = deltaker.KlasseID,
+                TypeID = deltaker.TypeID,
                 PersonID = deltaker.PersonID,
                 StartNummer = FinnNesteLedigeStartnummer(konkurranse, deltaker.KlasseID)
             });

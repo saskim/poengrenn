@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Poengrenn.DAL</RootNamespace>
     <AssemblyName>Poengrenn.DAL</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -52,78 +53,33 @@
     <Compile Include="EFRepository\BaseRepository.cs" />
     <Compile Include="EFRepository\EFPoengrennRepository.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
-    <Compile Include="Models\Klubbmesterskap.cs">
-      <DependentUpon>PoengrennModel.tt</DependentUpon>
+    <Compile Include="Migrations\201708192242077_Initial.cs" />
+    <Compile Include="Migrations\201708192242077_Initial.Designer.cs">
+      <DependentUpon>201708192242077_Initial.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\Konkurranse.cs">
-      <DependentUpon>PoengrennModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\KonkurranseDeltaker.cs">
-      <DependentUpon>PoengrennModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\KonkurranseKlasse.cs">
-      <DependentUpon>PoengrennModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\KonkurranseType.cs">
-      <DependentUpon>PoengrennModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Person.cs">
-      <DependentUpon>PoengrennModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Poengrenn.cs">
-      <DependentUpon>PoengrennModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\PoengrennModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PoengrennModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\PoengrennModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PoengrennModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\PoengrennModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PoengrennModel.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\PoengrennSerie.cs">
-      <DependentUpon>PoengrennModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Startnummere.cs">
-      <DependentUpon>PoengrennModel.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Konkurranse.cs" />
+    <Compile Include="Models\KonkurranseDeltaker.cs" />
+    <Compile Include="Models\KonkurranseKlasse.cs" />
+    <Compile Include="Models\KonkurranseType.cs" />
+    <Compile Include="Models\Person.cs" />
+    <Compile Include="Models\PoengrennContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <EntityDeploy Include="Models\PoengrennModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>PoengrennModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="Models\PoengrennModel.edmx.diagram">
-      <DependentUpon>PoengrennModel.edmx</DependentUpon>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Models\PoengrennModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>PoengrennModel.edmx</DependentUpon>
-      <LastGenOutput>PoengrennModel.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\PoengrennModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>PoengrennModel.edmx</DependentUpon>
-      <LastGenOutput>PoengrennModel.cs</LastGenOutput>
-    </Content>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+    <EmbeddedResource Include="Migrations\201708192242077_Initial.resx">
+      <DependentUpon>201708192242077_Initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

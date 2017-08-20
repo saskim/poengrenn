@@ -35,7 +35,6 @@ export class CompetitionCreateComponent implements OnInit {
     this.model.typeID = this.defaultCompetitionType.typeID;
     //this.tempDatoer = new Array<NgbDateStruct>(1);
     this.model.datoer = new Array<Date>(1);
-    this.model.datoer[0] = new Date();
     
     this.getCompetitionTypes();
   }

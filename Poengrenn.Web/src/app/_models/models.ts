@@ -42,6 +42,7 @@ export class KonkurranseDeltaker {
 export class NyKonkurranseDeltaker {
     personID: number;
     klasseID: string;
+    typeID: string;
 }
 
 export class KonkurranseOpprett {

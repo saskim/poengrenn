@@ -124,6 +124,7 @@ export class CompetitionDetailsComponent implements OnInit {
     let nyKonkurranseDeltaker = new NyKonkurranseDeltaker();
     nyKonkurranseDeltaker.personID = this.selectedPerson.personID;
     nyKonkurranseDeltaker.klasseID = this.selectedCompetitionClass.klasseID;
+    nyKonkurranseDeltaker.typeID = this.selectedCompetitionClass.typeID;
 
     this._apiService.RegisterForCompetition(this.competition.konkurranseID, nyKonkurranseDeltaker)
       .subscribe((result:KonkurranseDeltaker) => {
@@ -162,8 +163,31 @@ export class CompetitionDetailsComponent implements OnInit {
     text$
       .debounceTime(200)
       .map(term => {
-        return term == '' ? [] :  this.persons.filter(p => p.fornavn.toLowerCase().indexOf(term.toLowerCase()) > -1 || p.etternavn.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10);
+        return term == '' ? [] : this.filteredOnFirstnameAndLastname(term);
+        //return term == '' ? [] :  this.persons.filter(p => p.fornavn.toLowerCase().indexOf(term.toLowerCase()) > -1 || p.etternavn.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10);
       });
+
+  private filteredOnFirstname(term: string) {
+    let persons = this.persons.filter(p => p.fornavn.toLowerCase().indexOf(term.toLowerCase()) > -1);
+    return persons;
+  }
+  private filteredOnLastname(term: string) {
+    let persons = this.persons.filter(p => p.etternavn.toLowerCase().indexOf(term.toLowerCase()) > -1);
+    return persons;
+  }
+  private filteredOnFirstnameAndLastname(term: string) {
+    let filteredPersons = [];
+    let words = term.split(" ");
+    words.forEach(word => {
+      let foundFirstname = this.filteredOnFirstname(word);
+      let foundLastname = this.filteredOnLastname(word);
+      filteredPersons = filteredPersons.concat(foundFirstname);
+      filteredPersons = filteredPersons.concat(foundLastname);
+      filteredPersons = filteredPersons.filter((person, index, self) => self.findIndex(t => t.personID === person.personID) === index)
+    });
+    console.log(filteredPersons);
+    return filteredPersons;//this.persons.filter(p => p.etternavn.toLowerCase().indexOf(term.toLowerCase()) > -1);
+  }
 
   searchFormatter(p: {fornavn: string, etternavn: string, fodselsar: number, personID: string}) {
     return p.fornavn + " " + p.etternavn + " (" + p.fodselsar + ")";
