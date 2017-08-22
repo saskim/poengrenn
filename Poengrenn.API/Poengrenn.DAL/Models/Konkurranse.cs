@@ -8,7 +8,7 @@ namespace Poengrenn.DAL.Models
     {
         public Konkurranse()
         {
-            this.KonkurranseDeltakere = new HashSet<KonkurranseDeltaker>();
+            KonkurranseDeltakere = new HashSet<KonkurranseDeltaker>();
         }
     
         public int KonkurranseID { get; set; }

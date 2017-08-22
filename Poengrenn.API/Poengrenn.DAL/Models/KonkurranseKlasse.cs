@@ -8,7 +8,7 @@ namespace Poengrenn.DAL.Models
     {
         public KonkurranseKlasse()
         {
-            this.KonkurranseDeltakere = new HashSet<KonkurranseDeltaker>();
+            KonkurranseDeltakere = new HashSet<KonkurranseDeltaker>();
         }
     
         public string KlasseID { get; set; }
@@ -21,7 +21,7 @@ namespace Poengrenn.DAL.Models
         public int SisteStartnummer { get; set; }
         public bool MedTidtaking { get; set; }
         public Nullable<decimal> DistanseKm { get; set; }
-    
+
         public virtual ICollection<KonkurranseDeltaker> KonkurranseDeltakere { get; set; }
         public virtual KonkurranseType KonkurranseType { get; set; }
     }
