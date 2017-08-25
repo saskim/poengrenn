@@ -22,7 +22,7 @@ export class CompetitionClassesComponent implements OnInit {
   competitionTypes: KonkurranseType[];
 
   defaultCompetitionType: KonkurranseType;
-  genders = GENDERS; 
+  genders = GENDERS.slice(0, GENDERS.length); 
 
   constructor(
     private _apiService: ApiService,

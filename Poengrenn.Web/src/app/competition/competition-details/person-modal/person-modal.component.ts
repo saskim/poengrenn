@@ -14,10 +14,12 @@ import { KonkurranseDeltaker, Konkurranse, Person } from 'app/_models/models';
 export class PersonModalComponent implements OnInit {
 
   @Input() editPerson: Person;
+  @Input() existingPersons: Person[];
 
   personModel: Person;
 
   genders = GENDERS.slice(0, GENDERS.length); 
+  duplicates: Person[];
 
   constructor(
     public _activeModal: NgbActiveModal,
@@ -40,12 +42,29 @@ export class PersonModalComponent implements OnInit {
         });
     }
     else {
+      // let doCancel = true;
+      // this.duplicates = this.findDuplicates();
+      // if (this.duplicates.length > 0)
+      //   doCancel = confirm(`Fant person(er) med samme navn i databasen. Vil du fortsatt opprette ${this.personModel.fornavn} ${this.personModel.etternavn}`)
+      
+      // if (!doCancel) {
       this._apiService.AddPerson(this.personModel)
         .subscribe((result: Person) => {
           if (result)
             this._activeModal.close(result);
         });
+      //}
     }
     
+  }
+
+  findDuplicates():void {
+    console.log(this.personModel);
+    if (this.personModel.fornavn && this.personModel.etternavn) {
+      console.log(this.personModel);
+      this.duplicates = this.existingPersons
+                            .filter(e => e.fornavn.toLowerCase().startsWith(this.personModel.fornavn.toLowerCase()) &&
+                                         e.etternavn.toLowerCase().startsWith(this.personModel.etternavn.toLowerCase()));
+    }
   }
 }

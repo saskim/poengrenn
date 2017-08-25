@@ -32,7 +32,9 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
     }
 
   ngOnInit() {
-    this.competition.konkurranseDeltakere = this.competition.konkurranseDeltakere.sort(function(a:KonkurranseDeltaker, b: KonkurranseDeltaker) {
+    this.competition.konkurranseDeltakere = this.competition.konkurranseDeltakere
+      .filter(p => p.tilstede === true)
+      .sort(function(a:KonkurranseDeltaker, b: KonkurranseDeltaker) {
       return a.startNummer - b.startNummer;
     });
     

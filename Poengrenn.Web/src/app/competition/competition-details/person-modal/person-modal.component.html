@@ -1,6 +1,7 @@
 <div class="modal-header">
   <h4 class="modal-title">
-    Opprett person 
+    <span *ngIf="editPerson">Rediger {{editPerson.personID}} ({{editPerson.fornavn}} {{editPerson.etternavn}}) </span>
+    <span *ngIf="!editPerson">Opprett person</span>
   </h4>
   <button type="button" class="close" aria-label="Lukk" (click)="_activeModal.dismiss('Cross click')">
     <span aria-hidden="true">&times;</span>
@@ -16,24 +17,24 @@
           </div>
         </div>
         <div class="row">
-          <div class="col">
-            <!--<label class="font-weight-bold">Konkurranseklasse</label>
-            <select [(ngModel)]="participant.klasseID" class="form-control" name="klasseID">
-              <option *ngFor="let c of matchingCompetitionClasses" [ngValue]="c.klasseID">
-                {{c?.navn}}
-              </option>
-            </select>-->
-          </div>
-        </div>
-        <div class="row">
           <div class="form-group col">
             <label class="font-weight-bold" for="fornavn">Fornavn</label>
-            <input [(ngModel)]="personModel.fornavn" type="text" required class="form-control" name="fornavn" placeholder="">
+            <input [(ngModel)]="personModel.fornavn" (change)="findDuplicates()" type="text" required class="form-control" name="fornavn" placeholder="">
           </div>
 
           <div class="form-group col">
             <label class="font-weight-bold" for="etternavn">Etternavn</label>
-            <input [(ngModel)]="personModel.etternavn" type="text" required class="form-control" name="etternavn" placeholder="">
+            <input [(ngModel)]="personModel.etternavn" (change)="findDuplicates()" type="text" required class="form-control" name="etternavn" placeholder="">
+          </div>
+        </div>
+        <div class="row" *ngIf="duplicates">
+          <div class="form-group col">
+            <label class="font-weight-bold">Duplikater funnet:</label>
+            <div class="row text-muted">
+              <ul>
+                <li *ngFor="let duplicate of duplicates">{{duplicate.fornavn}} {{duplicate.etternavn}} ({{duplicate.fodselsar}})</li>
+              </ul>
+            </div>
           </div>
         </div>
         <div class="row">
@@ -52,7 +53,7 @@
         <div class="row">
           <div class="form-group col">
             <label class="font-weight-bold" for="epost">E-post</label>
-            <input [(ngModel)]="personModel.epost" type="text" required class="form-control" name="epost" placeholder="">
+            <input [(ngModel)]="personModel.epost" type="text" [attr.required]="!editPerson" class="form-control" name="epost" placeholder="">
           </div>
 
           <div class="form-group col">
@@ -61,6 +62,7 @@
           </div>
           
         </div>
+        
     </div>
   </form>
 </div>

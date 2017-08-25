@@ -24,19 +24,21 @@ export class EditCompetitionParticipantModalComponent implements OnInit {
     
   }
 
-  saveCompetitionParticipant() {
+  updateCompetitionParticipant() {
     this._apiService.UpdateCompetitionParticipant(this.participant)
       .subscribe((result: KonkurranseDeltaker) => {
         console.log(result);
-        this._activeModal.close("Saved");
+        this._activeModal.close({updated: result, old: this.participant});
       });
   }
 
   deleteCompetitionParticipant() {
-    this._apiService.DeleteCompetitionParticipant(this.participant)
-      .subscribe(result => {
-        console.log(result);
-        this._activeModal.close("Deleted");
-      });
+    if(confirm("Er du sikker på at du vil slette deltaker?")) {   
+      this._apiService.DeleteCompetitionParticipant(this.participant)
+        .subscribe(result => {
+          console.log(result);
+          this._activeModal.close({deleted: result});
+        });
+    }
   }
 }

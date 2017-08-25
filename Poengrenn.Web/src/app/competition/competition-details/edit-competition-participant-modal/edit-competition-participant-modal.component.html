@@ -45,24 +45,24 @@
         <div class="row">
           <div class="form-group col">
             <label class="font-weight-bold" for="starttid">Starttid</label>
-            <input [(ngModel)]="participant.startTid" type="number" class="form-control" name="starttid" placeholder="">
+            <input [(ngModel)]="participant.startTid" disabled type="string" class="form-control" name="starttid" placeholder="">
           </div>
 
           <div class="form-group col">
             <label class="font-weight-bold" for="sluttid">Sluttid</label>
-            <input [(ngModel)]="participant.sluttTid" type="number" class="form-control" name="sluttid" placeholder="">
+            <input [(ngModel)]="participant.sluttTid" disabled type="string" class="form-control" name="sluttid" placeholder="">
           </div>
 
           <div class="form-group col">
             <label class="font-weight-bold" for="tidsforbruk">Tidsforbruk</label>
-            <input [(ngModel)]="participant.tidsforbruk" disabled type="number" class="form-control" name="tidsforbruk" placeholder="">
+            <input [(ngModel)]="participant.tidsforbruk" disabled type="string" class="form-control" name="tidsforbruk" placeholder="">
           </div>
         </div>
     </div>
   </form>
 </div>
 <div class="modal-footer">
-  <button type="submit" class="btn btn-primary" (click)="deleteCompetitionParticipant()">Slett</button>
-  <button type="submit" class="btn btn-primary" [disabled]="!editCompetitionParticipantForm.valid" (click)="saveCompetitionParticipant()">Lagre</button>
+  <button type="submit" class="btn btn-primary float-left" (click)="deleteCompetitionParticipant()">Slett</button>
+  <button type="submit" class="btn btn-primary" [disabled]="!editCompetitionParticipantForm.valid" (click)="updateCompetitionParticipant()">Lagre</button>
   <button type="button" class="btn btn-secondary" (click)="_activeModal.close('Close click')">Lukk</button>
 </div>

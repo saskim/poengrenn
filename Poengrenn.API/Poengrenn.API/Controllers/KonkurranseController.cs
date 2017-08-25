@@ -143,8 +143,8 @@ namespace Poengrenn.API.Controllers
         [HttpPut]
         public KonkurranseDeltaker PutDeltaker(int id, KonkurranseDeltaker deltaker)
         {
-            var konkurranseExists = _konkurranseRepo.Any(d => d.KonkurranseID == id);
-            if (!konkurranseExists)
+            var konkurranse = _konkurranseRepo.Get(d => d.KonkurranseID == id).FirstOrDefault();
+            if (konkurranse == null)
                 return null;
 
             var deltakerUpdate = _konkurranseDeltagerRepo.Get(d => d.KonkurranseID == id && d.PersonID == deltaker.PersonID).FirstOrDefault();
@@ -166,6 +166,8 @@ namespace Poengrenn.API.Controllers
             else
             {
                 _konkurranseDeltagerRepo.Delete(deltakerUpdate);
+
+                deltaker.StartNummer = FinnNesteLedigeStartnummer(konkurranse, deltaker.KlasseID);
                 return _konkurranseDeltagerRepo.Insert(deltaker);
             }
         }
@@ -181,8 +183,7 @@ namespace Poengrenn.API.Controllers
 
         private int FinnNesteLedigeStartnummer(Konkurranse konkurranse, string klasseID)
         {
-            //var person = _personRepo.GetByID(personID);
-            var konkurranseKlasse = _konkurranseKlasseRepo.GetByID(klasseID, konkurranse.TypeID);//FinnKonkurranseKlasse(typeID, person);
+            var konkurranseKlasse = _konkurranseKlasseRepo.GetByID(klasseID, konkurranse.TypeID);
             if (konkurranseKlasse == null)
                 konkurranseKlasse = _konkurranseKlasseRepo.GetByID(klasseID, "0");
 
