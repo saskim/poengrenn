@@ -24,20 +24,20 @@
           <button class="btn btn-secondary" type="button" (click)="setSelectedPerson(null)"><i class="fa fa-times" aria-hidden="true"></i></button>
         </span>
       </div>
-      <div class="float-right" *ngIf="selectedPerson && (isMe() || isAdmin())">
+      <div class="float-right mt-2" *ngIf="selectedPerson && (isMe() || isAdmin())">
         <button type="submit" class="btn btn-primary" (click)="openPersonModal(selectedPerson)"><i class="fa fa-pencil" aria-hidden="true"></i> Rediger person...</button>
       </div>
-      <div class="float-right">
+      <div class="float-right mt-2 mr-2">
         <button type="submit" class="btn btn-primary" (click)="openPersonModal(null)"><i class="fa fa-plus" aria-hidden="true"></i> Opprett person...</button>
       </div>
       
     </div>
     <div class="row mt-3">
       <div class="col-sm-6">
-        <h4>{{countRegistered()}} påmeldte (<small>{{countAttending()}} tilstede / {{countPaid()}} har betalt</small>)</h4>
+        <h4>{{countRegistered()}} påmeldte <small *ngIf="isAdmin()">({{countAttending()}} tilstede / {{countPaid()}} har betalt)</small></h4>
       </div>
-      <div class="col-sm-6">
-        <h5>{{countFiltered()}} filtrerte (<small>{{countFilteredAttending()}} tilstede / {{countFilteredPaid()}} har betalt</small>)</h5>
+      <div class="col-sm-6" *ngIf="isAdmin()">
+        <h5>{{countFiltered()}} filtrerte <small>({{countFilteredAttending()}} tilstede / {{countFilteredPaid()}} har betalt)</small></h5>
       </div>
     </div>
     <div *ngIf="!isAdmin() && !isMe() && !!selectedPerson" class="alert alert-danger">
