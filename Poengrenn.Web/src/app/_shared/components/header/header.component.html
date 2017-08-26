@@ -25,7 +25,7 @@
         <a class="nav-link" routerLink="/adminlogin"><i class="fa fa-lock" aria-hidden="true"></i> Admin</a>
       </li>
       <li class="nav-item" *ngIf="isAuth()">
-        <a class="nav-link" routerLink="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Logg ut</a>
+        <a class="nav-link" routerLink="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Logg ut {{(loggedInUser?.rolle === 'admin') ? loggedInUser?.brukernavn : ''}}</a>
       </li>
     </ul>
   </div>
