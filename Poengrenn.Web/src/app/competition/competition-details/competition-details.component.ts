@@ -192,6 +192,45 @@ export class CompetitionDetailsComponent implements OnInit {
 
   }
 
+  participantsIsFiltered() : boolean {
+    return !!this.filter.startNumber ||
+           !!this.filter.firstname ||
+           !!this.filter.lastname ||
+           this.filter.genders.length > 0 ||
+           this.filter.competitionClasses.length > 0;
+  }
+
+  countRegistered(): number {
+    if (!this.competition || !this.competition.konkurranseDeltakere)
+      return 0;
+    return this.competition.konkurranseDeltakere.length;
+  }
+  countAttending(): number {
+    if (!this.competition || !this.competition.konkurranseDeltakere)
+      return 0;
+    return this.competition.konkurranseDeltakere.filter(p => p.tilstede === true).length;
+  }
+  countPaid(): number {
+    if (!this.competition || !this.competition.konkurranseDeltakere)
+      return 0;
+    return this.competition.konkurranseDeltakere.filter(p => p.betalt === true).length;
+  }
+  countFiltered(): number {
+    if (!this.filteredParticpants)
+      return 0;
+    return this.filteredParticpants.length;
+  }
+  countFilteredAttending(): number {
+    if (!this.filteredParticpants)
+      return 0;
+    return this.filteredParticpants.filter(p => p.tilstede === true).length;
+  }
+  countFilteredPaid(): number {
+    if (!this.filteredParticpants)
+      return 0;
+    return this.filteredParticpants.filter(p => p.betalt === true).length;;
+  }
+
   isAdmin() {
     return this._authService.isAdmin();
   }

@@ -1,9 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 $font-family-sans-serif: "Helvetica Neue", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
 
-$blue:                      #cf142b;
+$red:                      #cf142b;
 
-$brand-primary:             $blue;
+$brand-primary:             $red;
 
 $body-bg:    #f2f2f2;
 $body-color: #535353;
@@ -61,6 +61,9 @@ $enable-rounded: false;
 
 .clickable { 
     cursor: pointer;
+}
+.text-disabled {
+  color: #CCC;
 }
 
 .ng-valid[required], .ng-valid.required {

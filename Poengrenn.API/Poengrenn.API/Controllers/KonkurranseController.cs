@@ -160,6 +160,7 @@ namespace Poengrenn.API.Controllers
                 deltakerUpdate.KlasseID = deltaker.KlasseID;
                 deltakerUpdate.Tilstede = deltaker.Tilstede;
                 deltakerUpdate.Betalt = deltaker.Betalt;
+                deltakerUpdate.BetalingsNotat = deltaker.BetalingsNotat;
 
                 return _konkurranseDeltagerRepo.Update(deltakerUpdate);
             }

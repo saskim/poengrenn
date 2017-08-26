@@ -1,7 +1,11 @@
 <div class="card">
   <div class="card-block">
+      <button *ngIf="isAdmin()" type="submit" class="btn btn-primary float-right" (click)="openEditResultsModal()">
+        <i class="fa fa-clock-o" aria-hidden="true"></i> Registrer resultater...
+      </button>
     <h4 class="card-title">{{competition?.navn}}</h4>
     <h6 class="card-subtitle mb-2 text-muted">{{competition?.dato | amDateFormat:'DD.MM.YYYY'}} kl. {{competition?.dato | amDateFormat:'HH:mm'}}</h6>
+
 
     <div class="mt-3">
       <ng-template #searchResultFormatter let-r="result" let-t="term">
@@ -19,14 +23,22 @@
         <span class="input-group-btn">
           <button class="btn btn-secondary" type="button" (click)="setSelectedPerson(null)"><i class="fa fa-times" aria-hidden="true"></i></button>
         </span>
-        <span class="input-group-btn" *ngIf="selectedPerson && (isMe() || isAdmin())">
-          <button type="submit" class="btn btn-primary" (click)="openPersonModal(selectedPerson)"><i class="fa fa-pencil" aria-hidden="true"></i> Rediger person...</button>
-        </span>
-        <span class="input-group-btn" >
-          <button type="submit" class="btn btn-primary" (click)="openPersonModal(null)"><i class="fa fa-plus" aria-hidden="true"></i> Opprett person...</button>
-        </span>
+      </div>
+      <div class="float-right" *ngIf="selectedPerson && (isMe() || isAdmin())">
+        <button type="submit" class="btn btn-primary" (click)="openPersonModal(selectedPerson)"><i class="fa fa-pencil" aria-hidden="true"></i> Rediger person...</button>
+      </div>
+      <div class="float-right">
+        <button type="submit" class="btn btn-primary" (click)="openPersonModal(null)"><i class="fa fa-plus" aria-hidden="true"></i> Opprett person...</button>
       </div>
       
+    </div>
+    <div class="row mt-3">
+      <div class="col-sm-6">
+        <h4>{{countRegistered()}} påmeldte (<small>{{countAttending()}} tilstede / {{countPaid()}} har betalt</small>)</h4>
+      </div>
+      <div class="col-sm-6">
+        <h5>{{countFiltered()}} filtrerte (<small>{{countFilteredAttending()}} tilstede / {{countFilteredPaid()}} har betalt</small>)</h5>
+      </div>
     </div>
     <div *ngIf="!isAdmin() && !isMe() && !!selectedPerson" class="alert alert-danger">
       Du må logge inn for å kunne melde deg på. <a class="nav-link" routerLink="/login"><i class="fa fa-user" aria-hidden="true"></i> Logg inn her</a>
@@ -65,7 +77,6 @@
     </div>
 
     <div class="deltakere mt-3">
-      <button *ngIf="isAdmin()" type="submit" class="btn btn-primary float-right" (click)="openEditResultsModal()">Registrer resultater...</button>
       
       <table class="table table-striped">
         <thead>
@@ -78,6 +89,7 @@
             <th (click)="orderParticipantsBy('tidsforbruk')" class="clickable">Tid</th>
             <th *ngIf="isAdmin()" (click)="orderParticipantsBy('tilstede')" class="clickable">Tilstede</th>
             <th *ngIf="isAdmin()" (click)="orderParticipantsBy('betalt')" class="clickable">Bet.</th>
+            <th *ngIf="isAdmin()"></th>
             <th></th>
           </tr>
         </thead>
@@ -86,8 +98,7 @@
             <td><input type="text" [ngModel]="filter.startNumber" (change)="onFilterStartNumber($event)" [ngClass]="{'text-alert': filter.startNumber}" class="form-control form-control-sm" style="width: 60px" name="filterStartNumber" width="10"/></td>
             <td><input type="text" [ngModel]="filter.firstname" (change)="onFilterFirstname($event)" class="form-control form-control-sm" name="filterFirstname"/></td>
             <td><input type="text" [ngModel]="filter.lastname" (change)="onFilterLastname($event)" class="form-control form-control-sm" name="filterLastname"/></td>
-            <td>
-              <!-- Filter gender -->
+            <td><!-- Filter gender -->
               <button (click)="showGenderFilter = !showGenderFilter" class="btn btn-secondary btn-sm" type="button" aria-haspopup="true" aria-expanded="false">
                 <span [ngClass]="{'text-alert': filter.genders.length > 0}">{{(filter.genders.length == 0) ? 'Velg' : filter.genders}}</span>
                 <i class="fa" [ngClass]="{'fa-angle-down': !showGenderFilter, 'fa-angle-up': showGenderFilter}" aria-hidden="true"></i>
@@ -104,8 +115,7 @@
                 </ul>
               </div>
             </td>
-            <td>
-              <!-- Filter klasseID -->
+            <td><!-- Filter klasseID -->
               <button (click)="showClassIDFilter = !showClassIDFilter" class="btn btn-secondary btn-sm" type="button" aria-haspopup="true" aria-expanded="false">
                 <span [ngClass]="{'text-alert': filter.competitionClasses.length > 0}">{{(filter.competitionClasses.length == 0) ? 'Velg' : ((filter.competitionClasses.length == 1) ? filter.competitionClasses[0] : 'Flere valg')}}</span>
                 <i class="fa" [ngClass]="{'fa-angle-down': !showClassIDFilter, 'fa-angle-up': showClassIDFilter}" aria-hidden="true"></i>
@@ -130,6 +140,7 @@
             <td *ngIf="isAdmin()">
               <!-- Betalt -->
             </td>
+            <td *ngIf="isAdmin()"></td>
             <td></td>
           </tr>
           <tr *ngFor="let deltaker of filteredParticpants">
@@ -148,6 +159,11 @@
               <label class="form-check-label">
                 <input class="form-check-input" type="checkbox" [checked]="deltaker?.betalt" (change)="updateBetalt(deltaker)"/>
               </label>
+            </td>
+            <td *ngIf="isAdmin()">
+                <button type="button" class="btn  btn-sm" placement="bottom" ngbTooltip="{{deltaker?.betalingsNotat}}">
+                    <i class="fa fa-commenting-o" [ngClass]="{'fa-commenting-o': deltaker?.betalingsNotat, 'fa-comment-o text-disabled': !deltaker?.betalingsNotat}" aria-hidden="true" title="{{deltaker?.betalingsNotat}}"></i>
+                </button>
             </td>
             <td *ngIf="isAdmin()">
               <div class="col"><button type="submit" class="btn btn-primary btn-sm" (click)="openEditCompetitionParticipant(deltaker)" name="editBtn">
