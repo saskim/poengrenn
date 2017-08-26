@@ -27,7 +27,7 @@
             <input [(ngModel)]="personModel.etternavn" (change)="findDuplicates()" type="text" required class="form-control" name="etternavn" placeholder="">
           </div>
         </div>
-        <div class="row" *ngIf="duplicates && duplicates?.length > 0">
+        <div class="row" *ngIf="!editPerson && duplicates && duplicates?.length > 0">
           <div class="form-group col">
             <label class="font-weight-bold">Duplikater funnet:</label>
             <div class="row text-muted">

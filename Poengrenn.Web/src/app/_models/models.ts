@@ -35,6 +35,7 @@ export class KonkurranseDeltaker {
     tidsforbruk: string;
     tilstede: boolean;
     betalt: boolean;
+    betalingsNotat: string;
     konkurranse: Konkurranse;
     konkurranseKlasse: KonkurranseKlasse;
     person: Person;

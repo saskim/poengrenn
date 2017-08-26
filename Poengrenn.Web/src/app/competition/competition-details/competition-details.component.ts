@@ -350,7 +350,7 @@ export class CompetitionDetailsComponent implements OnInit {
         let updatedParticipant = result.updated as KonkurranseDeltaker;
         let oldParticipant = result.old as KonkurranseDeltaker;
         let changedStartNumberStr = (updatedParticipant.startNummer != oldParticipant.startNummer) ? `(endret fra ${oldParticipant.startNummer})` : ``;
-        this.updateMessage = `Sist oppdatert: ${updatedParticipant.person.fornavn} ${updatedParticipant.person.etternavn} 
+        this.updateMessage = `Sist oppdatert: ${(updatedParticipant.person) ? updatedParticipant.person.fornavn : ''} ${(updatedParticipant.person) ? updatedParticipant.person.etternavn : ''} 
                              <h5>Startnummer: ${updatedParticipant.startNummer} ${changedStartNumberStr}</h5>`;
       }
       else if (result.deleted) {
