@@ -42,8 +42,8 @@ export class UserLoginComponent implements OnInit {
     this.errorMessage = "";
     this._authService.authenticate(this.model)
       .subscribe((user: LoginResponse) => {
-        if (!user)
-          this.errorMessage = "Kunne ikke logge inn. Finner ikke matchende e-post/mobilnr og person.";
+        if (!user || user.rolle != 'user' || !user.token)
+          this.errorMessage = "Kunne ikke logge inn. Finner ikke matchende e-post/mobilnr.<br/>Send en e-post til <a href='mailto:styret.langrenn@flatas.no'>styret.langrenn@flatas.no</a> for å få registrert dette.";
         else if (user.brukernavn == this.model.brukernavn && user.token) {
           this.router.navigate([this.returnUrl]);
         }

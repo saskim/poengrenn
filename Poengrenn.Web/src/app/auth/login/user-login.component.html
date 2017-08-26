@@ -37,7 +37,7 @@
             <button class="btn btn-primary">Logg inn</button>
         </div>
         <div class="alert alert-danger" *ngIf="errorMessage">
-          {{errorMessage}}
+          <span [innerHtml]="errorMessage"></span>
         </div>
     </form>
 </div>
