@@ -16,6 +16,7 @@ namespace Poengrenn.DAL.Models
         public Nullable<TimeSpan> Tidsforbruk { get; set; }
         public Nullable<bool> Betalt { get; set; }
         public Nullable<bool> Tilstede { get; set; }
+        public string BetalingsNotat { get; set; }
     
         public virtual Konkurranse Konkurranse { get; set; }
         public virtual KonkurranseKlasse KonkurranseKlasse { get; set; }
@@ -34,6 +35,7 @@ namespace Poengrenn.DAL.Models
             Property(k => k.KlasseID).IsRequired().HasMaxLength(50);
             Property(k => k.PersonID).IsRequired();
             Property(k => k.TypeID).HasMaxLength(20);
+            Property(k => k.BetalingsNotat).HasMaxLength(255);
 
             HasRequired(k => k.Konkurranse)
                 .WithMany(d => d.KonkurranseDeltakere)

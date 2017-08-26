@@ -57,6 +57,10 @@
     <Compile Include="Migrations\201708192242077_Initial.Designer.cs">
       <DependentUpon>201708192242077_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201708261643379_AddedDeltakerBetalingsNotat.cs" />
+    <Compile Include="Migrations\201708261643379_AddedDeltakerBetalingsNotat.Designer.cs">
+      <DependentUpon>201708261643379_AddedDeltakerBetalingsNotat.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Konkurranse.cs" />
     <Compile Include="Models\KonkurranseDeltaker.cs" />
@@ -79,6 +83,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201708192242077_Initial.resx">
       <DependentUpon>201708192242077_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708261643379_AddedDeltakerBetalingsNotat.resx">
+      <DependentUpon>201708261643379_AddedDeltakerBetalingsNotat.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
