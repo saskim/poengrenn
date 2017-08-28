@@ -242,7 +242,7 @@ export class CompetitionDetailsComponent implements OnInit {
     return loggedInUser && 
           (loggedInUser.brukernavn == this.selectedPerson.personID.toString() 
           || 
-          loggedInUser.personIDer.indexOf(this.selectedPerson.personID) > -1);
+          (loggedInUser.personIDer && loggedInUser.personIDer.indexOf(this.selectedPerson.personID) > -1));
   }
 
   updateTilstede(participant: KonkurranseDeltaker) {

@@ -169,6 +169,7 @@ namespace Poengrenn.API.Controllers
                 _konkurranseDeltagerRepo.Delete(deltakerUpdate);
 
                 deltaker.StartNummer = FinnNesteLedigeStartnummer(konkurranse, deltaker.KlasseID);
+                deltaker.Person = null;
                 return _konkurranseDeltagerRepo.Insert(deltaker);
             }
         }
