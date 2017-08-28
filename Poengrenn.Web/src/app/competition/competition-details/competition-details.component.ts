@@ -239,7 +239,10 @@ export class CompetitionDetailsComponent implements OnInit {
       return false;
     
     let loggedInUser = this._authService.loggedInUser();
-    return loggedInUser && loggedInUser.brukernavn == this.selectedPerson.personID.toString();
+    return loggedInUser && 
+          (loggedInUser.brukernavn == this.selectedPerson.personID.toString() 
+          || 
+          loggedInUser.personIDer.indexOf(this.selectedPerson.personID) > -1);
   }
 
   updateTilstede(participant: KonkurranseDeltaker) {

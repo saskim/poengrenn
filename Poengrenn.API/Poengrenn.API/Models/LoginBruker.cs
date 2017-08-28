@@ -19,5 +19,6 @@ namespace Poengrenn.API.Models
         public string Brukernavn { get; set; }
         public string Rolle { get; set; }
         public string Token { get; set; }
+        public IEnumerable<int> PersonIDer { get; set; }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using Poengrenn.API.Models;
+using Poengrenn.DAL.EFRepository;
+using Poengrenn.DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +13,11 @@ namespace Poengrenn.API.Controllers
     [RoutePrefix("api/bruker")]
     public class UserController : ApiController
     {
+        private readonly EFPoengrennRepository<Person> _personInfoRepo;
+
         public UserController()
         {
-            
+            _personInfoRepo = new EFPoengrennRepository<Person>();
         }
         
         [Route("login")]
@@ -37,10 +41,12 @@ namespace Poengrenn.API.Controllers
 
                 var personCtrl = new PersonController();
                 var person = personCtrl.Get(personId);
+                var personIDer = _personInfoRepo.Get(p => p.Epost == bruker.Passord || p.Telefon == bruker.Passord).Select(x => x.PersonID);
                 if (person != null && (person.Epost == bruker.Passord || person.Telefon == bruker.Passord))
                 {
                     loginResponse.Rolle = "user";
                     loginResponse.Token = "jwtusertoken"; // TODO
+                    loginResponse.PersonIDer = personIDer;
                 }
             }
             return loginResponse;

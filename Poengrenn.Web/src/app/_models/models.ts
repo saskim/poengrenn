@@ -73,6 +73,7 @@ export class LoginResponse {
     brukernavn: string;
     rolle: string;
     token: string;
+    personIDer: number[];
 }
 export class LoginModel {
     brukernavn: string;
