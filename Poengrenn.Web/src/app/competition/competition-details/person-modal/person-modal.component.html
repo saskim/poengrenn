@@ -46,14 +46,14 @@
           </div>
 
           <div class="form-group col">
-            <label class="font-weight-bold" for="fodselsar">Fødselsår</label>
+            <label class="font-weight-bold" for="fodselsar">Fødselsår (4 siffer)</label>
             <input [(ngModel)]="personModel.fodselsar" type="number" required class="form-control" name="fodselsar" placeholder="">
           </div>
         </div>
         <div class="row">
           <div class="form-group col">
             <label class="font-weight-bold" for="epost">E-post</label>
-            <input [(ngModel)]="personModel.epost" type="text" [attr.required]="!editPerson" class="form-control" name="epost" placeholder="">
+            <input [(ngModel)]="personModel.epost" type="text" ng-required="!editPerson || editPerson.personID" class="form-control" name="epost" placeholder="">
           </div>
 
           <div class="form-group col">
@@ -67,6 +67,10 @@
   </form>
 </div>
 <div class="modal-footer">
-  <button type="submit" class="btn btn-primary" [disabled]="!addCompetitionParticipantForm.valid" (click)="saveCompetitionParticipant()">Lagre</button>
+  <button type="submit" class="btn btn-primary" [disabled]="!addCompetitionParticipantForm.valid || hasErrors()" (click)="saveCompetitionParticipant()">Lagre</button>
   <button type="button" class="btn btn-secondary" (click)="_activeModal.close('Close click')">Lukk</button>
+</div>
+
+<div *ngIf="hasErrors()" class="alert alert-danger">
+  <div [innerHtml]="errorMessage">
 </div>
