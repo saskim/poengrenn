@@ -42,7 +42,7 @@ namespace Poengrenn.API.Controllers
                 var personCtrl = new PersonController();
                 var person = personCtrl.Get(personId);
                 var personIDer = _personInfoRepo.Get(p => p.Epost == bruker.Passord || p.Telefon == bruker.Passord).Select(x => x.PersonID);
-                if (person != null && (person.Epost == bruker.Passord || person.Telefon == bruker.Passord))
+                if (person != null && ((person.Epost != null && person.Epost.ToLower() == bruker.Passord.ToLower()) || (person.Telefon != null && person.Telefon.Replace(" ", "") == bruker.Passord)))
                 {
                     loginResponse.Rolle = "user";
                     loginResponse.Token = "jwtusertoken"; // TODO
