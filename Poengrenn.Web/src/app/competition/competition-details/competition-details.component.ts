@@ -35,6 +35,7 @@ export class CompetitionDetailsComponent implements OnInit {
   
   lastAddedPerson: Person;
   lastAddedStartNumber: number;
+  lastAddedPersonMessage: string;
   updateMessage: string;
 
   filteredParticpants: KonkurranseDeltaker[];
@@ -263,10 +264,21 @@ export class CompetitionDetailsComponent implements OnInit {
   }
 
   registerForCompetition() {
+
     let nyKonkurranseDeltaker = new NyKonkurranseDeltaker();
     nyKonkurranseDeltaker.personID = this.selectedPerson.personID;
     nyKonkurranseDeltaker.klasseID = this.selectedCompetitionClass.klasseID;
     nyKonkurranseDeltaker.typeID = this.selectedCompetitionClass.typeID;
+
+    var lastParticipantInClass = this.competition.konkurranseDeltakere
+                            .sort((p1, p2) => { return p2.startNummer - p1.startNummer })
+                            .find(p => p.klasseID == nyKonkurranseDeltaker.klasseID);
+
+    var curCompClass = this.competitionClasses.find(c => c.klasseID == nyKonkurranseDeltaker.klasseID);
+    
+    if (lastParticipantInClass.startNummer >= curCompClass.sisteStartnummer) {
+      this.lastAddedPersonMessage = `<h5>Sjekk startnummer!</h5>Deltakeren har fått et startnummer som er høyere enn siste startnummer i gjeldende klasse.<br/>Rediger deltakeren og skriv inn et annet startnummer`;
+    }
 
     console.log(nyKonkurranseDeltaker);
     this._apiService.RegisterForCompetition(this.competition.konkurranseID, nyKonkurranseDeltaker)
@@ -443,6 +455,7 @@ export class CompetitionDetailsComponent implements OnInit {
       if (participantsResult)
         this.filteredParticpants = participantsResult;
     }
+    this.orderParticipantsBy("startnummer");
   }
 
   private getCompetitionClasses() : void {
