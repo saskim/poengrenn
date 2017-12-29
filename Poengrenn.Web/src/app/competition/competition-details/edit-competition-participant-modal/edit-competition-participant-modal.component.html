@@ -67,17 +67,18 @@
         <div class="row">
           <div class="form-group col">
             <label class="font-weight-bold" for="starttid">Starttid</label>
-            <input [(ngModel)]="participant.startTid" disabled type="string" class="form-control" name="starttid" placeholder="">
+            <ngb-timepicker [(ngModel)]="startTime" (change)="updateTidsforbruk()" [spinners]="false" [seconds]="true" name="tp-startTime"></ngb-timepicker>
           </div>
-
           <div class="form-group col">
             <label class="font-weight-bold" for="sluttid">Sluttid</label>
-            <input [(ngModel)]="participant.sluttTid" disabled type="string" class="form-control" name="sluttid" placeholder="">
+            <ngb-timepicker [(ngModel)]="endTime" (change)="updateTidsforbruk()" [spinners]="false" [seconds]="true" name="tp-endtime"></ngb-timepicker>
           </div>
-
+        </div>
+        <div class="row">
+          <div class="form-group col"></div>
           <div class="form-group col">
             <label class="font-weight-bold" for="tidsforbruk">Tidsforbruk</label>
-            <input [(ngModel)]="participant.tidsforbruk" disabled type="string" class="form-control" name="tidsforbruk" placeholder="">
+            <ngb-timepicker [(ngModel)]="totalTime" [spinners]="false" [seconds]="true" name="tp-totalTime" disabled></ngb-timepicker>
           </div>
         </div>
     </div>
