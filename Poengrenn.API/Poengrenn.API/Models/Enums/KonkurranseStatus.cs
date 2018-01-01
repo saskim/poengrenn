@@ -9,6 +9,7 @@ namespace Poengrenn.API.Models.Enums
     {
         Inaktiv = 0,
         Aktiv = 1,
+        PåmeldingUtløpt = 2,
         Avlyst = 3,
         Slettet = 10
     }

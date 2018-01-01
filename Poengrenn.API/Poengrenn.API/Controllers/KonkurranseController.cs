@@ -95,10 +95,12 @@ namespace Poengrenn.API.Controllers
             konkurranseUpdate.TypeID = konkurranse.TypeID;
             konkurranseUpdate.Serie = konkurranse.Serie;
             konkurranseUpdate.Dato = konkurranse.Dato;
-            konkurranseUpdate.Status = KonkurranseStatus.Aktiv.ToString();
+            konkurranseUpdate.Navn = konkurranse.Navn;
+            konkurranseUpdate.Status = konkurranse.Status.ToString();
             
             return _konkurranseRepo.Update(konkurranseUpdate);
         }
+
 
         // DELETE api/konkurranse/5
         [Route("")]
@@ -122,20 +124,48 @@ namespace Poengrenn.API.Controllers
         // POST api/konkurranse/5/deltaker
         [Route("{id}/deltaker")]
         [HttpPost]
-        public KonkurranseDeltaker PostDeltaker(int id, NyKonkurranseDeltaker deltaker)
+        public IEnumerable<KonkurranseDeltaker> PostDeltaker(int id, NyKonkurranseDeltaker deltaker)
         {
             var konkurranse = _konkurranseRepo.Get(d => d.KonkurranseID == id).FirstOrDefault();
-            if (konkurranse ==  null)
+            if (konkurranse == null)
                 return null;
-            
-            return _konkurranseDeltagerRepo.Insert(new KonkurranseDeltaker
+
+            var insertedList = new List<KonkurranseDeltaker>();
+
+            // Insert for "poengrenn"-serie
+            if (konkurranse.TypeID == "poengrenn" && konkurranse.Serie != null)
             {
-                KonkurranseID = id,
-                KlasseID = deltaker.KlasseID,
-                TypeID = deltaker.TypeID,
-                PersonID = deltaker.PersonID,
-                StartNummer = FinnNesteLedigeStartnummer(konkurranse, deltaker.KlasseID)
-            });
+                var konkurranseSeriePoengrenn = _konkurranseRepo.Get(k => k.Serie == konkurranse.Serie && k.TypeID == konkurranse.TypeID).ToList();
+                if (konkurranseSeriePoengrenn != null)
+                {
+                    foreach (var konkurranseSerie in konkurranseSeriePoengrenn)
+                    {
+                        var inserted = _konkurranseDeltagerRepo.Insert(new KonkurranseDeltaker
+                        {
+                            KonkurranseID = konkurranseSerie.KonkurranseID,
+                            KlasseID = deltaker.KlasseID,
+                            TypeID = deltaker.TypeID,
+                            PersonID = deltaker.PersonID,
+                            StartNummer = FinnNesteLedigeStartnummer(konkurranseSerie, deltaker.KlasseID)
+                        });
+                        insertedList.Add(inserted);
+                    }
+                }
+            }
+            else
+            {
+
+                var inserted = _konkurranseDeltagerRepo.Insert(new KonkurranseDeltaker
+                {
+                    KonkurranseID = id,
+                    KlasseID = deltaker.KlasseID,
+                    TypeID = deltaker.TypeID,
+                    PersonID = deltaker.PersonID,
+                    StartNummer = FinnNesteLedigeStartnummer(konkurranse, deltaker.KlasseID)
+                });
+                insertedList.Add(inserted);
+            }
+            return insertedList;
         }
 
         // PUT api/konkurranse/5/deltaker/2
@@ -150,6 +180,20 @@ namespace Poengrenn.API.Controllers
             var deltakerUpdate = _konkurranseDeltagerRepo.Get(d => d.KonkurranseID == id && d.PersonID == deltaker.PersonID).FirstOrDefault();
             if (deltakerUpdate == null)
                 return null;
+
+            // Update payment for "poengrenn"-serie
+            if (konkurranse.TypeID == "poengrenn" && konkurranse.Serie != null && deltaker.Betalt != deltakerUpdate.Betalt)
+            {
+                var konkurranseDeltakerSerie = _konkurranseDeltagerRepo.Get(d => d.Konkurranse.Serie == konkurranse.Serie && d.PersonID == deltaker.PersonID).ToList();
+                if (konkurranseDeltakerSerie != null)
+                {
+                    foreach (var deltakerSerie in konkurranseDeltakerSerie)
+                    {
+                        deltakerSerie.Betalt = deltaker.Betalt;
+                        _konkurranseDeltagerRepo.Update(deltakerSerie);
+                    }
+                }
+            }
 
             if (deltakerUpdate.KlasseID == deltaker.KlasseID)
             {

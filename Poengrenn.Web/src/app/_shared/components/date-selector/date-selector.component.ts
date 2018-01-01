@@ -50,6 +50,7 @@ export class DateSelectorComponent implements OnInit {
     console.log(this.dateTemp);
     console.log(this.timeTemp);
     var emitDate = new Date(this.dateTemp.year, this.dateTemp.month - 1, this.dateTemp.day, this.timeTemp.hour, this.timeTemp.minute);
-    this.onDateChange.emit(emitDate);
+    //this.onDateChange.emit(emitDate);
+    this.onDateChange.next(emitDate);
   }
 }

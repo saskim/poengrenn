@@ -5,7 +5,7 @@ export class Konkurranse {
     navn: string;
     dato: Date;
     typeID: string;
-    avlyst: boolean;
+    status: string;
     konkurranseDeltakere: KonkurranseDeltaker[];
     konkurranseKlasser: KonkurranseKlasse[];
     konkurranseType: KonkurranseType;

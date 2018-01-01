@@ -33,8 +33,6 @@ export class EditCompetitionParticipantModalComponent implements OnInit {
   }
 
   updateCompetitionParticipant() {
-    
-      
     this.participant.startTid = this._compService.toTimeWithLeadingZeros(this.startTime);
     this.participant.sluttTid = this._compService.toTimeWithLeadingZeros(this.endTime);
     this.participant.tidsforbruk = this._compService.toTimeWithLeadingZeros(this.totalTime);

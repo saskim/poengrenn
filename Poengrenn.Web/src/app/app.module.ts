@@ -27,6 +27,7 @@ import { RegisterCompetitionResultsModalComponent } from './competition/competit
 import { AdminLoginComponent } from './auth/login/admin-login.component';
 import { LogoutComponent } from './auth/logout/logout.component';
 import { UserLoginComponent } from './auth/login/user-login.component';
+import { EditCompetitionModalComponent } from './competition/competition-details/edit-competition-modal/edit-competition-modal.component';
 
 @NgModule({
   declarations: [
@@ -46,9 +47,11 @@ import { UserLoginComponent } from './auth/login/user-login.component';
     RegisterCompetitionResultsModalComponent,
     AdminLoginComponent,
     LogoutComponent,
-    UserLoginComponent
+    UserLoginComponent,
+    EditCompetitionModalComponent
   ],
   entryComponents: [
+    EditCompetitionModalComponent,
     EditCompetitionClassModalComponent,
     EditCompetitionParticipantModalComponent,
     PersonModalComponent,

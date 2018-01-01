@@ -94,7 +94,10 @@ export class CompetitionCreateComponent implements OnInit {
     //   if (d)
     //     this.model.datoer.push(d);
     // });
-
+    this.model.datoer.forEach(d => {
+      let timezoneOffset = d.getTimezoneOffset();
+      d = new Date(d.valueOf() - (timezoneOffset * 60000));
+    });
     console.log(this.model);
     this._apiService.CreateCompetition(this.model)
       .subscribe(() => {

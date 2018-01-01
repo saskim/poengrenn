@@ -11,7 +11,8 @@ import { Konkurranse, KonkurranseKlasse, KonkurranseDeltaker, NyKonkurranseDelta
 import { EditCompetitionParticipantModalComponent } from './edit-competition-participant-modal/edit-competition-participant-modal.component';
 import { PersonModalComponent } from './person-modal/person-modal.component';
 import { RegisterCompetitionResultsModalComponent } from './register-competition-results-modal/register-competition-results-modal.component';
-import { GENDERS } from 'app/_shared/constants/constants';
+import { EditCompetitionModalComponent } from './edit-competition-modal/edit-competition-modal.component';
+import { GENDERS, COMP_STATUSES } from 'app/_shared/constants/constants';
 declare var moment: any;
 
 @Component({
@@ -50,8 +51,11 @@ export class CompetitionDetailsComponent implements OnInit {
   showClassIDFilter: boolean;
 
   genders: any[];
+  compStatuses: { id: string, displayText: string }[];
 
   isDone: boolean;
+  isActive: boolean;
+  compStatus: { id: string, displayText: string };
 
   constructor(
     private _route: ActivatedRoute, 
@@ -63,6 +67,7 @@ export class CompetitionDetailsComponent implements OnInit {
     let id = this._route.snapshot.params['id'];
     
     this.genders = GENDERS.slice(0, GENDERS.length-1);
+    this.compStatuses = COMP_STATUSES;
 
     this.getPersonsForSearch();
     this.getCompetition(id);
@@ -276,18 +281,18 @@ export class CompetitionDetailsComponent implements OnInit {
 
     var curCompClass = this.competitionClasses.find(c => c.klasseID == nyKonkurranseDeltaker.klasseID);
     
-    if (lastParticipantInClass.startNummer >= curCompClass.sisteStartnummer) {
+    if (lastParticipantInClass && lastParticipantInClass.startNummer >= curCompClass.sisteStartnummer) {
       this.lastAddedPersonMessage = `<h5>Sjekk startnummer!</h5>Deltakeren har fått et startnummer som er høyere enn siste startnummer i gjeldende klasse.<br/>Rediger deltakeren og skriv inn et annet startnummer`;
     }
 
     console.log(nyKonkurranseDeltaker);
     this._apiService.RegisterForCompetition(this.competition.konkurranseID, nyKonkurranseDeltaker)
-      .subscribe((result:KonkurranseDeltaker) => {
+      .subscribe((result:KonkurranseDeltaker[]) => {
         console.log(result);
         
         this.getCompetitionParticipants();
         this.lastAddedPerson = this.selectedPerson;
-        this.lastAddedStartNumber = result.startNummer;
+        this.lastAddedStartNumber = result[0].startNummer;
         this.setSelectedPerson(null);
       });
   }
@@ -299,6 +304,11 @@ export class CompetitionDetailsComponent implements OnInit {
         this.competition = result;
 
         this.isDone = this.competition.dato > new Date();
+        this.isActive = (this.competition.status === "Aktiv");
+
+        this.compStatus = this.compStatuses.find(s => {
+          return (s.id === this.competition.status);
+        });
 
         this.getCompetitionClasses();
         this.getCompetitionParticipants();
@@ -399,6 +409,17 @@ export class CompetitionDetailsComponent implements OnInit {
 
     modalRef.result.then((result) => {
       this.getCompetitionParticipants();
+    });
+  }
+
+  openEditCompetitionModal() {
+    let options: NgbModalOptions = { size: "lg" };
+    const modalRef = this._modalService.open(EditCompetitionModalComponent, options);
+    
+    modalRef.componentInstance.competition = this.competition;
+
+    modalRef.result.then((result) => {
+      this.getCompetition(this.competition.konkurranseID);
     });
   }
 

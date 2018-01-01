@@ -1,13 +1,16 @@
 <div class="card">
   <div class="card-block">
-      <button *ngIf="isAdmin()" type="submit" class="btn btn-primary float-right" (click)="openEditResultsModal()">
-        <i class="fa fa-clock-o" aria-hidden="true"></i> Registrer resultater...
-      </button>
-    <h4 class="card-title">{{competition?.navn}}</h4>
+    <button *ngIf="isAdmin()" type="submit" class="btn btn-primary float-right" (click)="openEditResultsModal()">
+      <i class="fa fa-clock-o" aria-hidden="true"></i> Resultater...
+    </button>
+    <button *ngIf="isAdmin()" type="submit" class="btn btn-primary float-right mr-2" (click)="openEditCompetitionModal()">
+      <i class="fa fa-edit" aria-hidden="true"></i> Rediger...
+    </button>
+    <h4 class="card-title">{{competition?.navn}} <span class="status">{{compStatus?.displayText}}</span></h4>
     <h6 class="card-subtitle mb-2 text-muted">{{competition?.dato | amDateFormat:'DD.MM.YYYY'}} kl. {{competition?.dato | amDateFormat:'HH:mm'}}</h6>
 
 
-    <div class="mt-3">
+    <div class="mt-3" *ngIf="isActive">
       <ng-template #searchResultFormatter let-r="result" let-t="term">
         {{ r?.fornavn }} {{r?.etternavn}} ({{r?.fodselsar}}) <small class="text-muted">ID={{r.personID}}</small>
       </ng-template>
@@ -44,7 +47,7 @@
       Du må logge inn for å kunne melde deg på. <a class="nav-link" routerLink="/login"><i class="fa fa-user" aria-hidden="true"></i> Logg inn her</a>
     </div>
     
-    <div *ngIf="isAdmin() || isMe()">
+    <div *ngIf="isActive && (isAdmin() || isMe())">
       <div class="mt-3" *ngIf="matchingCompetitionClasses">
         <label class="font-weight-bold" for="radio1">Tilgjengelige klasser</label>
 
@@ -59,7 +62,6 @@
             <span class="custom-control-description">{{(compClass?.navn) ? compClass?.navn : compClass?.klasseID}}</span>
           </label>
         </div>
-
         <button type="submit" class="btn btn-primary" [disabled]="!selectedCompetitionClass.klasseID || !canRegister" (click)="registerForCompetition()">Meld på</button>
         <span *ngIf="!selectedCompetitionClass.klasseID || !canRegister" class="text-danger">{{errorMessage}}</span>
       </div>

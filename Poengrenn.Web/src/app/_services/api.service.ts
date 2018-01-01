@@ -55,6 +55,9 @@ export class ApiService {
   public CreateCompetition(competitionCreate: KonkurranseOpprett) {
     return this.post(Endpoints.Competition.Post, competitionCreate);
   }
+  public UpdateCompetition(competition: Konkurranse) {
+    return this.put(Endpoints.Competition.Put, competition);
+  }
   
   /* Competition participants */
   public RegisterForCompetition(konkurranseID: number, nyKonkurranseDeltaker: NyKonkurranseDeltaker) {

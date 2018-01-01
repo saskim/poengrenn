@@ -19,7 +19,7 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
 
   filteredParticipants: KonkurranseDeltaker[];
   currentParticipant: KonkurranseDeltaker;
-  selectedCompetitionClass: KonkurranseKlasse;
+  //selectedCompetitionClass: KonkurranseKlasse;
   defaultStartDiffInSeconds: number;
 
   participantIdx = 0;
@@ -220,7 +220,6 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
     });
   }
   private isCompetitionClassWithTime(klasseID) : boolean {
-    //console.log(this.competition);
     let compClass = this.competition.konkurranseKlasser.find(k => k.klasseID === klasseID && k.medTidtaking);
     if (compClass)
       return compClass.medTidtaking;

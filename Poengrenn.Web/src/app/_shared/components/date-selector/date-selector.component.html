@@ -11,6 +11,6 @@
     </div>
   </div>
   <div class="p-2">
-    <ngb-timepicker [(ngModel)]="timeTemp" [meridian]="meridian" [spinners]="true" [size]="timeSize"></ngb-timepicker>
+    <ngb-timepicker [(ngModel)]="timeTemp" [meridian]="meridian" [spinners]="true" [size]="timeSize" (ngModelChange)="modelChange()"></ngb-timepicker>
   </div>
 </div>
