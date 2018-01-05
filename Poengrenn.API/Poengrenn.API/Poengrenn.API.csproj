@@ -247,6 +247,8 @@
     </Content>
     <None Include="Properties\PublishProfiles\flatas-api - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\flatas-api - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\flatas-api-test - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\poengrenn - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
