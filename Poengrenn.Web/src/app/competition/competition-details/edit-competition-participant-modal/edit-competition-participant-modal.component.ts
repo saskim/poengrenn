@@ -22,6 +22,7 @@ export class EditCompetitionParticipantModalComponent implements OnInit {
   startTime: TimeViewModel;
   endTime: TimeViewModel;
   totalTime: TimeViewModel;
+  medTidtaking: boolean;
 
   constructor(
     public _activeModal: NgbActiveModal,
@@ -29,6 +30,8 @@ export class EditCompetitionParticipantModalComponent implements OnInit {
     private _compService: CompetitionService) { }
 
   ngOnInit() {
+    let compClass = this.matchingCompetitionClasses.find(c => c.klasseID == this.participant.klasseID);
+    this.medTidtaking = compClass.medTidtaking;
     this.setStartAndEndTime(this.participant);
   }
 
