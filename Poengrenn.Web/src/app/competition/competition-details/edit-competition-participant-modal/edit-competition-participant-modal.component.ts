@@ -43,8 +43,8 @@ export class EditCompetitionParticipantModalComponent implements OnInit {
       });
   }
 
-  deleteCompetitionParticipant() {
-    if(confirm("Er du sikker på at du vil slette deltaker?")) {   
+  unregisterCompetitionParticipant() {
+    if(confirm("Er du sikker på at du vil melde av deltaker?")) {   
       this._apiService.DeleteCompetitionParticipant(this.participant)
         .subscribe(result => {
           console.log(result);

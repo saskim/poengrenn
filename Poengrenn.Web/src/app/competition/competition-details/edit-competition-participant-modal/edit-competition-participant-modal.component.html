@@ -85,7 +85,7 @@
   </form>
 </div>
 <div class="modal-footer">
-  <button type="submit" class="btn btn-primary float-left" (click)="deleteCompetitionParticipant()">Slett</button>
+  <button type="submit" class="btn btn-primary float-left" (click)="unregisterCompetitionParticipant()">Meld av</button>
   <button type="submit" class="btn btn-primary" [disabled]="!editCompetitionParticipantForm.valid" (click)="updateCompetitionParticipant()">Lagre</button>
   <button type="button" class="btn btn-secondary" (click)="_activeModal.close('Close click')">Lukk</button>
 </div>
