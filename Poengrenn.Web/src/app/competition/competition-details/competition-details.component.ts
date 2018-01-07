@@ -366,7 +366,7 @@ export class CompetitionDetailsComponent implements OnInit {
     let options: NgbModalOptions = { size: "lg" };
     const modalRef = this._modalService.open(EditCompetitionParticipantModalComponent, options);
     
-    modalRef.componentInstance.participant = participant;
+    modalRef.componentInstance.participant = Object.assign({}, participant);
     modalRef.componentInstance.matchingCompetitionClasses = this.findBestMatchingClass(participant.person);
 
     modalRef.result.then((result) => {

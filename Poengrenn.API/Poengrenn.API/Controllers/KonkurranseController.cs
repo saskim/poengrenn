@@ -140,6 +140,10 @@ namespace Poengrenn.API.Controllers
                 {
                     foreach (var konkurranseSerie in konkurranseSeriePoengrenn)
                     {
+                        var alreadyRegistered = _konkurranseDeltagerRepo.Any(d => d.PersonID == deltaker.PersonID && d.KonkurranseID == konkurranseSerie.KonkurranseID);
+                        if (alreadyRegistered)
+                            continue;
+
                         var inserted = _konkurranseDeltagerRepo.Insert(new KonkurranseDeltaker
                         {
                             KonkurranseID = konkurranseSerie.KonkurranseID,

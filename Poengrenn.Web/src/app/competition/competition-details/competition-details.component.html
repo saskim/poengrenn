@@ -71,6 +71,7 @@
         <div class="alert alert-success">
           Sist lagt til: {{lastAddedPerson?.fornavn}} {{lastAddedPerson?.etternavn}}
           <h5>Startnummer: {{lastAddedStartNumber}}</h5>
+          <span *ngIf="competition.typeID == 'poengrenn'">Du ble samtidig automatisk påmeldt de andre rennene i '{{competition?.navn}}'</span>
   
           <div *ngIf="lastAddedPersonMessage">
             <span class="font-weight-bold text-danger" [innerHtml]="lastAddedPersonMessage"></span>

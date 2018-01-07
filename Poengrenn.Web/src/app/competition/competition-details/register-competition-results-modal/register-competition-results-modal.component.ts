@@ -168,7 +168,7 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
     this.currentParticipant = this.filteredParticipants.slice(index)[0];
     this.participantIdx = index;
 
-    if (!this.currentParticipant.tidsforbruk) {
+    if (this.currentParticipant && !this.currentParticipant.tidsforbruk) {
       this.currentParticipant.startTid = prevStartTid;
       this.currentParticipant.sluttTid = this.currentParticipant.startTid;
     }
@@ -192,6 +192,8 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
   }
 
   private setStartAndEndTime(participant: KonkurranseDeltaker) {
+    if (!participant)
+      return;
     this.startTime = {
       hour: +participant.startTid.slice(0, 2),
       minute: +participant.startTid.slice(3, 5),

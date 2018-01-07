@@ -16,7 +16,7 @@
   </select>-->
   <form #registerResultsForm="ngForm" class="">
     
-    <div class="form-group">
+    <div class="form-group" *ngIf="currentParticipant">
         <div class="row pt-2">
           <div class="col">
             <button type="button" class="btn btn-primary" (click)="getParticipant(prevParticipantWithoutTime())">Forrige uten tid</button>
@@ -75,6 +75,6 @@
   </form>
 </div>
 <div class="modal-footer">
-  <button type="submit" class="btn btn-primary" [disabled]="!registerResultsForm.valid || disableSave" (click)="saveParticipantResult()">Oppdater</button>
+  <button type="submit" class="btn btn-primary" [disabled]="!registerResultsForm.valid || disableSave || !currentParticipant" (click)="saveParticipantResult()">Oppdater</button>
   <button type="button" class="btn btn-secondary" (click)="_activeModal.close('Close click')">Lukk</button>
 </div>

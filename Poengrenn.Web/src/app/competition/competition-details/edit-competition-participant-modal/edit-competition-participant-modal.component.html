@@ -43,7 +43,7 @@
           </div>
         </div>
         <div class="row">
-            <div class="col row">
+            <!-- <div class="col row">
               <div class="form-group col">
                 <label class="font-weight-bold" for="tilstede">Tilstede</label>
                 <br/>
@@ -58,13 +58,13 @@
                   <input [(ngModel)]="participant.betalt" type="checkbox" class="form-check-input" name="betalt" placeholder="">
                 </label>
               </div>
-            </div>
+            </div> -->
             <div class="form-group col">
               <label class="font-weight-bold" for="betalingsNotat">Betalingsnotat</label>
               <input [(ngModel)]="participant.betalingsNotat" type="text" class="form-control" name="betalingsNotat" placeholder="">
             </div>
         </div>
-        <div class="row">
+        <div class="row" *ngIf="medTidtaking">
           <div class="form-group col">
             <label class="font-weight-bold" for="starttid">Starttid</label>
             <ngb-timepicker [(ngModel)]="startTime" (change)="updateTidsforbruk()" [spinners]="false" [seconds]="true" name="tp-startTime"></ngb-timepicker>
@@ -74,7 +74,7 @@
             <ngb-timepicker [(ngModel)]="endTime" (change)="updateTidsforbruk()" [spinners]="false" [seconds]="true" name="tp-endtime"></ngb-timepicker>
           </div>
         </div>
-        <div class="row">
+        <div class="row" *ngIf="medTidtaking">
           <div class="form-group col"></div>
           <div class="form-group col">
             <label class="font-weight-bold" for="tidsforbruk">Tidsforbruk</label>
@@ -85,7 +85,7 @@
   </form>
 </div>
 <div class="modal-footer">
-  <button type="submit" class="btn btn-primary float-left" (click)="deleteCompetitionParticipant()">Slett</button>
+  <!-- <button type="submit" class="btn btn-primary float-left" (click)="unregisterCompetitionParticipant()">Meld av</button> -->
   <button type="submit" class="btn btn-primary" [disabled]="!editCompetitionParticipantForm.valid" (click)="updateCompetitionParticipant()">Lagre</button>
   <button type="button" class="btn btn-secondary" (click)="_activeModal.close('Close click')">Lukk</button>
 </div>
