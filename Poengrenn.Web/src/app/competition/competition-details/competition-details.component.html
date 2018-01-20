@@ -10,10 +10,10 @@
     <h6 class="card-subtitle mb-2 text-muted">{{competition?.dato | amDateFormat:'DD.MM.YYYY'}} kl. {{competition?.dato | amDateFormat:'HH:mm'}}</h6>
 
 
-    <div *ngIf="isLoggedIn()">
+    <div *ngIf="isLoggedIn()" class="text-warning">
       <p *ngIf="isAdmin()">Du er admin og kan melde på alle</p>
       <div *ngIf="!isAdmin()">
-        <span>Du kan melde på:</span>
+        <span>Du har rettigheter til å melde på:</span>
         <ul class="list-inline related-persons-list">
             <li class="list-inline-item" *ngFor="let p of relatedPersons">
                 {{ p.fornavn }} {{ p.etternavn }}
@@ -27,7 +27,7 @@
         {{ r?.fornavn }} {{r?.etternavn}} ({{r?.fodselsar}}) <small class="text-muted">ID={{r.personID}}</small>
       </ng-template>
       <div class="input-group">
-        <div class="input-group-addon hidden-sm-down">Finn person</div>
+        <div class="input-group-addon hidden-sm-down">Finn deltaker</div>
         <input id="typeahead-search" type="text" class="form-control"
           [(ngModel)]="searchModel"
           [ngbTypeahead]="search"
@@ -40,10 +40,10 @@
         </span>
       </div>
       <div class="float-right mt-2" *ngIf="selectedPerson && (isMe() || isAdmin())">
-        <button type="submit" class="btn btn-primary" (click)="openPersonModal(selectedPerson)"><i class="fa fa-pencil" aria-hidden="true"></i> Rediger person...</button>
+        <button type="submit" class="btn btn-primary" (click)="openPersonModal(selectedPerson)"><i class="fa fa-pencil" aria-hidden="true"></i> Rediger deltaker...</button>
       </div>
       <div class="float-right mt-2 mr-2">
-        <button type="submit" class="btn btn-primary" (click)="openPersonModal(null)"><i class="fa fa-plus" aria-hidden="true"></i> Opprett person...</button>
+        <button type="submit" class="btn btn-primary" (click)="openPersonModal(null)"><i class="fa fa-plus" aria-hidden="true"></i> Registrer ny deltaker...</button>
       </div>
       
     </div>
