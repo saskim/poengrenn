@@ -91,7 +91,7 @@ export class CompetitionDetailsComponent implements OnInit {
   setRelatedPersons() {
     const user = this._authService.loggedInUser();
     if (user) {
-      this.relatedPersons = this.persons.filter(person => user['personIDer'].includes(person.personID));
+      this.relatedPersons = this.persons.filter(person => (user['personIDer']) ? user['personIDer'].includes(person.personID) : false);
     }
   }
 
