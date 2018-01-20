@@ -79,11 +79,20 @@
       </div>
     </div>
 
-    <div class="mt-3" *ngIf="lastAddedPerson">
+    <div class="mt-3" *ngIf="lastAddedParticipant">
         <div class="alert alert-success">
-          Sist lagt til: {{lastAddedPerson?.fornavn}} {{lastAddedPerson?.etternavn}}
-          <h5>Startnummer: {{lastAddedStartNumber}}</h5>
-          <span *ngIf="competition.typeID == 'poengrenn'">Du ble samtidig automatisk påmeldt de andre rennene i '{{competition?.navn}}'</span>
+          Sist lagt til: {{lastAddedParticipant?.person?.fornavn}} {{lastAddedParticipant?.person?.etternavn}}
+          <h5>Startnummer: {{lastAddedParticipant?.startNummer}}</h5>
+
+          <div *ngIf="isAdmin()">
+            <button type="button" class="btn btn-outline-success btn-sm" (click)="updateTilstede(lastAddedParticipant)">
+              Tilstede!
+            </button>
+            <button type="button" class="btn btn-outline-success btn-sm" (click)="updateBetalt(lastAddedParticipant)">
+              Betalt!
+            </button>
+          </div>
+          <div *ngIf="competition.typeID == 'poengrenn'">Du ble samtidig automatisk påmeldt de andre rennene i '{{competition?.navn}}'</div>
   
           <div *ngIf="lastAddedPersonMessage">
             <span class="font-weight-bold text-danger" [innerHtml]="lastAddedPersonMessage"></span>

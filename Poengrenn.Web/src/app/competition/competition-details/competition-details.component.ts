@@ -34,8 +34,7 @@ export class CompetitionDetailsComponent implements OnInit {
   errorMessage: string;
   canRegister: boolean;
 
-  lastAddedPerson: Person;
-  lastAddedStartNumber: number;
+  lastAddedParticipant: KonkurranseDeltaker;
   lastAddedPersonMessage: string;
   updateMessage: string;
   relatedPersons: Person[];  // Persons the logged in user can sign up
@@ -277,7 +276,7 @@ export class CompetitionDetailsComponent implements OnInit {
   private saveCompetitionParticipant(participant: KonkurranseDeltaker) {
     this._apiService.UpdateCompetitionParticipant(participant)
       .subscribe((result: KonkurranseDeltaker) => {
-        console.log(result);
+        this.getCompetitionParticipants();
     });
   }
 
@@ -304,8 +303,8 @@ export class CompetitionDetailsComponent implements OnInit {
         console.log(result);
         
         this.getCompetitionParticipants();
-        this.lastAddedPerson = this.selectedPerson;
-        this.lastAddedStartNumber = result[0].startNummer;
+        this.lastAddedParticipant = result.find(d => d.konkurranseID == this.competition.konkurranseID);
+        this.lastAddedParticipant.person = this.selectedPerson;
         this.setSelectedPerson(null);
       });
   }
