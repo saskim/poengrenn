@@ -10,7 +10,7 @@
     <h6 class="card-subtitle mb-2 text-muted">{{competition?.dato | amDateFormat:'DD.MM.YYYY'}} kl. {{competition?.dato | amDateFormat:'HH:mm'}}</h6>
 
 
-    <div class="mt-3" *ngIf="isActive">
+    <div class="mt-3" *ngIf="isAdmin() || isActive">
       <ng-template #searchResultFormatter let-r="result" let-t="term">
         {{ r?.fornavn }} {{r?.etternavn}} ({{r?.fodselsar}}) <small class="text-muted">ID={{r.personID}}</small>
       </ng-template>
@@ -47,7 +47,7 @@
       Du må logge inn for å kunne melde deg på. <a class="nav-link" routerLink="/login"><i class="fa fa-user" aria-hidden="true"></i> Logg inn her</a>
     </div>
     
-    <div *ngIf="isActive && (isAdmin() || isMe())">
+    <div *ngIf="isAdmin() || (isActive && isMe())">
       <div class="mt-3" *ngIf="matchingCompetitionClasses">
         <label class="font-weight-bold" for="radio1">Tilgjengelige klasser</label>
 

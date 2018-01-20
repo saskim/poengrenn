@@ -4,7 +4,7 @@ import { NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { ApiService } from 'app/_services/api.service';
 import { CompetitionService } from 'app/competition/competition.service';
 import { KonkurranseDeltaker, KonkurranseKlasse, Person } from 'app/_models/models';
-import { TimeViewModel } from '../../models';
+import { ITimeViewModel, TimeViewModel } from '../../models';
 declare var moment: any;
 
 @Component({
@@ -19,9 +19,9 @@ export class EditCompetitionParticipantModalComponent implements OnInit {
   @Input() participant: KonkurranseDeltaker;
   @Input() matchingCompetitionClasses: KonkurranseKlasse[];
 
-  startTime: TimeViewModel;
-  endTime: TimeViewModel;
-  totalTime: TimeViewModel;
+  startTime: ITimeViewModel;
+  endTime: ITimeViewModel;
+  totalTime: ITimeViewModel;
   medTidtaking: boolean;
 
   constructor(
@@ -57,33 +57,24 @@ export class EditCompetitionParticipantModalComponent implements OnInit {
   }
 
   updateTidsforbruk() {
+    this.totalTime = new TimeViewModel(0, 0, 0);
+    
     if (this.startTime && this.endTime) {
-      let startDuration = moment.duration({seconds: this.startTime.second, minutes: this.startTime.minute, hours: this.startTime.hour});
-      let endDuration = moment.duration({seconds: this.endTime.second, minutes: this.endTime.minute, hours: this.endTime.hour});
+      let startDuration = moment.duration({seconds: this.startTime.duration.second, minutes: this.startTime.duration.minute, hours: this.startTime.duration.hour});
+      let endDuration = moment.duration({seconds: this.endTime.duration.second, minutes: this.endTime.duration.minute, hours: this.endTime.duration.hour});
       const diff = endDuration.subtract(startDuration);
 
-      this.totalTime = {
-        hour: diff.hours(),
-        minute: diff.minutes(),
-        second: diff.seconds()
-      }
-    }
-    else {
-      this.totalTime = {
-        hour: 0,
-        minute: 0,
-        second: 0
-      }
+      this.totalTime = new TimeViewModel(diff.hours(), diff.minutes(), diff.seconds());
     }
   }
 
   private setStartAndEndTime(participant: KonkurranseDeltaker) {
-    this.startTime = {
+    this.startTime.duration = {
       hour: +participant.startTid.slice(0, 2),
       minute: +participant.startTid.slice(3, 5),
       second: +participant.startTid.slice(6, 8)
     }
-    this.endTime = {
+    this.endTime.duration = {
       hour: +participant.sluttTid.slice(0, 2),
       minute: +participant.sluttTid.slice(3, 5),
       second: +participant.sluttTid.slice(6, 8)
