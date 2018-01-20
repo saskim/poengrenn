@@ -479,8 +479,8 @@ export class CompetitionDetailsComponent implements OnInit {
         let matchingGender = (genderFilter.length == 0) ? true : (genderFilter.some(g => g == participant.person.kjonn));
         let matchingCompetitionClasses = (competitionClassFilter.length == 0) ? true : (competitionClassFilter.some(c => c == participant.klasseID));
         let matchingStartNumber = (startNumberFilter.length == 0) ? true : (participant.startNummer.toString().startsWith(startNumberFilter));
-        let matchingFirstname = (firstnameFilter.length == 0) ? true : (participant.person.fornavn.startsWith(firstnameFilter));
-        let matchingLastname = (lastnameFilter.length == 0) ? true : (participant.person.etternavn.startsWith(lastnameFilter));
+        let matchingFirstname = (firstnameFilter.length == 0) ? true : (participant.person.fornavn.indexOf(firstnameFilter) >= 0);
+        let matchingLastname = (lastnameFilter.length == 0) ? true : (participant.person.etternavn.indexOf(lastnameFilter) >= 0);
         
         return (matchingGender && matchingCompetitionClasses && matchingStartNumber && matchingFirstname && matchingLastname);
       });
