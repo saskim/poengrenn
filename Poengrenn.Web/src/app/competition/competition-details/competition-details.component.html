@@ -10,17 +10,29 @@
     <h6 class="card-subtitle mb-2 text-muted">{{competition?.dato | amDateFormat:'DD.MM.YYYY'}} kl. {{competition?.dato | amDateFormat:'HH:mm'}}</h6>
 
 
+    <div *ngIf="isLoggedIn()">
+      <p *ngIf="isAdmin()">Du er admin og kan melde på alle</p>
+      <div *ngIf="!isAdmin()">
+        <span>Du kan melde på:</span>
+        <ul class="list-inline related-persons-list">
+            <li class="list-inline-item" *ngFor="let p of relatedPersons">
+                {{ p.fornavn }} {{ p.etternavn }}
+            </li>
+        </ul>
+      </div>
+    </div>
+
     <div class="mt-3" *ngIf="isAdmin() || isActive">
       <ng-template #searchResultFormatter let-r="result" let-t="term">
         {{ r?.fornavn }} {{r?.etternavn}} ({{r?.fodselsar}}) <small class="text-muted">ID={{r.personID}}</small>
       </ng-template>
       <div class="input-group">
         <div class="input-group-addon hidden-sm-down">Finn person</div>
-        <input id="typeahead-search" type="text" class="form-control" 
-          [(ngModel)]="searchModel" 
-          [ngbTypeahead]="search" 
-          [resultTemplate]="searchResultFormatter" 
-          [inputFormatter]="searchFormatter" 
+        <input id="typeahead-search" type="text" class="form-control"
+          [(ngModel)]="searchModel"
+          [ngbTypeahead]="search"
+          [resultTemplate]="searchResultFormatter"
+          [inputFormatter]="searchFormatter"
           (selectItem)="onPersonSelected($event)"
           placeholder="Søk etter fornavn eller etternavn" />
         <span class="input-group-btn">

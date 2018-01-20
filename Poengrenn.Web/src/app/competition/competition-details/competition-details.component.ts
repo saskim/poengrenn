@@ -33,11 +33,12 @@ export class CompetitionDetailsComponent implements OnInit {
   matchingCompetitionClasses: KonkurranseKlasse[];
   errorMessage: string;
   canRegister: boolean;
-  
+
   lastAddedPerson: Person;
   lastAddedStartNumber: number;
   lastAddedPersonMessage: string;
   updateMessage: string;
+  relatedPersons: Person[];  // Persons the logged in user can sign up
 
   filteredParticpants: KonkurranseDeltaker[];
   filter : {
@@ -82,6 +83,18 @@ export class CompetitionDetailsComponent implements OnInit {
 
     this.updateMessage = "";
   }
+
+  isLoggedIn() {
+    return this._authService.isAuthenticated();
+  }
+
+  setRelatedPersons() {
+    const user = this._authService.loggedInUser();
+    if (user) {
+      this.relatedPersons = this.persons.filter(person => user['personIDer'].includes(person.personID));
+    }
+  }
+
   onPersonSelected(selectedItemEvent) {
     this.setSelectedPerson(selectedItemEvent.item);
   }
@@ -500,20 +513,24 @@ export class CompetitionDetailsComponent implements OnInit {
     this._apiService.GetAllPersons()
       .subscribe((result: Person[]) => {
         this.persons = result;
+        this.setRelatedPersons();
       });
   }
 
   private findBestMatchingClass(person: Person) {
     let alder = new Date().getFullYear() - person.fodselsar;
-    
+
     let compClasses = this.competitionClasses.filter(function (item) {
       let matchingAge = person.fodselsar == 1900 || (item.minAlder <= alder && item.maxAlder >= alder);
       let matchingGender = (item.kjonn.toLowerCase() === person.kjonn.toLowerCase() || item.kjonn.toLowerCase() === 'mix');
-      
+
       return (matchingAge && matchingGender);
     });
-    
+
     if (compClasses && compClasses.length > 0)
       return compClasses;
   }
+
+
+
 }
