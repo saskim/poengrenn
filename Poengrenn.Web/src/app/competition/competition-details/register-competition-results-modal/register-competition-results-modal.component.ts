@@ -4,7 +4,7 @@ import { NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { ApiService } from 'app/_services/api.service';
 import { CompetitionService } from 'app/competition/competition.service';
 import { Konkurranse, KonkurranseDeltaker, KonkurranseKlasse, Person } from 'app/_models/models';
-import { TimeViewModel } from '../../models';
+import { ITimeViewModel, TimeViewModel } from '../../models';
 declare var moment: any;
 
 @Component({
@@ -19,7 +19,6 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
 
   filteredParticipants: KonkurranseDeltaker[];
   currentParticipant: KonkurranseDeltaker;
-  //selectedCompetitionClass: KonkurranseKlasse;
   defaultStartDiffInSeconds: number;
 
   participantIdx = 0;
@@ -27,25 +26,14 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
   findParticipantMessage = "";
   disableSave = false;
 
-  startTime: TimeViewModel;
-  endTime: TimeViewModel;
-  totalTime: TimeViewModel;
-  // startTime = {
-  //   hour: 0,
-  //   minute: 0,
-  //   second: 0
-  // }
-  // endTime = {
-  //   hour: 0,
-  //   minute: 0,
-  //   second: 0
-  // }
+  startTime: ITimeViewModel;
+  endTime: ITimeViewModel;
+  totalTime: ITimeViewModel;
 
   constructor(
     public _activeModal: NgbActiveModal,
     private _apiService: ApiService,
-    private _compService: CompetitionService) {
-
+    private _compService: CompetitionService) {      
   }
 
   ngOnInit() {
@@ -55,59 +43,38 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
       return a.startNummer - b.startNummer;
     });
     
-    this.defaultStartDiffInSeconds = 30;
+    this.defaultStartDiffInSeconds = 15;
 
     this.filteredParticipants = this.filterParticipantsWithTime();
-    console.log(this.filteredParticipants);
     this.getParticipant(this.participantIdx);
   }
 
   updateTidsforbruk() {
+    this.totalTime = new TimeViewModel(0, 0, 0);
     if (this.startTime && this.endTime) {
-      let startDuration = moment.duration({seconds: this.startTime.second, minutes: this.startTime.minute, hours: this.startTime.hour});
-      let endDuration = moment.duration({seconds: this.endTime.second, minutes: this.endTime.minute, hours: this.endTime.hour});
-      const diff = endDuration.subtract(startDuration);
+      let startDuration = moment.duration({seconds: this.startTime.duration.second, minutes: this.startTime.duration.minute, hours: this.startTime.duration.hour});
+      let endDuration = moment.duration({seconds: this.endTime.duration.second, minutes: this.endTime.duration.minute, hours: this.endTime.duration.hour});
+      if (endDuration >= startDuration) {
+        const diff = moment.duration(endDuration.asMilliseconds() - startDuration.asMilliseconds());
+        this.totalTime = new TimeViewModel(diff.hours(), diff.minutes(), diff.seconds());
+      }
+    }
+  }
 
-      this.totalTime = {
-        hour: diff.hours(),
-        minute: diff.minutes(),
-        second: diff.seconds()
-      }
-    }
-    else {
-      this.totalTime = {
-        hour: 0,
-        minute: 0,
-        second: 0
-      }
-    }
+  updateEndTime() {
+    this.endTime.duration = this.startTime.duration;
   }
 
   addSeconds(seconds: number) {
-    //this.defaultStartDiffInSeconds = seconds;
-    let updateSluttTid = (this.currentParticipant.startTid == this.currentParticipant.sluttTid);
-    let newStartTidMs = moment.duration(this.currentParticipant.startTid).asMilliseconds() + seconds * 1000;
-    this.currentParticipant.startTid = moment.utc(newStartTidMs).format("HH:mm:ss");
-    
-    if (updateSluttTid)
-      this.currentParticipant.sluttTid = this.currentParticipant.startTid;
-
+    this.startTime.add(0, 0, seconds);
     this.updateTidsforbruk();
   }
 
-  saveParticipantResult() {
-    console.log(this.currentParticipant);
-    
+  saveParticipantResult() {    
     this.currentParticipant.startTid = this._compService.toTimeWithLeadingZeros(this.startTime);
     this.currentParticipant.sluttTid = this._compService.toTimeWithLeadingZeros(this.endTime);
     this.currentParticipant.tidsforbruk = this._compService.toTimeWithLeadingZeros(this.totalTime);
-    console.log(this.currentParticipant);
-      // this._apiService.UpdateCompetitionParticipant(this.participant)
-      //   .subscribe((result: KonkurranseDeltaker) => {
-      //     console.log(result);
-      //     this._activeModal.close({updated: result, old: this.participant});
-      //   });
-    
+
     this._apiService.UpdateCompetitionParticipant(this.currentParticipant)
       .subscribe((result: KonkurranseDeltaker) => {
         console.log(result);
@@ -115,9 +82,6 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
         // TODO:
         // Get next participant in selected class
         this.getParticipant(this.nextParticipantWithoutTime());
-        this.addSeconds(this.defaultStartDiffInSeconds * this.participantIdx);
-
-        //this._activeModal.close("Saved");
       });
   }
 
@@ -125,6 +89,7 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
     // Loop down to zero from participantIdx
     for (let i = this.participantIdx - 1; i >= 0; i--) {
       if (!this.filteredParticipants[i].tidsforbruk) {
+        this.updateEndTime();
         return i;
       }
     }
@@ -132,6 +97,7 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
     // Loop down to participantIdx from filteredParticipants
     for (let i = this.filteredParticipants.length - 1; i >= this.participantIdx; i--) {
       if (!this.filteredParticipants[i].tidsforbruk) {
+        this.updateEndTime();
         return i;
       }
     }
@@ -143,6 +109,8 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
     // Loop up from participantIdx to filteredParticipants.length
     for (let i = this.participantIdx + 1; i < this.filteredParticipants.length; i++) {
       if (!this.filteredParticipants[i].tidsforbruk) {
+        this.addSeconds(this.defaultStartDiffInSeconds);
+        this.updateEndTime();
         return i;
       }
     }
@@ -150,7 +118,12 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
     // Not found on previous loop.
     // Then loop up from zero to participantIdx
     for (let i = 0; i >= this.participantIdx; i++) {
+      if (i === this.filteredParticipants.length)
+        return this.participantIdx;
+
       if (!this.filteredParticipants[i].tidsforbruk) {
+        this.addSeconds(this.defaultStartDiffInSeconds);
+        this.updateEndTime();
         return i;
       }
     }
@@ -169,7 +142,9 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
     this.participantIdx = index;
 
     if (this.currentParticipant && !this.currentParticipant.tidsforbruk) {
-      this.currentParticipant.startTid = prevStartTid;
+      //this.startTime.add(0, 0, this.defaultStartDiffInSeconds);
+      //this.addSeconds(this.defaultStartDiffInSeconds);
+      this.currentParticipant.startTid = this.startTime.toString();//prevStartTid;
       this.currentParticipant.sluttTid = this.currentParticipant.startTid;
     }
     this.disableSave = false;
@@ -181,7 +156,7 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
     this.disableSave = true;
     this.findParticipantMessage = "";
     let currentStartnummer = this.currentParticipant.startNummer;
-    console.log(event.currentTarget.value);
+
     let startnummer = +event.currentTarget.value;
     let foundIndex = this.filteredParticipants.findIndex(p => p.startNummer == startnummer);
     if (foundIndex > -1) 
@@ -194,24 +169,26 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
   private setStartAndEndTime(participant: KonkurranseDeltaker) {
     if (!participant)
       return;
-    this.startTime = {
-      hour: +participant.startTid.slice(0, 2),
-      minute: +participant.startTid.slice(3, 5),
-      second: +participant.startTid.slice(6, 8)
-    }
-    this.endTime = {
-      hour: +participant.sluttTid.slice(0, 2),
-      minute: +participant.sluttTid.slice(3, 5),
-      second: +participant.sluttTid.slice(6, 8)
-    }
+
+    this.startTime = new TimeViewModel(
+      +participant.startTid.slice(0, 2),
+      +participant.startTid.slice(3, 5),
+      +participant.startTid.slice(6, 8)
+    );
+
+    this.endTime = new TimeViewModel(
+      +participant.sluttTid.slice(0, 2),
+      +participant.sluttTid.slice(3, 5),
+      +participant.sluttTid.slice(6, 8)
+    );
 
     this.updateTidsforbruk();
   }
 
   private toTimeWithLeadingZeros(time: TimeViewModel): string {
-    let hh = (time.hour < 10) ? `0${time.hour}` : time.hour;
-    let mm = (time.minute < 10) ? `0${time.minute}` : time.minute;
-    let ss = (time.second < 10) ? `0${time.second}` : time.second;
+    let hh = (time.duration.hour < 10) ? `0${time.duration.hour}` : time.duration.hour;
+    let mm = (time.duration.minute < 10) ? `0${time.duration.minute}` : time.duration.minute;
+    let ss = (time.duration.second < 10) ? `0${time.duration.second}` : time.duration.second;
     return `${hh}:${mm}:${ss}`;
   }
 

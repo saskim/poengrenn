@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { TimeViewModel } from './models';
+import { ITimeViewModel } from './models';
 
 @Injectable()
 export class CompetitionService {
-    toTimeWithLeadingZeros(time: TimeViewModel): string {
+    toTimeWithLeadingZeros(time: ITimeViewModel): string {
         if (!time)
             return; 
             
-        let hh = (time.hour < 10) ? `0${time.hour}` : time.hour;
-        let mm = (time.minute < 10) ? `0${time.minute}` : time.minute;
-        let ss = (time.second < 10) ? `0${time.second}` : time.second;
+        let hh = (time.duration.hour < 10) ? `0${time.duration.hour}` : time.duration.hour;
+        let mm = (time.duration.minute < 10) ? `0${time.duration.minute}` : time.duration.minute;
+        let ss = (time.duration.second < 10) ? `0${time.duration.second}` : time.duration.second;
         return `${hh}:${mm}:${ss}`;
       }
 }
