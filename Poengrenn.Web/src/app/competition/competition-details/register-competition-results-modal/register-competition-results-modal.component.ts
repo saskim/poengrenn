@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
 import { ApiService } from 'app/_services/api.service';
-import { CompetitionService } from 'app/competition/competition.service';
 import { Konkurranse, KonkurranseDeltaker, KonkurranseKlasse, Person } from 'app/_models/models';
 import { ITimeViewModel, TimeViewModel } from '../../models';
 declare var moment: any;
@@ -11,7 +10,7 @@ declare var moment: any;
   selector: 'app-register-competition-results-modal',
   templateUrl: './register-competition-results-modal.component.html',
   styleUrls: ['./register-competition-results-modal.component.scss'],
-  providers: [ApiService, CompetitionService]
+  providers: [ApiService]
 })
 export class RegisterCompetitionResultsModalComponent implements OnInit {
 
@@ -20,6 +19,7 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
   filteredParticipants: KonkurranseDeltaker[];
   currentParticipant: KonkurranseDeltaker;
   defaultStartDiffInSeconds: number;
+  lastSaved: string;
 
   participantIdx = 0;
 
@@ -30,13 +30,18 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
   endTime: ITimeViewModel;
   totalTime: ITimeViewModel;
 
+  warning: string;
+
   constructor(
     public _activeModal: NgbActiveModal,
-    private _apiService: ApiService,
-    private _compService: CompetitionService) {      
+    private _apiService: ApiService) {      
   }
 
   ngOnInit() {
+    const compDate = moment(this.competition.dato);
+    if (moment().isBefore(compDate)) {
+      this.warning = `Konkurransen har ikke vært ennå... Registrerer du på riktig konkurranse?`;
+    }
     this.competition.konkurranseDeltakere = this.competition.konkurranseDeltakere
       .filter(p => p.tilstede === true)
       .sort(function(a:KonkurranseDeltaker, b: KonkurranseDeltaker) {
@@ -71,13 +76,15 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
   }
 
   saveParticipantResult() {    
-    this.currentParticipant.startTid = this._compService.toTimeWithLeadingZeros(this.startTime);
-    this.currentParticipant.sluttTid = this._compService.toTimeWithLeadingZeros(this.endTime);
-    this.currentParticipant.tidsforbruk = this._compService.toTimeWithLeadingZeros(this.totalTime);
+    this.currentParticipant.startTid = this.startTime.toStringWithLeadingZero();
+    this.currentParticipant.sluttTid = this.endTime.toStringWithLeadingZero();
+    this.currentParticipant.tidsforbruk = this.totalTime.toStringWithLeadingZero();
 
     this._apiService.UpdateCompetitionParticipant(this.currentParticipant)
       .subscribe((result: KonkurranseDeltaker) => {
         console.log(result);
+        const lastSavedPerson = this.filteredParticipants.find(p => p.person.personID == result.personID).person;
+        this.lastSaved = `${lastSavedPerson.personID} - ${lastSavedPerson.fornavn} ${lastSavedPerson.etternavn}`;
 
         // TODO:
         // Get next participant in selected class
@@ -144,7 +151,7 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
     if (this.currentParticipant && !this.currentParticipant.tidsforbruk) {
       //this.startTime.add(0, 0, this.defaultStartDiffInSeconds);
       //this.addSeconds(this.defaultStartDiffInSeconds);
-      this.currentParticipant.startTid = this.startTime.toString();//prevStartTid;
+      this.currentParticipant.startTid = this.startTime.toStringWithLeadingZero();//prevStartTid;
       this.currentParticipant.sluttTid = this.currentParticipant.startTid;
     }
     this.disableSave = false;

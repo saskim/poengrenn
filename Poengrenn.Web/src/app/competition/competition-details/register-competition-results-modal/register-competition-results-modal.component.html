@@ -14,7 +14,10 @@
       {{c?.navn}}
     </option>
   </select>-->
-  <form #registerResultsForm="ngForm" class="">
+  <div *ngIf="warning" class="alert alert-danger">
+    {{warning}}
+  </div>
+  <form #registerResultsForm="ngForm" (keyup.enter)="saveParticipantResult()" class="">
     
     <div class="form-group" *ngIf="currentParticipant">
         <div class="row pt-2">
@@ -59,22 +62,20 @@
           </div>
         </div>
         <div class="row">
-          <div class="form-group col"></div>
+          <div class="form-group col">
+            <button type="button" class="btn btn-primary btn-sm" (click)="addSeconds(15)">+15 sek</button>
+            <button type="button" class="btn btn-primary btn-sm" (click)="addSeconds(30)">+30 sek</button>
+          </div>
           <div class="form-group col">
             <label class="font-weight-bold" for="tidsforbruk">Tid</label>
             <ngb-timepicker [(ngModel)]="totalTime.duration" [spinners]="false" [seconds]="true" name="tp-totalTime" disabled></ngb-timepicker>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <button type="button" class="btn btn-primary" (click)="addSeconds(15)">+15 sek</button>
-            <button type="button" class="btn btn-primary" (click)="addSeconds(30)">+30 sek</button>
           </div>
         </div>
     </div>
   </form>
 </div>
 <div class="modal-footer">
+  <div class="alert alert-info" *ngIf="lastSaved"><strong>Sist lagret:</strong> {{lastSaved}}</div>
   <button type="submit" class="btn btn-primary" [disabled]="!registerResultsForm.valid || disableSave || !currentParticipant" (click)="saveParticipantResult()">Oppdater</button>
   <button type="button" class="btn btn-secondary" (click)="_activeModal.close('Close click')">Lukk</button>
 </div>
