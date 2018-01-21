@@ -14,7 +14,9 @@
       {{c?.navn}}
     </option>
   </select>-->
-
+  <div *ngIf="warning" class="alert alert-danger">
+    {{warning}}
+  </div>
   <form #registerResultsForm="ngForm" (keyup.enter)="saveParticipantResult()" class="">
     
     <div class="form-group" *ngIf="currentParticipant">

@@ -29,14 +29,19 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
   startTime: ITimeViewModel;
   endTime: ITimeViewModel;
   totalTime: ITimeViewModel;
-  
+
+  warning: string;
+
   constructor(
     public _activeModal: NgbActiveModal,
     private _apiService: ApiService) {      
   }
 
   ngOnInit() {
-    
+    const compDate = moment(this.competition.dato);
+    if (moment().isBefore(compDate)) {
+      this.warning = `Konkurransen har ikke vært ennå... Registrerer du på riktig konkurranse?`;
+    }
     this.competition.konkurranseDeltakere = this.competition.konkurranseDeltakere
       .filter(p => p.tilstede === true)
       .sort(function(a:KonkurranseDeltaker, b: KonkurranseDeltaker) {
