@@ -4,6 +4,7 @@ import { NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { ApiService } from 'app/_services/api.service';
 import { Konkurranse, KonkurranseDeltaker, KonkurranseKlasse, Person } from 'app/_models/models';
 import { ITimeViewModel, TimeViewModel } from '../../models';
+import { TagContentType } from '@angular/compiler';
 declare var moment: any;
 
 @Component({
@@ -37,7 +38,7 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
     private _apiService: ApiService) {      
   }
 
-  ngOnInit() {
+  ngOnInit() {    
     const compDate = moment(this.competition.dato);
     if (moment().isBefore(compDate)) {
       this.warning = `Konkurransen har ikke vært ennå... Registrerer du på riktig konkurranse?`;
@@ -148,7 +149,7 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
     this.currentParticipant = this.filteredParticipants.slice(index)[0];
     this.participantIdx = index;
 
-    if (this.currentParticipant && !this.currentParticipant.tidsforbruk) {
+    if (this.startTime && this.currentParticipant && !this.currentParticipant.tidsforbruk) {
       //this.startTime.add(0, 0, this.defaultStartDiffInSeconds);
       //this.addSeconds(this.defaultStartDiffInSeconds);
       this.currentParticipant.startTid = this.startTime.toStringWithLeadingZero();//prevStartTid;
@@ -177,17 +178,24 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
     if (!participant)
       return;
 
-    this.startTime = new TimeViewModel(
-      +participant.startTid.slice(0, 2),
-      +participant.startTid.slice(3, 5),
-      +participant.startTid.slice(6, 8)
-    );
+    this.startTime = new TimeViewModel(0, 0, 0);
+    this.endTime = new TimeViewModel(0, 0, 0);
 
-    this.endTime = new TimeViewModel(
-      +participant.sluttTid.slice(0, 2),
-      +participant.sluttTid.slice(3, 5),
-      +participant.sluttTid.slice(6, 8)
-    );
+    if (participant.startTid) {
+      this.startTime = new TimeViewModel(
+        +participant.startTid.slice(0, 2),
+        +participant.startTid.slice(3, 5),
+        +participant.startTid.slice(6, 8)
+      );
+    }
+
+    if (participant.sluttTid) {
+      this.endTime = new TimeViewModel(
+        +participant.sluttTid.slice(0, 2),
+        +participant.sluttTid.slice(3, 5),
+        +participant.sluttTid.slice(6, 8)
+      );
+    }
 
     this.updateTidsforbruk();
   }
