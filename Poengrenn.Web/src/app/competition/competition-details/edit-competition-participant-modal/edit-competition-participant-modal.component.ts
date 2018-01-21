@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
 import { ApiService } from 'app/_services/api.service';
-import { CompetitionService } from 'app/competition/competition.service';
 import { KonkurranseDeltaker, KonkurranseKlasse, Person } from 'app/_models/models';
 import { ITimeViewModel, TimeViewModel } from '../../models';
 declare var moment: any;
@@ -11,7 +10,7 @@ declare var moment: any;
   selector: 'app-edit-competition-participant-modal',
   templateUrl: './edit-competition-participant-modal.component.html',
   styleUrls: ['./edit-competition-participant-modal.component.scss'],
-  providers: [ApiService, CompetitionService]
+  providers: [ApiService]
 })
 
 export class EditCompetitionParticipantModalComponent implements OnInit {
@@ -26,8 +25,7 @@ export class EditCompetitionParticipantModalComponent implements OnInit {
 
   constructor(
     public _activeModal: NgbActiveModal,
-    private _apiService: ApiService,
-    private _compService: CompetitionService) { }
+    private _apiService: ApiService) { }
 
   ngOnInit() {
     let compClass = this.matchingCompetitionClasses.find(c => c.klasseID == this.participant.klasseID);
@@ -36,9 +34,9 @@ export class EditCompetitionParticipantModalComponent implements OnInit {
   }
 
   updateCompetitionParticipant() {
-    this.participant.startTid = this._compService.toTimeWithLeadingZeros(this.startTime);
-    this.participant.sluttTid = this._compService.toTimeWithLeadingZeros(this.endTime);
-    this.participant.tidsforbruk = this._compService.toTimeWithLeadingZeros(this.totalTime);
+    this.participant.startTid = this.startTime.toStringWithLeadingZero();
+    this.participant.sluttTid = this.endTime.toStringWithLeadingZero();
+    this.participant.tidsforbruk = this.totalTime.toStringWithLeadingZero();
     this._apiService.UpdateCompetitionParticipant(this.participant)
       .subscribe((result: KonkurranseDeltaker) => {
         console.log(result);
