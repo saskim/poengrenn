@@ -124,9 +124,33 @@
         </thead>
         <tbody>
           <tr>
-            <td><input type="text" [ngModel]="filter.startNumber" (change)="onFilterStartNumber($event)" [ngClass]="{'text-alert': filter.startNumber}" class="form-control form-control-sm" style="width: 60px" name="filterStartNumber" width="10"/></td>
-            <td><input type="text" [ngModel]="filter.firstname" (change)="onFilterFirstname($event)" class="form-control form-control-sm" name="filterFirstname"/></td>
-            <td><input type="text" [ngModel]="filter.lastname" (change)="onFilterLastname($event)" class="form-control form-control-sm" name="filterLastname"/></td>
+            <td>
+              <div class="input-group input-group-sm">
+                <input type="text" class="form-control form-control-sm" name="filterStartNumber" style="width: 50px" width="10"
+                  [ngModel]="filter.startNumber" (change)="onFilterStartNumber($event)" [ngClass]="{'text-alert': filter.startNumber}"/>
+                <span class="input-group-btn">
+                  <button class="btn btn-secondary" type="button" (click)="onFilterStartNumber(null)"><i class="fa fa-times" aria-hidden="true"></i></button>
+                </span>
+              </div>
+            </td>
+            <td>
+              <div class="input-group input-group-sm">
+                <input type="text" class="form-control" name="filterFirstname" style="width: 130px"
+                  [ngModel]="filter.firstname" (change)="onFilterFirstname($event)"/>
+                <span class="input-group-btn">
+                  <button class="btn btn-secondary" type="button" (click)="onFilterFirstname(null)"><i class="fa fa-times" aria-hidden="true"></i></button>
+                </span>
+              </div>
+            </td>
+            <td>
+              <div class="input-group input-group-sm">
+                <input type="text" class="form-control" name="filterLastname" style="width: 130px"
+                  [ngModel]="filter.lastname" (change)="onFilterLastname($event)"/>
+                <span class="input-group-btn">
+                  <button class="btn btn-secondary" type="button" (click)="onFilterLastname(null)"><i class="fa fa-times" aria-hidden="true"></i></button>
+                </span>
+              </div>
+            </td>
             <td><!-- Filter gender -->
               <button (click)="showGenderFilter = !showGenderFilter" class="btn btn-secondary btn-sm" type="button" aria-haspopup="true" aria-expanded="false">
                 <span [ngClass]="{'text-alert': filter.genders.length > 0}">{{(filter.genders.length == 0) ? 'Velg' : filter.genders}}</span>
