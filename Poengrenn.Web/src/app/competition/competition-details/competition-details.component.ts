@@ -132,15 +132,24 @@ export class CompetitionDetailsComponent implements OnInit {
   }
 
   onFilterStartNumber(event: Event) {
-    this.filter.startNumber =  event.currentTarget["value"];
+    if (!event)
+      this.filter.startNumber = "";
+    else
+      this.filter.startNumber =  event.currentTarget["value"];
     this.filterCompetitionParticipants(this.competition.konkurranseDeltakere);
   }
   onFilterFirstname(event: Event){
-    this.filter.firstname = event.currentTarget["value"];
+    if (!event)
+      this.filter.firstname = "";
+    else
+      this.filter.firstname = event.currentTarget["value"];
     this.filterCompetitionParticipants(this.competition.konkurranseDeltakere);
   }
   onFilterLastname(event: Event){
-    this.filter.lastname = event.currentTarget["value"];
+    if (!event)
+      this.filter.lastname = "";
+    else
+      this.filter.lastname = event.currentTarget["value"];
     this.filterCompetitionParticipants(this.competition.konkurranseDeltakere);
   }
 
@@ -488,8 +497,8 @@ export class CompetitionDetailsComponent implements OnInit {
         let matchingGender = (genderFilter.length == 0) ? true : (genderFilter.some(g => g == participant.person.kjonn));
         let matchingCompetitionClasses = (competitionClassFilter.length == 0) ? true : (competitionClassFilter.some(c => c == participant.klasseID));
         let matchingStartNumber = (startNumberFilter.length == 0) ? true : (participant.startNummer.toString().startsWith(startNumberFilter));
-        let matchingFirstname = (firstnameFilter.length == 0) ? true : (participant.person.fornavn.indexOf(firstnameFilter) >= 0);
-        let matchingLastname = (lastnameFilter.length == 0) ? true : (participant.person.etternavn.indexOf(lastnameFilter) >= 0);
+        let matchingFirstname = (firstnameFilter.length == 0) ? true : (participant.person.fornavn.toLowerCase().indexOf(firstnameFilter.toLowerCase()) >= 0);
+        let matchingLastname = (lastnameFilter.length == 0) ? true : (participant.person.etternavn.toLowerCase().indexOf(lastnameFilter.toLowerCase()) >= 0);
         
         return (matchingGender && matchingCompetitionClasses && matchingStartNumber && matchingFirstname && matchingLastname);
       });

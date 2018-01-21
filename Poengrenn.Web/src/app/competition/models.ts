@@ -6,8 +6,8 @@ export interface ITimeViewModel {
         minute?: number;
         second?: number;
     }
-    add?: (hours: number, minutes: number, seconds: number) => void;
-    toString: () => string;
+    add: (hours: number, minutes: number, seconds: number) => void;
+    toStringWithLeadingZero: () => string;
 }
 
 export class TimeViewModel implements ITimeViewModel {
@@ -40,11 +40,22 @@ export class TimeViewModel implements ITimeViewModel {
         this.setFromDuration(duration);
     }
 
-    toString() : string {
-        return this.formatDuration(this.duration);
+    toStringWithLeadingZero() : string {
+        return this.toTimeWithLeadingZeros();
     }
 
-    private setFromDuration(duration: any) {
+    private toTimeWithLeadingZeros(): string {
+        let hh = this.ensureLeadingZero(this.duration.hour);
+        let mm = this.ensureLeadingZero(this.duration.minute);
+        let ss = this.ensureLeadingZero(this.duration.second);
+        return `${hh}:${mm}:${ss}`;
+    }
+
+    private ensureLeadingZero = (x: number): string => {
+        return x < 10 ? `0${x}` : `${x}`;
+    }
+
+    private setFromDuration = (duration: any) => {
         this.duration = {
             hour: duration.hours(),
             minute: duration.minutes(),
@@ -52,14 +63,14 @@ export class TimeViewModel implements ITimeViewModel {
         }
     }
 
-    private formatDuration(duration: any) {
-        var ensureZeroPrefixed = (x: number): string => {
-            return x < 10 ? `0${x}` : `${x}`;
-        }
+    // private formatDuration(duration: any) {
+    //     var ensureZeroPrefixed = (x: number): string => {
+    //         return x < 10 ? `0${x}` : `${x}`;
+    //     }
         
-        const h = ensureZeroPrefixed(duration.hour);
-        const m = ensureZeroPrefixed(duration.minute);
-        const s = ensureZeroPrefixed(duration.second);
-        return `${h}:${m}:${s}`;
-    }
+    //     const h = ensureZeroPrefixed(duration.hour);
+    //     const m = ensureZeroPrefixed(duration.minute);
+    //     const s = ensureZeroPrefixed(duration.second);
+    //     return `${h}:${m}:${s}`;
+    // }
 }
