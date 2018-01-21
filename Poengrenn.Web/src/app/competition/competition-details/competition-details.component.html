@@ -150,7 +150,15 @@
                 <i class="fa" [ngClass]="{'fa-angle-down': !showClassIDFilter, 'fa-angle-up': showClassIDFilter}" aria-hidden="true"></i>
               </button>
               <div class="card" style="position: absolute;" *ngIf="showClassIDFilter">
-                <ul class="list-group list-group-flush" *ngFor="let compClass of competitionClasses">
+                <ul class="list-group list-group-flush" *ngFor="let compClass of competitionClasses; let i = index">
+                  <li *ngIf="i==0" class="list-group-item m-0 p-0">
+                      <button type="button" class="btn btn-outline-danger btn-sm mr-1" (click)="onToggleAllClasses(true)">
+                        <i class="fa fa-check-square-o" aria-hidden="true"></i> Merk alle
+                      </button>
+                      <button type="button" class="btn btn-outline-danger btn-sm" (click)="onToggleAllClasses(false)">
+                          <i class="fa fa-square-o" aria-hidden="true"></i> Fjern merking
+                      </button>
+                  </li>
                   <li class="list-group-item">
                     <input class="" type="checkbox" id="checkboxKlasseID" 
                           [value]="compClass.klasseID"

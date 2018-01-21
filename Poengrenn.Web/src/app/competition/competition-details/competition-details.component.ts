@@ -122,6 +122,15 @@ export class CompetitionDetailsComponent implements OnInit {
     this.filterCompetitionParticipants(this.competition.konkurranseDeltakere);
   }
 
+  onToggleAllClasses(checked: boolean) {
+    this.filter.competitionClasses = [];
+    if(checked) {
+      this.competitionClasses.forEach(c => {
+        this.filter.competitionClasses.push(c.klasseID);
+      });
+    }
+  }
+
   onFilterStartNumber(event: Event) {
     this.filter.startNumber =  event.currentTarget["value"];
     this.filterCompetitionParticipants(this.competition.konkurranseDeltakere);
