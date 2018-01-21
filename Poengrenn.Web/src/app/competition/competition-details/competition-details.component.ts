@@ -34,8 +34,7 @@ export class CompetitionDetailsComponent implements OnInit {
   errorMessage: string;
   canRegister: boolean;
 
-  lastAddedPerson: Person;
-  lastAddedStartNumber: number;
+  lastAddedParticipant: KonkurranseDeltaker;
   lastAddedPersonMessage: string;
   updateMessage: string;
   relatedPersons: Person[];  // Persons the logged in user can sign up
@@ -91,7 +90,7 @@ export class CompetitionDetailsComponent implements OnInit {
   setRelatedPersons() {
     const user = this._authService.loggedInUser();
     if (user) {
-      this.relatedPersons = this.persons.filter(person => user['personIDer'].includes(person.personID));
+      this.relatedPersons = this.persons.filter(person => (user['personIDer']) ? user['personIDer'].includes(person.personID) : false);
     }
   }
 
@@ -121,6 +120,15 @@ export class CompetitionDetailsComponent implements OnInit {
     }
 
     this.filterCompetitionParticipants(this.competition.konkurranseDeltakere);
+  }
+
+  onToggleAllClasses(checked: boolean) {
+    this.filter.competitionClasses = [];
+    if(checked) {
+      this.competitionClasses.forEach(c => {
+        this.filter.competitionClasses.push(c.klasseID);
+      });
+    }
   }
 
   onFilterStartNumber(event: Event) {
@@ -277,7 +285,7 @@ export class CompetitionDetailsComponent implements OnInit {
   private saveCompetitionParticipant(participant: KonkurranseDeltaker) {
     this._apiService.UpdateCompetitionParticipant(participant)
       .subscribe((result: KonkurranseDeltaker) => {
-        console.log(result);
+        this.getCompetitionParticipants();
     });
   }
 
@@ -304,8 +312,8 @@ export class CompetitionDetailsComponent implements OnInit {
         console.log(result);
         
         this.getCompetitionParticipants();
-        this.lastAddedPerson = this.selectedPerson;
-        this.lastAddedStartNumber = result[0].startNummer;
+        this.lastAddedParticipant = result.find(d => d.konkurranseID == this.competition.konkurranseID);
+        this.lastAddedParticipant.person = this.selectedPerson;
         this.setSelectedPerson(null);
       });
   }
@@ -480,8 +488,8 @@ export class CompetitionDetailsComponent implements OnInit {
         let matchingGender = (genderFilter.length == 0) ? true : (genderFilter.some(g => g == participant.person.kjonn));
         let matchingCompetitionClasses = (competitionClassFilter.length == 0) ? true : (competitionClassFilter.some(c => c == participant.klasseID));
         let matchingStartNumber = (startNumberFilter.length == 0) ? true : (participant.startNummer.toString().startsWith(startNumberFilter));
-        let matchingFirstname = (firstnameFilter.length == 0) ? true : (participant.person.fornavn.startsWith(firstnameFilter));
-        let matchingLastname = (lastnameFilter.length == 0) ? true : (participant.person.etternavn.startsWith(lastnameFilter));
+        let matchingFirstname = (firstnameFilter.length == 0) ? true : (participant.person.fornavn.indexOf(firstnameFilter) >= 0);
+        let matchingLastname = (lastnameFilter.length == 0) ? true : (participant.person.etternavn.indexOf(lastnameFilter) >= 0);
         
         return (matchingGender && matchingCompetitionClasses && matchingStartNumber && matchingFirstname && matchingLastname);
       });
