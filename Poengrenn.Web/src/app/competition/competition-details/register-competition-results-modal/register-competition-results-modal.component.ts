@@ -3,7 +3,7 @@ import { NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
 import { ApiService } from 'app/_services/api.service';
 import { Konkurranse, KonkurranseDeltaker, KonkurranseKlasse, Person } from 'app/_models/models';
-import { ITimeViewModel, TimeViewModel } from '../../models';
+import { IDurationViewModel, DurationViewModel } from '../../models';
 import { TagContentType } from '@angular/compiler';
 declare var moment: any;
 
@@ -27,9 +27,9 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
   findParticipantMessage = "";
   disableSave = false;
 
-  startTime: ITimeViewModel;
-  endTime: ITimeViewModel;
-  totalTime: ITimeViewModel;
+  startTime: IDurationViewModel;
+  endTime: IDurationViewModel;
+  totalTime: IDurationViewModel;
 
   warning: string;
 
@@ -56,13 +56,13 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
   }
 
   updateTidsforbruk() {
-    this.totalTime = new TimeViewModel(0, 0, 0);
+    this.totalTime = new DurationViewModel(0, 0, 0);
     if (this.startTime && this.endTime) {
       let startDuration = moment.duration({seconds: this.startTime.duration.second, minutes: this.startTime.duration.minute, hours: this.startTime.duration.hour});
       let endDuration = moment.duration({seconds: this.endTime.duration.second, minutes: this.endTime.duration.minute, hours: this.endTime.duration.hour});
       if (endDuration >= startDuration) {
         const diff = moment.duration(endDuration.asMilliseconds() - startDuration.asMilliseconds());
-        this.totalTime = new TimeViewModel(diff.hours(), diff.minutes(), diff.seconds());
+        this.totalTime = new DurationViewModel(diff.hours(), diff.minutes(), diff.seconds());
       }
     }
   }
@@ -81,11 +81,15 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
     this.currentParticipant.sluttTid = this.endTime.toStringWithLeadingZero();
     this.currentParticipant.tidsforbruk = this.totalTime.toStringWithLeadingZero();
 
+    if (this.currentParticipant.tidsforbruk === "00:00:00") {
+      this.currentParticipant.tidsforbruk = null;
+    }
+
     this._apiService.UpdateCompetitionParticipant(this.currentParticipant)
       .subscribe((result: KonkurranseDeltaker) => {
         console.log(result);
-        const lastSavedPerson = this.filteredParticipants.find(p => p.person.personID == result.personID).person;
-        this.lastSaved = `${lastSavedPerson.personID} - ${lastSavedPerson.fornavn} ${lastSavedPerson.etternavn}`;
+        const lastSavedParticipant = this.filteredParticipants.find(p => p.person.personID == result.personID);
+        this.lastSaved = `${lastSavedParticipant.startNummer} - ${lastSavedParticipant.person.fornavn} ${lastSavedParticipant.person.etternavn}`;
 
         // TODO:
         // Get next participant in selected class
@@ -94,29 +98,44 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
   }
 
   prevParticipantWithoutTime() : number {
+    let tempStartTime = new DurationViewModel();
+    if (this.participantIdx === 0)
+      return this.filteredParticipants.length - 1;
+
     // Loop down to zero from participantIdx
     for (let i = this.participantIdx - 1; i >= 0; i--) {
-      if (!this.filteredParticipants[i].tidsforbruk) {
+      this.updateTempStartTime(i+1, tempStartTime);
+      if (!this.totalTimeExists(this.filteredParticipants[i])) {
+        this.updateStartTimeFromTempTime(tempStartTime);
+        this.addSeconds(-this.defaultStartDiffInSeconds);
         this.updateEndTime();
         return i;
       }
     }
 
     // Loop down to participantIdx from filteredParticipants
+    tempStartTime = new DurationViewModel();
     for (let i = this.filteredParticipants.length - 1; i >= this.participantIdx; i--) {
-      if (!this.filteredParticipants[i].tidsforbruk) {
+      if (i+1 < this.filteredParticipants.length)
+        this.updateTempStartTime(i+1, tempStartTime);
+      if (!this.totalTimeExists(this.filteredParticipants[i])) {
+        this.updateStartTimeFromTempTime(tempStartTime);
+        this.addSeconds(-this.defaultStartDiffInSeconds);
         this.updateEndTime();
         return i;
       }
     }
   }
   nextParticipantWithoutTime(): number {
+    let tempStartTime = new DurationViewModel();
     if (this.participantIdx === this.filteredParticipants.length - 1)
       return 0;
 
     // Loop up from participantIdx to filteredParticipants.length
     for (let i = this.participantIdx + 1; i < this.filteredParticipants.length; i++) {
-      if (!this.filteredParticipants[i].tidsforbruk) {
+      this.updateTempStartTime(i-1, tempStartTime);
+      if (!this.totalTimeExists(this.filteredParticipants[i])) {
+        this.updateStartTimeFromTempTime(tempStartTime);
         this.addSeconds(this.defaultStartDiffInSeconds);
         this.updateEndTime();
         return i;
@@ -125,15 +144,36 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
 
     // Not found on previous loop.
     // Then loop up from zero to participantIdx
+    tempStartTime = new DurationViewModel();
     for (let i = 0; i >= this.participantIdx; i++) {
-      if (i === this.filteredParticipants.length)
+      if (i === this.filteredParticipants.length) {
         return this.participantIdx;
-
-      if (!this.filteredParticipants[i].tidsforbruk) {
+      }
+      
+      this.updateTempStartTime(i, tempStartTime);
+      if (!this.totalTimeExists(this.filteredParticipants[i])) {
+        this.updateStartTimeFromTempTime(tempStartTime);
         this.addSeconds(this.defaultStartDiffInSeconds);
         this.updateEndTime();
         return i;
       }
+    }
+  }
+  private totalTimeExists = (participant: KonkurranseDeltaker): boolean => {
+    return participant.tidsforbruk && participant.tidsforbruk !== "00:00:00"
+  }
+  private updateStartTimeFromTempTime = (tempStartTime: DurationViewModel):void => {
+    if (!tempStartTime.equals(new DurationViewModel())) {
+      this.startTime = new DurationViewModel(
+        tempStartTime.duration.hour, 
+        tempStartTime.duration.minute, 
+        tempStartTime.duration.second
+      );
+    }
+  }
+  private updateTempStartTime = (i: number, tempStartTime: DurationViewModel): void => {
+    if (this.totalTimeExists(this.filteredParticipants[i])) {
+      tempStartTime.setDurationFromString(this.filteredParticipants[i].startTid);
     }
   }
 
@@ -150,8 +190,6 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
     this.participantIdx = index;
 
     if (this.startTime && this.currentParticipant && !this.currentParticipant.tidsforbruk) {
-      //this.startTime.add(0, 0, this.defaultStartDiffInSeconds);
-      //this.addSeconds(this.defaultStartDiffInSeconds);
       this.currentParticipant.startTid = this.startTime.toStringWithLeadingZero();//prevStartTid;
       this.currentParticipant.sluttTid = this.currentParticipant.startTid;
     }
@@ -178,33 +216,19 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
     if (!participant)
       return;
 
-    this.startTime = new TimeViewModel(0, 0, 0);
-    this.endTime = new TimeViewModel(0, 0, 0);
+    this.startTime = new DurationViewModel();
+    this.endTime = new DurationViewModel();
 
     if (participant.startTid) {
-      this.startTime = new TimeViewModel(
-        +participant.startTid.slice(0, 2),
-        +participant.startTid.slice(3, 5),
-        +participant.startTid.slice(6, 8)
-      );
+      this.startTime.setDurationFromString(participant.startTid);
     }
 
     if (participant.sluttTid) {
-      this.endTime = new TimeViewModel(
-        +participant.sluttTid.slice(0, 2),
-        +participant.sluttTid.slice(3, 5),
-        +participant.sluttTid.slice(6, 8)
-      );
+      this.endTime.setDurationFromString(participant.sluttTid);
+
     }
 
     this.updateTidsforbruk();
-  }
-
-  private toTimeWithLeadingZeros(time: TimeViewModel): string {
-    let hh = (time.duration.hour < 10) ? `0${time.duration.hour}` : time.duration.hour;
-    let mm = (time.duration.minute < 10) ? `0${time.duration.minute}` : time.duration.minute;
-    let ss = (time.duration.second < 10) ? `0${time.duration.second}` : time.duration.second;
-    return `${hh}:${mm}:${ss}`;
   }
 
   private filterParticipantsWithTime() : KonkurranseDeltaker[] {
