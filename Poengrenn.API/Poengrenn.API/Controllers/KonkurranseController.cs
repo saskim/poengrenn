@@ -49,7 +49,7 @@ namespace Poengrenn.API.Controllers
         public IEnumerable<Konkurranse> GetDone()
         {
             var dt = DateTime.Now;
-            return _konkurranseRepo.Get(k => k.Dato < dt);
+            return _konkurranseRepo.Get(k => k.Dato < dt).OrderByDescending(k => k.Dato);
         }
 
         // GET api/konkurranse/5
@@ -97,6 +97,7 @@ namespace Poengrenn.API.Controllers
             konkurranseUpdate.Dato = konkurranse.Dato;
             konkurranseUpdate.Navn = konkurranse.Navn;
             konkurranseUpdate.Status = konkurranse.Status.ToString();
+            konkurranseUpdate.StartInterval = konkurranse.StartInterval;
             
             return _konkurranseRepo.Update(konkurranseUpdate);
         }

@@ -61,6 +61,10 @@
     <Compile Include="Migrations\201708261643379_AddedDeltakerBetalingsNotat.Designer.cs">
       <DependentUpon>201708261643379_AddedDeltakerBetalingsNotat.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801282044348_StartInterval.cs" />
+    <Compile Include="Migrations\201801282044348_StartInterval.Designer.cs">
+      <DependentUpon>201801282044348_StartInterval.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Konkurranse.cs" />
     <Compile Include="Models\KonkurranseDeltaker.cs" />
@@ -86,6 +90,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708261643379_AddedDeltakerBetalingsNotat.resx">
       <DependentUpon>201708261643379_AddedDeltakerBetalingsNotat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801282044348_StartInterval.resx">
+      <DependentUpon>201801282044348_StartInterval.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

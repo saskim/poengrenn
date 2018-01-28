@@ -434,10 +434,12 @@ export class CompetitionDetailsComponent implements OnInit {
     let options: NgbModalOptions = { size: "lg" };
     const modalRef = this._modalService.open(RegisterCompetitionResultsModalComponent, options);
     
-    modalRef.componentInstance.competition = Object.create(this.competition);
-    modalRef.componentInstance.competition.konkurranseKlasser = Object.create(this.competitionClasses);
+    const comp = Object.assign({}, this.competition);
+    comp.konkurranseKlasser = this.competitionClasses;
+    modalRef.componentInstance.competition = comp;
 
     modalRef.result.then((result) => {
+      this.getCompetition(this.competition.konkurranseID);
       this.getCompetitionParticipants();
     });
   }
