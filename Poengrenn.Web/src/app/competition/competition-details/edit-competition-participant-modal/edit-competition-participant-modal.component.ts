@@ -3,7 +3,7 @@ import { NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
 import { ApiService } from 'app/_services/api.service';
 import { KonkurranseDeltaker, KonkurranseKlasse, Person } from 'app/_models/models';
-import { ITimeViewModel, TimeViewModel } from '../../models';
+import { IDurationViewModel, DurationViewModel } from '../../models';
 declare var moment: any;
 
 @Component({
@@ -18,9 +18,9 @@ export class EditCompetitionParticipantModalComponent implements OnInit {
   @Input() participant: KonkurranseDeltaker;
   @Input() matchingCompetitionClasses: KonkurranseKlasse[];
 
-  startTime: ITimeViewModel;
-  endTime: ITimeViewModel;
-  totalTime: ITimeViewModel;
+  startTime: IDurationViewModel;
+  endTime: IDurationViewModel;
+  totalTime: IDurationViewModel;
   medTidtaking: boolean;
 
   constructor(
@@ -33,10 +33,21 @@ export class EditCompetitionParticipantModalComponent implements OnInit {
     this.setStartAndEndTime(this.participant);
   }
 
-  updateCompetitionParticipant() {
-    this.participant.startTid = this.startTime.toStringWithLeadingZero();
-    this.participant.sluttTid = this.endTime.toStringWithLeadingZero();
-    this.participant.tidsforbruk = this.totalTime.toStringWithLeadingZero();
+  updateCompetitionParticipant() {    
+    if (this.totalTime && this.totalTime.toStringWithLeadingZero() === "00:00:00") {
+      this.participant.startTid = null;
+      this.participant.sluttTid = null;
+      this.participant.tidsforbruk = null;
+    }
+    else {
+      if (this.startTime)
+        this.participant.startTid = this.startTime.toStringWithLeadingZero();
+      if (this.endTime)
+        this.participant.sluttTid = this.endTime.toStringWithLeadingZero();
+      if (this.totalTime)
+        this.participant.tidsforbruk = this.totalTime.toStringWithLeadingZero();
+    }
+
     this._apiService.UpdateCompetitionParticipant(this.participant)
       .subscribe((result: KonkurranseDeltaker) => {
         console.log(result);
@@ -55,27 +66,30 @@ export class EditCompetitionParticipantModalComponent implements OnInit {
   }
 
   updateTidsforbruk() {
-    this.totalTime = new TimeViewModel(0, 0, 0);
+    this.totalTime = new DurationViewModel(0, 0, 0);
     
     if (this.startTime && this.endTime) {
       let startDuration = moment.duration({seconds: this.startTime.duration.second, minutes: this.startTime.duration.minute, hours: this.startTime.duration.hour});
       let endDuration = moment.duration({seconds: this.endTime.duration.second, minutes: this.endTime.duration.minute, hours: this.endTime.duration.hour});
       const diff = endDuration.subtract(startDuration);
 
-      this.totalTime = new TimeViewModel(diff.hours(), diff.minutes(), diff.seconds());
+      this.totalTime = new DurationViewModel(diff.hours(), diff.minutes(), diff.seconds());
     }
   }
 
   private setStartAndEndTime(participant: KonkurranseDeltaker) {
-    this.startTime.duration = {
-      hour: +participant.startTid.slice(0, 2),
-      minute: +participant.startTid.slice(3, 5),
-      second: +participant.startTid.slice(6, 8)
+    if (!participant)
+      return;
+    
+    this.startTime = new DurationViewModel();
+    this.endTime = new DurationViewModel();
+
+    if (participant.startTid) {
+      this.startTime.setDurationFromString(participant.startTid);
     }
-    this.endTime.duration = {
-      hour: +participant.sluttTid.slice(0, 2),
-      minute: +participant.sluttTid.slice(3, 5),
-      second: +participant.sluttTid.slice(6, 8)
+
+    if (participant.sluttTid) {
+      this.endTime.setDurationFromString(participant.sluttTid);
     }
 
     this.updateTidsforbruk();

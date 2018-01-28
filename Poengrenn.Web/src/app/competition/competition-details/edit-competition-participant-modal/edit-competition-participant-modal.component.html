@@ -67,18 +67,18 @@
         <div class="row" *ngIf="medTidtaking">
           <div class="form-group col">
             <label class="font-weight-bold" for="starttid">Starttid</label>
-            <ngb-timepicker [(ngModel)]="startTime" (change)="updateTidsforbruk()" [spinners]="false" [seconds]="true" name="tp-startTime"></ngb-timepicker>
+            <ngb-timepicker [(ngModel)]="startTime.duration" (change)="updateTidsforbruk()" [spinners]="false" [seconds]="true" name="tp-startTime"></ngb-timepicker>
           </div>
           <div class="form-group col">
             <label class="font-weight-bold" for="sluttid">Sluttid</label>
-            <ngb-timepicker [(ngModel)]="endTime" (change)="updateTidsforbruk()" [spinners]="false" [seconds]="true" name="tp-endtime"></ngb-timepicker>
+            <ngb-timepicker [(ngModel)]="endTime.duration" (change)="updateTidsforbruk()" [spinners]="false" [seconds]="true" name="tp-endtime"></ngb-timepicker>
           </div>
         </div>
         <div class="row" *ngIf="medTidtaking">
           <div class="form-group col"></div>
           <div class="form-group col">
             <label class="font-weight-bold" for="tidsforbruk">Tidsforbruk</label>
-            <ngb-timepicker [(ngModel)]="totalTime" [spinners]="false" [seconds]="true" name="tp-totalTime" disabled></ngb-timepicker>
+            <ngb-timepicker [(ngModel)]="totalTime.duration" [spinners]="false" [seconds]="true" name="tp-totalTime" disabled></ngb-timepicker>
           </div>
         </div>
     </div>

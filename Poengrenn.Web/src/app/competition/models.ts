@@ -1,30 +1,30 @@
 declare var moment: any;
 
-export interface ITimeViewModel {
-    duration: {
-        hour?: number;
-        minute?: number;
-        second?: number;
-    }
+export interface IDurationViewModel {
+    duration: IDuration;
+
     add: (hours: number, minutes: number, seconds: number) => void;
+    equals: (durationViewModel: DurationViewModel) => boolean;
     toStringWithLeadingZero: () => string;
+    setDurationFromString: (hhmmss: string) => void;
+}
+export interface IDuration {
+    hour?: number;
+    minute?: number;
+    second?: number;
 }
 
-export class TimeViewModel implements ITimeViewModel {
-    duration: {
-        hour: number;
-        minute: number;
-        second: number;
-    }
+export class DurationViewModel implements IDurationViewModel {
+    duration: IDuration;
 
-    constructor(hours: number, minutes: number, seconds: number) {
+    constructor(hours: number = 0, minutes: number = 0, seconds: number = 0) {
         const duration = moment.duration({
             hours: hours,
             minutes: minutes,
             seconds: seconds
         });
 
-        this.setFromDuration(duration);
+        this.setFromMomentDuration(duration);
     }
 
     add(hours: number, minutes: number, seconds: number) {
@@ -37,40 +37,37 @@ export class TimeViewModel implements ITimeViewModel {
                 .add(minutes, "minutes")
                 .add(seconds, "seconds");
 
-        this.setFromDuration(duration);
+        this.setFromMomentDuration(duration);
+    }
+
+    equals(durationViewModel: DurationViewModel): boolean {
+        return this.duration.hour === durationViewModel.duration.hour && 
+               this.duration.minute === durationViewModel.duration.minute && 
+               this.duration.second === durationViewModel.duration.second;
     }
 
     toStringWithLeadingZero() : string {
-        return this.toTimeWithLeadingZeros();
-    }
-
-    private toTimeWithLeadingZeros(): string {
         let hh = this.ensureLeadingZero(this.duration.hour);
         let mm = this.ensureLeadingZero(this.duration.minute);
         let ss = this.ensureLeadingZero(this.duration.second);
         return `${hh}:${mm}:${ss}`;
+    }
+    
+    setDurationFromString(hhmmss: string): void {
+        this.duration.hour = +hhmmss.slice(0, 2);
+        this.duration.minute = +hhmmss.slice(3, 5);
+        this.duration.second = +hhmmss.slice(6, 8);
     }
 
     private ensureLeadingZero = (x: number): string => {
         return x < 10 ? `0${x}` : `${x}`;
     }
 
-    private setFromDuration = (duration: any) => {
+    private setFromMomentDuration = (momentDuration: any) => {
         this.duration = {
-            hour: duration.hours(),
-            minute: duration.minutes(),
-            second: duration.seconds()
+            hour: momentDuration.hours(),
+            minute: momentDuration.minutes(),
+            second: momentDuration.seconds()
         }
     }
-
-    // private formatDuration(duration: any) {
-    //     var ensureZeroPrefixed = (x: number): string => {
-    //         return x < 10 ? `0${x}` : `${x}`;
-    //     }
-        
-    //     const h = ensureZeroPrefixed(duration.hour);
-    //     const m = ensureZeroPrefixed(duration.minute);
-    //     const s = ensureZeroPrefixed(duration.second);
-    //     return `${h}:${m}:${s}`;
-    // }
 }
