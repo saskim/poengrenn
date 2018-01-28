@@ -17,6 +17,7 @@ namespace Poengrenn.DAL.Models
         public Nullable<DateTime> Dato { get; set; }
         public string TypeID { get; set; }
         public string Status { get; set; }
+        public int StartInterval { get; set; }
     
         public virtual KonkurranseType KonkurranseType { get; set; }
         public virtual ICollection<KonkurranseDeltaker> KonkurranseDeltakere { get; set; }

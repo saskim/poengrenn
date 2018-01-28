@@ -6,6 +6,7 @@ export class Konkurranse {
     dato: Date;
     typeID: string;
     status: string;
+    startInterval: number;
     konkurranseDeltakere: KonkurranseDeltaker[];
     konkurranseKlasser: KonkurranseKlasse[];
     konkurranseType: KonkurranseType;

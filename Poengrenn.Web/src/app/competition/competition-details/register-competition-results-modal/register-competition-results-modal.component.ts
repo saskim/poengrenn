@@ -38,7 +38,7 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
     private _apiService: ApiService) {      
   }
 
-  ngOnInit() {    
+  ngOnInit() {  
     const compDate = moment(this.competition.dato);
     if (moment().isBefore(compDate)) {
       this.warning = `Konkurransen har ikke vært ennå... Registrerer du på riktig konkurranse?`;
@@ -74,6 +74,12 @@ export class RegisterCompetitionResultsModalComponent implements OnInit {
   addSeconds(seconds: number) {
     this.startTime.add(0, 0, seconds);
     this.updateTidsforbruk();
+  }
+  saveStartInterval () {
+    this._apiService.UpdateCompetition(this.competition)
+      .subscribe((result: Konkurranse) => {
+        console.log(result);
+      });
   }
 
   saveParticipantResult() {    

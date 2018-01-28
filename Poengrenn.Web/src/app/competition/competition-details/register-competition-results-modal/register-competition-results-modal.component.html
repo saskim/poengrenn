@@ -37,7 +37,9 @@
           <div class="col">
             <label class="" for="startdiff">Standard startdiff.</label>
             <div class="input-group w-50">
-              <input [(ngModel)]="defaultStartDiffInSeconds" type="number" class="form-control w-50" name="startdiff" placeholder="">
+              <input [(ngModel)]="competition.startInterval"
+                     (change)="saveStartInterval()" 
+                     type="number" class="form-control w-50" name="startdiff" placeholder="">
               <div class="input-group-addon hidden-sm-down">sekund(er)</div>
             </div>
           </div>
