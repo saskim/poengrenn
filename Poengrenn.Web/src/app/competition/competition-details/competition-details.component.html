@@ -10,7 +10,7 @@
     <h6 class="card-subtitle mb-2 text-muted">{{competition?.dato | amDateFormat:'DD.MM.YYYY'}} kl. {{competition?.dato | amDateFormat:'HH:mm'}}</h6>
 
 
-    <div *ngIf="isLoggedIn()" class="text-warning">
+    <div *ngIf="isLoggedIn() && !isDone" class="text-warning">
       <p *ngIf="isAdmin()">Du er admin og kan melde på alle</p>
       <div *ngIf="!isAdmin()">
         <span>Du har rettigheter til å melde på:</span>
