@@ -58,14 +58,14 @@ export class CompetitionDetailsComponent implements OnInit {
   compStatus: { id: string, displayText: string };
 
   constructor(
-    private _route: ActivatedRoute, 
+    private _route: ActivatedRoute,
     private _apiService: ApiService,
     private _authService: AuthService,
     private _modalService: NgbModal) { }
 
   ngOnInit() {
     let id = this._route.snapshot.params['id'];
-    
+
     this.genders = GENDERS.slice(0, GENDERS.length-1);
     this.compStatuses = COMP_STATUSES;
 
@@ -113,12 +113,12 @@ export class CompetitionDetailsComponent implements OnInit {
       else if (!checked && index >= 0)
         array.splice(index, 1);
     }
-    
-    if (filterKey == 'gender') 
+
+    if (filterKey == 'gender')
     {
       toggleFilterValue(this.filter.genders, filterValue, event.currentTarget['checked']);
-    } 
-    else if (filterKey == 'klasseID') 
+    }
+    else if (filterKey == 'klasseID')
     {
       toggleFilterValue(this.filter.competitionClasses, filterValue, event.currentTarget['checked']);
     }
@@ -204,13 +204,13 @@ export class CompetitionDetailsComponent implements OnInit {
         this.filteredParticpants.sort((p1, p2) => {
           let durationP1 = moment.duration(p1.tidsforbruk);
           let durationP2 = moment.duration(p2.tidsforbruk);
-          
+
           if (!p1.tidsforbruk) durationP1 = moment.duration(durationP1).add(moment.duration(100000000000000));
           if (!p2.tidsforbruk) durationP2 = moment.duration(durationP2).add(moment.duration(100000000000000));
 
-          if (durationP1.asMilliseconds() === 0) 
+          if (durationP1.asMilliseconds() === 0)
             durationP1 = moment.duration(durationP1).add(moment.duration(100000000000));
-          if (durationP2.asMilliseconds() === 0) 
+          if (durationP2.asMilliseconds() === 0)
             durationP2 = moment.duration(durationP2).add(moment.duration(100000000000));
 
           return durationP1 - durationP2;
@@ -277,11 +277,11 @@ export class CompetitionDetailsComponent implements OnInit {
   isMe() {
     if (!this.selectedPerson)
       return false;
-    
+
     let loggedInUser = this._authService.loggedInUser();
-    return loggedInUser && 
-          (loggedInUser.brukernavn == this.selectedPerson.personID.toString() 
-          || 
+    return loggedInUser &&
+          (loggedInUser.brukernavn == this.selectedPerson.personID.toString()
+          ||
           (loggedInUser.personIDer && loggedInUser.personIDer.indexOf(this.selectedPerson.personID) > -1));
   }
 
@@ -314,7 +314,7 @@ export class CompetitionDetailsComponent implements OnInit {
                             .find(p => p.klasseID == nyKonkurranseDeltaker.klasseID);
 
     var curCompClass = this.competitionClasses.find(c => c.klasseID == nyKonkurranseDeltaker.klasseID);
-    
+
     if (lastParticipantInClass && lastParticipantInClass.startNummer >= curCompClass.sisteStartnummer) {
       this.lastAddedPersonMessage = `<h5>Sjekk startnummer!</h5>Deltakeren har fått et startnummer som er høyere enn siste startnummer i gjeldende klasse.<br/>Rediger deltakeren og skriv inn et annet startnummer`;
     }
@@ -323,7 +323,7 @@ export class CompetitionDetailsComponent implements OnInit {
     this._apiService.RegisterForCompetition(this.competition.konkurranseID, nyKonkurranseDeltaker)
       .subscribe((result:KonkurranseDeltaker[]) => {
         console.log(result);
-        
+
         this.getCompetitionParticipants();
         this.lastAddedParticipant = result.find(d => d.konkurranseID == this.competition.konkurranseID);
         this.lastAddedParticipant.person = this.selectedPerson;
@@ -366,7 +366,7 @@ export class CompetitionDetailsComponent implements OnInit {
         return term == '' ? [] : this.filteredOnFirstnameAndLastname(term);
         //return term == '' ? [] :  this.persons.filter(p => p.fornavn.toLowerCase().indexOf(term.toLowerCase()) > -1 || p.etternavn.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10);
       });
-  
+
 
   private filteredOnFirstname(term: string) {
     let persons = this.persons.filter(p => p.fornavn.toLowerCase().indexOf(term.toLowerCase()) > -1);
@@ -394,12 +394,12 @@ export class CompetitionDetailsComponent implements OnInit {
 
   searchFormatter(p: {fornavn: string, etternavn: string, fodselsar: number, personID: string}) {
     return p.fornavn + " " + p.etternavn + " (" + p.fodselsar + ")";
-  } 
+  }
 
   openEditCompetitionParticipant(participant: KonkurranseDeltaker) {
     let options: NgbModalOptions = { size: "lg" };
     const modalRef = this._modalService.open(EditCompetitionParticipantModalComponent, options);
-    
+
     modalRef.componentInstance.participant = Object.assign({}, participant);
     modalRef.componentInstance.matchingCompetitionClasses = this.findBestMatchingClass(participant.person);
 
@@ -409,7 +409,7 @@ export class CompetitionDetailsComponent implements OnInit {
         let updatedParticipant = result.updated as KonkurranseDeltaker;
         let oldParticipant = result.old as KonkurranseDeltaker;
         let changedStartNumberStr = (updatedParticipant.startNummer != oldParticipant.startNummer) ? `(endret fra ${oldParticipant.startNummer})` : ``;
-        this.updateMessage = `Sist oppdatert: ${(updatedParticipant.person) ? updatedParticipant.person.fornavn : ''} ${(updatedParticipant.person) ? updatedParticipant.person.etternavn : ''} 
+        this.updateMessage = `Sist oppdatert: ${(updatedParticipant.person) ? updatedParticipant.person.fornavn : ''} ${(updatedParticipant.person) ? updatedParticipant.person.etternavn : ''}
                              <h5>Startnummer: ${updatedParticipant.startNummer} ${changedStartNumberStr}</h5>`;
       }
       else if (result.deleted) {
@@ -429,7 +429,7 @@ export class CompetitionDetailsComponent implements OnInit {
         let person = result as Person;
         this.getPersonsForSearch();
         this.setSelectedPerson(person);
-        
+
         this.searchModel = person;
       }
     });
@@ -437,7 +437,7 @@ export class CompetitionDetailsComponent implements OnInit {
   openEditResultsModal() {
     let options: NgbModalOptions = { size: "lg" };
     const modalRef = this._modalService.open(RegisterCompetitionResultsModalComponent, options);
-    
+
     const comp = Object.assign({}, this.competition);
     comp.konkurranseKlasser = this.competitionClasses;
     modalRef.componentInstance.competition = comp;
@@ -451,7 +451,7 @@ export class CompetitionDetailsComponent implements OnInit {
   openEditCompetitionModal() {
     let options: NgbModalOptions = { size: "lg" };
     const modalRef = this._modalService.open(EditCompetitionModalComponent, options);
-    
+
     modalRef.componentInstance.competition = this.competition;
 
     modalRef.result.then((result) => {
@@ -491,8 +491,8 @@ export class CompetitionDetailsComponent implements OnInit {
     let firstnameFilter = this.filter.firstname;
     let lastnameFilter = this.filter.lastname;
 
-    if (genderFilter.length == 0 && 
-        competitionClassFilter.length == 0 && 
+    if (genderFilter.length == 0 &&
+        competitionClassFilter.length == 0 &&
         startNumberFilter.length == 0 &&
         firstnameFilter.length == 0 &&
         lastnameFilter.length == 0)
@@ -505,7 +505,7 @@ export class CompetitionDetailsComponent implements OnInit {
         let matchingStartNumber = (startNumberFilter.length == 0) ? true : (participant.startNummer.toString().startsWith(startNumberFilter));
         let matchingFirstname = (firstnameFilter.length == 0) ? true : (participant.person.fornavn.toLowerCase().indexOf(firstnameFilter.toLowerCase()) >= 0);
         let matchingLastname = (lastnameFilter.length == 0) ? true : (participant.person.etternavn.toLowerCase().indexOf(lastnameFilter.toLowerCase()) >= 0);
-        
+
         return (matchingGender && matchingCompetitionClasses && matchingStartNumber && matchingFirstname && matchingLastname);
       });
 
