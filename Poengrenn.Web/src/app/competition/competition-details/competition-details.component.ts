@@ -94,6 +94,10 @@ export class CompetitionDetailsComponent implements OnInit {
     }
   }
 
+  isRegistered(person) {
+    return this.competition.konkurranseDeltakere.find(deltaker => person.personID === deltaker.personID)
+  }
+
   onPersonSelected(selectedItemEvent) {
     this.setSelectedPerson(selectedItemEvent.item);
   }

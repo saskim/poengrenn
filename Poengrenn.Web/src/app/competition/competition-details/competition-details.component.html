@@ -14,9 +14,11 @@
       <p *ngIf="isAdmin()">Du er admin og kan melde på alle</p>
       <div *ngIf="!isAdmin()">
         <span>Du har rettigheter til å melde på:</span>
-        <ul class="list-inline related-persons-list">
-            <li class="list-inline-item" *ngFor="let p of relatedPersons">
-                {{ p.fornavn }} {{ p.etternavn }}
+        <ul class="related-persons-list">
+            <li *ngFor="let p of relatedPersons">
+              {{ p.fornavn }} {{ p.etternavn }}
+              <span class="label label-success" *ngIf="isRegistered(p)">Påmeldt</span>
+              <span class="btn btn-primary btn-sm" *ngIf="!isRegistered(p)" (click)="setSelectedPerson(p)">Meld på</span>
             </li>
         </ul>
       </div>
