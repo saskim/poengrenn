@@ -337,7 +337,7 @@ export class CompetitionDetailsComponent implements OnInit {
         console.log(result);
         this.competition = result;
 
-        this.isDone = this.competition.dato > new Date();
+        this.isDone = new Date(this.competition.dato) < new Date();
         this.isActive = (this.competition.status === "Aktiv");
 
         this.compStatus = this.compStatuses.find(s => {
