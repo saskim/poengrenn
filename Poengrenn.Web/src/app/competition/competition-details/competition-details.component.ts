@@ -7,7 +7,7 @@ import { NgbModal, NgbModalOptions  } from '@ng-bootstrap/ng-bootstrap';
 
 import { ApiService } from 'app/_services/api.service';
 import { AuthService } from 'app/_services/auth.service';
-import { Konkurranse, KonkurranseKlasse, KonkurranseDeltaker, NyKonkurranseDeltaker, Person } from 'app/_models/models';
+import { Konkurranse, KonkurranseKlasse, KonkurranseDeltaker, NyKonkurranseDeltaker, Person, RelatedPerson } from 'app/_models/models';
 import { EditCompetitionParticipantModalComponent } from './edit-competition-participant-modal/edit-competition-participant-modal.component';
 import { PersonModalComponent } from './person-modal/person-modal.component';
 import { RegisterCompetitionResultsModalComponent } from './register-competition-results-modal/register-competition-results-modal.component';
@@ -37,7 +37,7 @@ export class CompetitionDetailsComponent implements OnInit {
   lastAddedParticipant: KonkurranseDeltaker;
   lastAddedPersonMessage: string;
   updateMessage: string;
-  relatedPersons: Person[];  // Persons the logged in user can sign up
+  relatedPersons: RelatedPerson[];  // Persons the logged in user can sign up
 
   filteredParticpants: KonkurranseDeltaker[];
   filter : {
@@ -90,12 +90,27 @@ export class CompetitionDetailsComponent implements OnInit {
   setRelatedPersons() {
     const user = this._authService.loggedInUser();
     if (user) {
-      this.relatedPersons = this.persons.filter(person => (user['personIDer']) ? user['personIDer'].includes(person.personID) : false);
+      this.relatedPersons = this.persons
+          .filter(person => (user['personIDer']) ? user['personIDer'].includes(person.personID) : false)
+          .map(person => {
+            const rp = Object.assign(
+              new RelatedPerson(),
+              person
+            )
+            rp.isRegistered = this.isRegistered(rp);
+            return rp;
+          })
     }
   }
 
-  isRegistered(person) {
-    return this.competition.konkurranseDeltakere.find(deltaker => person.personID === deltaker.personID)
+  updateRelatedPersons() {
+    this.relatedPersons.forEach(p => {
+      p.isRegistered = this.isRegistered(p);
+    });
+  }
+
+  isRegistered(person: RelatedPerson) {
+    return this.competition.konkurranseDeltakere.some(deltaker => person.personID === deltaker.personID)
   }
 
   onPersonSelected(selectedItemEvent) {
@@ -528,6 +543,7 @@ export class CompetitionDetailsComponent implements OnInit {
     this._apiService.GetCompetitionParticipants(this.competition.konkurranseID)
       .subscribe((result: KonkurranseDeltaker[]) => {
         this.competition.konkurranseDeltakere = result;
+        this.updateRelatedPersons();
         this.filterCompetitionParticipants(this.competition.konkurranseDeltakere);
       });
   }
