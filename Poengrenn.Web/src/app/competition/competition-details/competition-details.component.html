@@ -17,8 +17,8 @@
         <ul class="related-persons-list">
             <li *ngFor="let p of relatedPersons">
               {{ p.fornavn }} {{ p.etternavn }}
-              <span class="label label-success" *ngIf="isRegistered(p)">Påmeldt</span>
-              <span class="btn btn-primary btn-sm" *ngIf="!isRegistered(p)" (click)="setSelectedPerson(p)">Meld på</span>
+              <span class="label label-success" *ngIf="p.isRegistered">Påmeldt</span>
+              <span class="btn btn-primary btn-sm" *ngIf="!p.isRegistered" (click)="setSelectedPerson(p)">Meld på</span>
             </li>
         </ul>
       </div>

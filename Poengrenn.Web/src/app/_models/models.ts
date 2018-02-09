@@ -70,6 +70,10 @@ export class Person {
     telefon: string;
 }
 
+export class RelatedPerson extends Person {
+  isRegistered: boolean;
+}
+
 export class LoginResponse {
     brukernavn: string;
     rolle: string;
