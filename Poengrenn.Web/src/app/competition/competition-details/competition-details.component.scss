@@ -25,14 +25,14 @@
     color: #3388bd;
 }
 
-.related-persons-list {
-    display: inline;
-    .list-inline-item:after {
-        content: ', ';
-    }
-    .list-inline-item:last-child:after {
-        content: '';
-    }
+.label {
+    color: white;
+    padding: .2em .6em .2em;
+    font-size: 75%;
+}
+
+.label-success {
+    background-color: #5cb85c;
 }
 input[type="checkbox"] {
     width: 20px; 
