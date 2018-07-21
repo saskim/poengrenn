@@ -29,7 +29,11 @@
         </div>
         <div class="row">
           <div class="form-group col">
-            <label class="font-weight-bold" for="startnummer">Startnummer</label>
+            <label class="font-weight-bold" for="lagnummer">Lag</label>
+            <input [(ngModel)]="participant.lagNummer" type="number" class="form-control" name="lagnummer" placeholder="">
+          </div>
+          <div class="form-group col">
+            <label class="font-weight-bold" for="startnummer">Startnr.</label>
             <input [(ngModel)]="participant.startNummer" type="number" class="form-control" name="startnummer" placeholder="">
           </div>
 

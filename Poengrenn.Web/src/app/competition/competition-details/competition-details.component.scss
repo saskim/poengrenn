@@ -1,3 +1,8 @@
+.table {
+    td {
+        padding: 0.35rem;
+    }
+}
 .filter {
     background-color: #f9ecec;
 }
@@ -27,5 +32,24 @@
     }
     .list-inline-item:last-child:after {
         content: '';
+    }
+}
+input[type="checkbox"] {
+    width: 20px; 
+    height: 20px;
+    vertical-align: middle;
+}
+
+.big-checkbox {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 4px;
+    background-color: antiquewhite;
+    font-weight: bold;
+
+    input[type="checkbox"] {
+        width: 20px; 
+        height: 20px;
+        vertical-align: middle;
     }
 }

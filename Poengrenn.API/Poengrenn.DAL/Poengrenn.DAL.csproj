@@ -65,6 +65,10 @@
     <Compile Include="Migrations\201801282044348_StartInterval.Designer.cs">
       <DependentUpon>201801282044348_StartInterval.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801282237137_AddedLagNummer.cs" />
+    <Compile Include="Migrations\201801282237137_AddedLagNummer.Designer.cs">
+      <DependentUpon>201801282237137_AddedLagNummer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Konkurranse.cs" />
     <Compile Include="Models\KonkurranseDeltaker.cs" />
@@ -93,6 +97,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201801282044348_StartInterval.resx">
       <DependentUpon>201801282044348_StartInterval.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801282237137_AddedLagNummer.resx">
+      <DependentUpon>201801282237137_AddedLagNummer.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

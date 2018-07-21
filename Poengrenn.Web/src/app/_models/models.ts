@@ -25,15 +25,17 @@ export class KonkurranseKlasse {
     distanseKm: number;
     konkurranseType: KonkurranseType;
 }
-
-export class KonkurranseDeltaker {
-    konkurranseID: number;
-    klasseID: string;
-    personID: number;
-    startNummer: number;
+export class KonkurranseDeltakerTid {
     startTid: string;
     sluttTid: string;
     tidsforbruk: string;
+}
+export class KonkurranseDeltaker extends KonkurranseDeltakerTid {
+    konkurranseID: number;
+    klasseID: string;
+    personID: number;
+    lagNummer?: number;
+    startNummer?: number;
     tilstede: boolean;
     betalt: boolean;
     betalingsNotat: string;
@@ -41,6 +43,14 @@ export class KonkurranseDeltaker {
     konkurranseKlasse: KonkurranseKlasse;
     person: Person;
 }
+
+export class KonkurranseLag extends KonkurranseDeltakerTid {
+    konkurranseID: number;
+    lagNummer?: number;
+    lagNavn: string;
+    startNummer?: number;
+}
+
 export class NyKonkurranseDeltaker {
     personID: number;
     klasseID: string;

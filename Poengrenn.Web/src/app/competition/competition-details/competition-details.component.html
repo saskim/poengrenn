@@ -106,10 +106,19 @@
       </div>
 
     <div class="deltakere mt-3">
-      
+      <div *ngIf="hasTeams">
+          <label class="big-checkbox">
+            <input type="checkbox" id="checkboxTeam" 
+              [value]="filter.teamsOnly"
+              [checked]="filter.teamsOnly"
+              (change)="onFilterChange($event, 'teamNumber', filter.teamsOnly)">
+              Vis kun lag
+          </label>
+      </div>  
       <table class="table table-striped">
         <thead>
           <tr>
+            <th (click)="orderParticipantsBy('lagnummer')" class="clickable" *ngIf="hasTeams">Lag</th>
             <th (click)="orderParticipantsBy('startnummer')" class="clickable">#</th>
             <th (click)="orderParticipantsBy('fornavn')" class="clickable">Fornavn</th>
             <th (click)="orderParticipantsBy('etternavn')" class="clickable">Etternavn</th>
@@ -124,6 +133,15 @@
         </thead>
         <tbody>
           <tr>
+            <td *ngIf="hasTeams">
+                <div class="input-group input-group-sm"> 
+                  <!-- <input type="text" class="form-control form-control-sm" name="filterteamNumber" style="width: 50px" width="10"
+                    [ngModel]="filter.teamNumber" (change)="onFilterTeamNumber($event)" [ngClass]="{'text-alert': filter.teamNumber}"/>
+                  <span class="input-group-btn">
+                    <button class="btn btn-secondary" type="button" (click)="onFilterTeamNumber(null)"><i class="fa fa-times" aria-hidden="true"></i></button>
+                  </span> -->
+                </div>
+            </td>
             <td>
               <div class="input-group input-group-sm">
                 <input type="text" class="form-control form-control-sm" name="filterStartNumber" style="width: 50px" width="10"
@@ -205,6 +223,7 @@
             <td></td>
           </tr>
           <tr *ngFor="let deltaker of filteredParticpants">
+            <th scope="row" *ngIf="hasTeams">{{deltaker?.lagNummer}}</th>
             <th scope="row">{{deltaker?.startNummer}}</th>
             <td>{{deltaker?.person?.fornavn}}</td>
             <td>{{deltaker?.person?.etternavn}}</td>
