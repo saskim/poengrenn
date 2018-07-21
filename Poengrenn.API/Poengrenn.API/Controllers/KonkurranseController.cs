@@ -40,7 +40,7 @@ namespace Poengrenn.API.Controllers
         [HttpGet]
         public IEnumerable<Konkurranse> GetOpen()
         {
-            var dt = DateTime.Now.AddHours(4);
+            var dt = DateTime.Now;
             return _konkurranseRepo.Get(k => k.Dato >= dt);
         }
         // GET api/konkurranse/done
