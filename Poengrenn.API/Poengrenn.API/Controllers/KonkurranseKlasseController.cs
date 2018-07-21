@@ -62,7 +62,7 @@ namespace Poengrenn.API.Controllers
         [HttpPut]
         public KonkurranseKlasse Put(KonkurranseKlasse konkurranseKlasse)
         {
-            var konkurranseKlasseUpdate = _konkurranseKlasseRepo.Get(k => k.KlasseID == konkurranseKlasse.KlasseID).SingleOrDefault();
+            var konkurranseKlasseUpdate = _konkurranseKlasseRepo.Get(k => k.KlasseID == konkurranseKlasse.KlasseID && k.TypeID == konkurranseKlasse.TypeID).SingleOrDefault();
             konkurranseKlasseUpdate.Navn = konkurranseKlasse.Navn;
             konkurranseKlasseUpdate.ForsteStartnummer = konkurranseKlasse.ForsteStartnummer;
             konkurranseKlasseUpdate.SisteStartnummer = konkurranseKlasse.SisteStartnummer;
