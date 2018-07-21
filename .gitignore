@@ -9,3 +9,4 @@ packages/
 *.min.css
 *.min.js
 *.map
+releaseHistory/

@@ -1,0 +1,13 @@
+.big-checkbox {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 4px;
+    background-color: antiquewhite;
+    font-weight: bold;
+
+    input[type="checkbox"] {
+        width: 20px; 
+        height: 20px;
+        vertical-align: middle;
+    }
+}

@@ -202,6 +202,7 @@ namespace Poengrenn.API.Controllers
 
             if (deltakerUpdate.KlasseID == deltaker.KlasseID)
             {
+                deltakerUpdate.LagNummer = deltaker.LagNummer;
                 deltakerUpdate.StartNummer = deltaker.StartNummer;
                 deltakerUpdate.StartTid = deltaker.StartTid;
                 deltakerUpdate.SluttTid = deltaker.SluttTid;

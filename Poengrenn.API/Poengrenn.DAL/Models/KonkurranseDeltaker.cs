@@ -10,6 +10,7 @@ namespace Poengrenn.DAL.Models
         public string KlasseID { get; set; }
         public int PersonID { get; set; }
         public string TypeID { get; set; }
+        public int? LagNummer { get; set; }
         public Nullable<int> StartNummer { get; set; }
         public Nullable<TimeSpan> StartTid { get; set; }
         public Nullable<TimeSpan> SluttTid { get; set; }

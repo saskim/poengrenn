@@ -21,19 +21,43 @@
     
     <div class="form-group" *ngIf="currentParticipant">
         <div class="row pt-2">
-          <div class="col">
-            <button type="button" class="btn btn-primary" (click)="getParticipant(prevParticipantWithoutTime())">Forrige uten tid</button>
-            <button type="button" class="btn btn-primary" (click)="getParticipant(participantIdx - 1)">Forrige</button>
-            <button type="button" class="btn btn-primary" (click)="getParticipant(participantIdx + 1)">Neste</button>
-            <button type="button" class="btn btn-primary" (click)="getParticipant(nextParticipantWithoutTime())">Neste uten tid</button>
+          <div class="col" *ngIf="!registerForTeams">
+            <button type="button" class="btn btn-primary" (click)="setParticipant(prevParticipantWithoutTime())">Forrige uten tid</button>
+            <button type="button" class="btn btn-primary" (click)="setParticipant(participantIdx - 1)">Forrige</button>
+            <button type="button" class="btn btn-primary" (click)="setParticipant(participantIdx + 1)">Neste</button>
+            <button type="button" class="btn btn-primary" (click)="setParticipant(nextParticipantWithoutTime())">Neste uten tid</button>
           </div>
+          <div class="col" *ngIf="registerForTeams">
+              <button type="button" class="btn btn-primary" (click)="setTeam(prevTeamWithoutTime())">Forrige uten tid</button>
+              <button type="button" class="btn btn-primary" (click)="setTeam(teamIdx - 1)">Forrige</button>
+              <button type="button" class="btn btn-primary" (click)="setTeam(teamIdx + 1)">Neste</button>
+              <button type="button" class="btn btn-primary" (click)="setTeam(nextTeamWithoutTime())">Neste uten tid</button>
+            </div>
         </div>
-
-        <div class="row pt-3">
-          <div class="form-group col">
-            <label class="font-weight-bold" for="startnummer">Startnummer</label>
-            <input [ngModel]="currentParticipant.startNummer" (change)="getParticipantByStartnummer($event)" type="number" class="form-control w-50" name="startnummer" placeholder="">
+        <div *ngIf="hasTeams" class="row mt-3 ml-2 mb-0 form-group">
+          <div class="col">
+            <label class="big-checkbox">
+              <input type="checkbox" id="checkboxTeam" 
+                [value]="registerForTeams"
+                [checked]="registerForTeams"
+                (change)="registerForTeams = !registerForTeams">
+                Registrer for lag
+            </label>
           </div>
+        </div> 
+        <div class="row pt-3">
+          <div class="form-group col" *ngIf="!registerForTeams">
+            <label class="font-weight-bold" for="startnummer">Startnummer</label>
+            <input [ngModel]="currentParticipant.startNummer" (change)="setParticipantByStartnummer($event)" 
+                    type="number" class="form-control w-50" name="startnummer" placeholder="">
+          </div>
+          <div class="form-group col" *ngIf="registerForTeams">
+              <label class="font-weight-bold" for="startdiff">Lagnummer</label>
+              <div class="input-group w-50">
+                <input [ngModel]="currentTeam.lagNummer" (change)="setTeamByTeamNumber($event)" 
+                        type="number" class="form-control w-50" name="lagnummer" placeholder="">
+              </div>
+            </div>
           <div class="col">
             <label class="" for="startdiff">Standard startdiff.</label>
             <div class="input-group w-50">
@@ -48,10 +72,14 @@
             <div class="text-danger">{{findParticipantMessage}}</div>
         </div>
         <div class="row">
-          <div class="col">
+          <div class="col" *ngIf="!registerForTeams">
             <div class="font-weight-bold text-muted">{{currentParticipant?.person?.fornavn}} {{currentParticipant?.person?.etternavn}} ({{currentParticipant?.person?.fodselsar}})</div>
             <div class="text-muted">{{currentParticipant?.klasseID}}</div>
           </div>
+          <div class="col" *ngIf="registerForTeams">
+              <div class="font-weight-bold text-muted" [innerHtml]="currentTeam?.lagNavn"></div>
+              <div class="text-muted">{{currentTeam?.klasseID}}</div>
+            </div>
         </div>
         <div class="row">
           <div class="form-group col">
@@ -77,7 +105,7 @@
   </form>
 </div>
 <div class="modal-footer">
-  <div class="alert alert-info" *ngIf="lastSaved"><strong>Sist lagret:</strong> {{lastSaved}}</div>
-  <button type="submit" class="btn btn-primary" [disabled]="!registerResultsForm.valid || disableSave || !currentParticipant" (click)="saveParticipantResult()">Oppdater</button>
+  <div class="alert alert-success" *ngIf="lastSaved">Sist lagret: <span class="font-weight-bold" [innerHtml]="lastSaved"></span></div>
+  <button type="submit" class="btn btn-primary" [disabled]="!registerResultsForm.valid || disableSave || !currentParticipant || !currentTeam" (click)="saveParticipantResult()">Oppdater</button>
   <button type="button" class="btn btn-secondary" (click)="_activeModal.close('Close click')">Lukk</button>
 </div>

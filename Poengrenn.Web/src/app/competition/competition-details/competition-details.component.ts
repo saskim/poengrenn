@@ -43,12 +43,14 @@ export class CompetitionDetailsComponent implements OnInit {
   filter : {
     genders: string[];
     competitionClasses: string[];
+    teamsOnly: boolean;
     startNumber: string;
     firstname: string;
     lastname: string;
   }
   showGenderFilter: boolean;
   showClassIDFilter: boolean;
+  hasTeams: boolean = false;;
 
   genders: any[];
   compStatuses: { id: string, displayText: string }[];
@@ -75,6 +77,7 @@ export class CompetitionDetailsComponent implements OnInit {
     this.filter = {
       genders: new Array<string>(),
       competitionClasses: new Array<string>(),
+      teamsOnly: false,
       startNumber: '',
       firstname: '',
       lastname: ''
@@ -128,14 +131,17 @@ export class CompetitionDetailsComponent implements OnInit {
       else if (!checked && index >= 0)
         array.splice(index, 1);
     }
-
-    if (filterKey == 'gender')
+    
+    if (filterKey === "gender") 
     {
       toggleFilterValue(this.filter.genders, filterValue, event.currentTarget['checked']);
-    }
-    else if (filterKey == 'klasseID')
+    } 
+    else if (filterKey === "klasseID") 
     {
       toggleFilterValue(this.filter.competitionClasses, filterValue, event.currentTarget['checked']);
+    }
+    else if (filterKey === "teamNumber") {
+      this.filter.teamsOnly = event.currentTarget['checked'] as boolean;
     }
 
     this.filterCompetitionParticipants(this.competition.konkurranseDeltakere);
@@ -150,6 +156,13 @@ export class CompetitionDetailsComponent implements OnInit {
     }
   }
 
+  onFilterTeamNumber(event: Event) {
+    if (!event)
+      this.filter.teamsOnly = false;
+    else
+      this.filter.teamsOnly =  event.currentTarget["value"] as boolean;
+    this.filterCompetitionParticipants(this.competition.konkurranseDeltakere);
+  }
   onFilterStartNumber(event: Event) {
     if (!event)
       this.filter.startNumber = "";
@@ -190,6 +203,11 @@ export class CompetitionDetailsComponent implements OnInit {
     }
 
     switch (type) {
+      case 'lagnummer':
+        this.filteredParticpants.sort((p1, p2) => {
+          return p1.lagNummer - p2.lagNummer;
+        });
+        break;
       case 'startnummer':
         this.filteredParticpants.sort((p1, p2) => {
           return p1.startNummer - p2.startNummer;
@@ -248,7 +266,8 @@ export class CompetitionDetailsComponent implements OnInit {
   }
 
   participantsIsFiltered() : boolean {
-    return !!this.filter.startNumber ||
+    return !this.filter.teamsOnly ||
+           !!this.filter.startNumber ||
            !!this.filter.firstname ||
            !!this.filter.lastname ||
            this.filter.genders.length > 0 ||
@@ -502,12 +521,14 @@ export class CompetitionDetailsComponent implements OnInit {
   private filterCompetitionParticipants(participants: KonkurranseDeltaker[]) {
     let genderFilter = this.filter.genders;
     let competitionClassFilter = this.filter.competitionClasses;
+    let teamsOnlyFilter = this.filter.teamsOnly;
     let startNumberFilter = this.filter.startNumber;
     let firstnameFilter = this.filter.firstname;
     let lastnameFilter = this.filter.lastname;
 
-    if (genderFilter.length == 0 &&
-        competitionClassFilter.length == 0 &&
+    if (genderFilter.length == 0 && 
+        competitionClassFilter.length == 0 && 
+        teamsOnlyFilter === false &&
         startNumberFilter.length == 0 &&
         firstnameFilter.length == 0 &&
         lastnameFilter.length == 0)
@@ -517,11 +538,12 @@ export class CompetitionDetailsComponent implements OnInit {
       let participantsResult = participants.filter(function (participant) {
         let matchingGender = (genderFilter.length == 0) ? true : (genderFilter.some(g => g == participant.person.kjonn));
         let matchingCompetitionClasses = (competitionClassFilter.length == 0) ? true : (competitionClassFilter.some(c => c == participant.klasseID));
+        let matchingTeamNumber = (!teamsOnlyFilter) ? true : (participant.lagNummer);
         let matchingStartNumber = (startNumberFilter.length == 0) ? true : (participant.startNummer.toString().startsWith(startNumberFilter));
         let matchingFirstname = (firstnameFilter.length == 0) ? true : (participant.person.fornavn.toLowerCase().indexOf(firstnameFilter.toLowerCase()) >= 0);
         let matchingLastname = (lastnameFilter.length == 0) ? true : (participant.person.etternavn.toLowerCase().indexOf(lastnameFilter.toLowerCase()) >= 0);
 
-        return (matchingGender && matchingCompetitionClasses && matchingStartNumber && matchingFirstname && matchingLastname);
+        return (matchingGender && matchingCompetitionClasses && matchingTeamNumber && matchingStartNumber && matchingFirstname && matchingLastname);
       });
 
       if (participantsResult)
@@ -544,6 +566,7 @@ export class CompetitionDetailsComponent implements OnInit {
       .subscribe((result: KonkurranseDeltaker[]) => {
         this.competition.konkurranseDeltakere = result;
         this.updateRelatedPersons();
+        this.hasTeams = this.competition.konkurranseDeltakere.some(d => d.lagNummer !== null);
         this.filterCompetitionParticipants(this.competition.konkurranseDeltakere);
       });
   }
