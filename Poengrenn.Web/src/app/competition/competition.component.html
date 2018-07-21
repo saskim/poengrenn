@@ -1,5 +1,5 @@
 
-<app-competition-create *ngIf="isAdmin()" onCompetitionCreated="onCompetitionCreated()"></app-competition-create>
+<app-competition-create *ngIf="isAdmin()" (change)="onCompetitionCreated($event)"></app-competition-create>
 
 <h4 class="mt-5">Kommende konkurranser</h4>
 <div class="card mt-3">

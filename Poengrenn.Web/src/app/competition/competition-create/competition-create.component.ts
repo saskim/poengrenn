@@ -12,7 +12,7 @@ import { KonkurranseType, KonkurranseOpprett, KonkurranseKlasse } from 'app/_mod
 })
 export class CompetitionCreateComponent implements OnInit {
 
-  @Output() onCompetitionCreated = new EventEmitter();
+  @Output() change = new EventEmitter<boolean>();
 
   model: KonkurranseOpprett;
   tempDatoer: NgbDateStruct[];
@@ -88,20 +88,14 @@ export class CompetitionCreateComponent implements OnInit {
   }
   createCompetition() {
     
-    //this.model.datoer = new Array<Date>();
-    // this.tempDatoer.forEach(dato => {
-    //   let d = new Date(this._parserFormatter.format(dato));
-    //   if (d)
-    //     this.model.datoer.push(d);
-    // });
-    this.model.datoer.forEach(d => {
+    this.model.datoer = this.model.datoer.map(d => {
       let timezoneOffset = d.getTimezoneOffset();
-      d = new Date(d.valueOf() - (timezoneOffset * 60000));
+      return new Date(d.valueOf() - (timezoneOffset * 60000));
     });
     console.log(this.model);
     this._apiService.CreateCompetition(this.model)
       .subscribe(() => {
-        this.onCompetitionCreated.emit();
+        this.change.emit(true);
       });
   }
 

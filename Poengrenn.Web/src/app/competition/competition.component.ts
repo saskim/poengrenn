@@ -26,7 +26,7 @@ export class CompetitionComponent implements OnInit {
     this.getDoneCompetitions();
   }
 
-  onCompetitionCreated() {
+  onCompetitionCreated(event) {
     console.log("onCompetitionCreated");
     this.getOpenCompetitions();
   }
