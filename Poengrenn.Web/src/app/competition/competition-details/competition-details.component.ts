@@ -39,6 +39,7 @@ export class CompetitionDetailsComponent implements OnInit {
   updateMessage: string;
   relatedPersons: RelatedPerson[];  // Persons the logged in user can sign up
 
+  orderBy: string;
   filteredParticpants: KonkurranseDeltaker[];
   filter : {
     genders: string[];
@@ -68,6 +69,7 @@ export class CompetitionDetailsComponent implements OnInit {
   ngOnInit() {
     let id = this._route.snapshot.params['id'];
 
+    this.orderBy = "startnummer";
     this.genders = GENDERS.slice(0, GENDERS.length-1);
     this.compStatuses = COMP_STATUSES;
 
@@ -186,6 +188,7 @@ export class CompetitionDetailsComponent implements OnInit {
   }
 
   orderParticipantsBy(type: string) {
+
     function compareStrings(a, b) {
       // var nameA = a.person.fornavn.toUpperCase(); // ignore upper and lowercase
       // var nameB = b.person.fornavn.toUpperCase(); // ignore upper and lowercase
@@ -202,6 +205,7 @@ export class CompetitionDetailsComponent implements OnInit {
       return 0;
     }
 
+    this.orderBy = type;
     switch (type) {
       case 'lagnummer':
         this.filteredParticpants.sort((p1, p2) => {
@@ -549,7 +553,7 @@ export class CompetitionDetailsComponent implements OnInit {
       if (participantsResult)
         this.filteredParticpants = participantsResult;
     }
-    this.orderParticipantsBy("startnummer");
+    this.orderParticipantsBy(this.orderBy);
   }
 
   private getCompetitionClasses() : void {
@@ -568,6 +572,7 @@ export class CompetitionDetailsComponent implements OnInit {
         this.updateRelatedPersons();
         this.hasTeams = this.competition.konkurranseDeltakere.some(d => d.lagNummer !== null);
         this.filterCompetitionParticipants(this.competition.konkurranseDeltakere);
+        this.orderParticipantsBy(this.orderBy);
       });
   }
 
