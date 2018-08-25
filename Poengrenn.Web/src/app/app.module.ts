@@ -28,6 +28,7 @@ import { AdminLoginComponent } from './auth/login/admin-login.component';
 import { LogoutComponent } from './auth/logout/logout.component';
 import { UserLoginComponent } from './auth/login/user-login.component';
 import { EditCompetitionModalComponent } from './competition/competition-details/edit-competition-modal/edit-competition-modal.component';
+import { LotteryModalComponent } from './competition/competition-details/lottery-modal/lottery-modal.component';
 
 @NgModule({
   declarations: [
@@ -48,14 +49,16 @@ import { EditCompetitionModalComponent } from './competition/competition-details
     AdminLoginComponent,
     LogoutComponent,
     UserLoginComponent,
-    EditCompetitionModalComponent
+    EditCompetitionModalComponent,
+    LotteryModalComponent
   ],
   entryComponents: [
     EditCompetitionModalComponent,
     EditCompetitionClassModalComponent,
     EditCompetitionParticipantModalComponent,
     PersonModalComponent,
-    RegisterCompetitionResultsModalComponent
+    RegisterCompetitionResultsModalComponent,
+    LotteryModalComponent
   ],
   imports: [
     BrowserModule,

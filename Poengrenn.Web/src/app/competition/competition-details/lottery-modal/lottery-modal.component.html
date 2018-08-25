@@ -1,0 +1,32 @@
+<div class="modal-header">
+  <h4 class="modal-title">
+    Lotteri
+    <small class="text-muted">{{competition?.konkurranseID}}</small>
+  </h4>
+  <button type="button" class="close" aria-label="Lukk" (click)="_activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <ul>
+    <li *ngFor="let filter of filters">{{ filter }}</li>
+  </ul>
+
+  <h2>Participants: {{ participants.length }}</h2>
+
+  <button type="button" class="btn btn-primary" [disabled]="participants.length < 1" (click)="roll_winner()">
+    Roll winner
+  </button>
+
+  <h2 *ngIf="currentWinner">Current winner: {{ currentWinner.person.fornavn }} {{ currentWinner.person.etternavn }}</h2>
+
+  <h3>Winners</h3>
+  <ol>
+    <li *ngFor="let winner of winners">
+      {{ winner.person.fornavn }} {{ winner.person.etternavn }}
+    </li>
+  </ol>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="_activeModal.close('Close click')">Lukk</button>
+</div>

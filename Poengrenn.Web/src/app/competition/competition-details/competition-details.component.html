@@ -1,6 +1,9 @@
 <div class="card">
   <div class="card-block">
-    <button *ngIf="isAdmin()" type="submit" class="btn btn-primary float-right" (click)="openEditResultsModal()">
+    <button *ngIf="isAdmin()" type="submit" class="btn btn-primary float-right" (click)="openLotteryModal()">
+      Lotteri
+    </button>
+    <button *ngIf="isAdmin()" type="submit" class="btn btn-primary float-right mr-2" (click)="openEditResultsModal()">
       <i class="fa fa-clock-o" aria-hidden="true"></i> Resultater...
     </button>
     <button *ngIf="isAdmin()" type="submit" class="btn btn-primary float-right mr-2" (click)="openEditCompetitionModal()">
