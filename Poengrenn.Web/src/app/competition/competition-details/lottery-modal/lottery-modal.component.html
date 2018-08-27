@@ -7,20 +7,22 @@
   </button>
 </div>
 <div class="modal-body">
-  <h2>Participants: {{ participants.length }}</h2>
+  <span class="pull-right">Deltagere: {{ participants.length }}</span>
 
-  <button type="button" class="btn btn-primary" [disabled]="participants.length < 1" (click)="roll_winner()">
-    Roll winner
-  </button>
+  <p>
+    <button type="button" class="btn btn-primary" [disabled]="participants.length < 1" (click)="roll_winner()">
+      Trekk vinner
+    </button>
+  </p>
 
-  <h2 *ngIf="currentWinner">Current winner: {{ currentWinner.person.fornavn }} {{ currentWinner.person.etternavn }}</h2>
+  <h2 *ngIf="currentWinner" ngClass="winnertoast">Nummer {{ currentWinner.startNummer }}: {{ currentWinner.person.fornavn }} {{ currentWinner.person.etternavn }}</h2>
 
-  <h3>Winners</h3>
-  <ol>
+  <h4 *ngIf="winners.length">Liste over vinnere ({{ winners.length }})</h4>
+  <ul>
     <li *ngFor="let winner of winners">
-      {{ winner.person.fornavn }} {{ winner.person.etternavn }}
+      {{ winner.startNummer }} - {{ winner.person.fornavn }} {{ winner.person.etternavn }}
     </li>
-  </ol>
+  </ul>
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-secondary" (click)="_activeModal.close('Close click')">Lukk</button>
