@@ -9,6 +9,7 @@ import { ApiService } from 'app/_services/api.service';
 import { AuthService } from 'app/_services/auth.service';
 import { Konkurranse, KonkurranseKlasse, KonkurranseDeltaker, NyKonkurranseDeltaker, Person, RelatedPerson } from 'app/_models/models';
 import { EditCompetitionParticipantModalComponent } from './edit-competition-participant-modal/edit-competition-participant-modal.component';
+import { LotteryModalComponent } from './lottery-modal/lottery-modal.component';
 import { PersonModalComponent } from './person-modal/person-modal.component';
 import { RegisterCompetitionResultsModalComponent } from './register-competition-results-modal/register-competition-results-modal.component';
 import { EditCompetitionModalComponent } from './edit-competition-modal/edit-competition-modal.component';
@@ -495,6 +496,12 @@ export class CompetitionDetailsComponent implements OnInit {
     modalRef.result.then((result) => {
       this.getCompetition(this.competition.konkurranseID);
     });
+  }
+
+  openLotteryModal() {
+      let options: NgbModalOptions = { size: "lg" };
+      const modalRef = this._modalService.open(LotteryModalComponent, options);
+      modalRef.componentInstance.filteredParticpants = this.filteredParticpants;
   }
 
   setSelectedPerson(person: Person) {
