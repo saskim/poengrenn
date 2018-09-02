@@ -110,9 +110,11 @@ export class CompetitionDetailsComponent implements OnInit {
   }
 
   updateRelatedPersons() {
-    this.relatedPersons.forEach(p => {
-      p.isRegistered = this.isRegistered(p);
-    });
+    if (this.relatedPersons && this.relatedPersons.length > 0) {
+      this.relatedPersons.forEach(p => {
+        p.isRegistered = this.isRegistered(p);
+      });
+    }
   }
 
   isRegistered(person: RelatedPerson) {
