@@ -106,6 +106,6 @@
 </div>
 <div class="modal-footer">
   <div class="alert alert-success" *ngIf="lastSaved">Sist lagret: <span class="font-weight-bold" [innerHtml]="lastSaved"></span></div>
-  <button type="submit" class="btn btn-primary" [disabled]="!registerResultsForm.valid || disableSave || !currentParticipant || !currentTeam" (click)="saveParticipantResult()">Oppdater</button>
+  <button type="submit" class="btn btn-primary" [disabled]="!registerResultsForm.valid || disableSave || !currentParticipant || (hasTeams && !currentTeam)" (click)="saveParticipantResult()">Oppdater</button>
   <button type="button" class="btn btn-secondary" (click)="_activeModal.close('Close click')">Lukk</button>
 </div>
