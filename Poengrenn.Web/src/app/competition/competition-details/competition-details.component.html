@@ -90,10 +90,18 @@
           <h5>Startnummer: {{lastAddedParticipant?.startNummer}}</h5>
 
           <div *ngIf="isAdmin()">
-            <button type="button" class="btn btn-outline-success btn-sm" (click)="updateTilstede(lastAddedParticipant)">
+            <button type="button"
+                    class="btn btn-sm"
+                    [class.btn-outline-success]="!lastAddedParticipant.tilstede"
+                    [class.btn-success]="lastAddedParticipant.tilstede"
+                    (click)="updateTilstede(lastAddedParticipant)">
               Tilstede!
             </button>
-            <button type="button" class="btn btn-outline-success btn-sm" (click)="updateBetalt(lastAddedParticipant)">
+            <button type="button"
+                    class="btn btn-sm"
+                    [class.btn-outline-success]="!lastAddedParticipant.betalt"
+                    [class.btn-success]="lastAddedParticipant.betalt"
+                    (click)="updateBetalt(lastAddedParticipant)">
               Betalt!
             </button>
           </div>
