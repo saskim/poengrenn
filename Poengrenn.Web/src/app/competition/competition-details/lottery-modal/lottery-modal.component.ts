@@ -21,7 +21,9 @@ export class LotteryModalComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.participants = this.filteredParticpants.slice(0)  // copy list
+    this.participants = this.filteredParticpants
+                            .filter(participant => participant.tilstede)
+                            .slice(0);
     this.winners = [];
   }
 
