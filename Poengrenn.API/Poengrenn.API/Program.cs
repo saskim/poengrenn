@@ -25,7 +25,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<PoengrennContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("PoengrennContext");
-    options.UseSqlServer(connectionString);
+    options.UseNpgsql(connectionString);
 });
 
 builder.Services.AddScoped(typeof(EFPoengrennRepository<>));
