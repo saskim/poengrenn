@@ -2,7 +2,8 @@ namespace Poengrenn.DAL.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity.ModelConfiguration;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
     public partial class KonkurranseDeltaker
     {
@@ -24,29 +25,29 @@ namespace Poengrenn.DAL.Models
         public virtual Person Person { get; set; }
     }
 
-    class KonkurranseDeltakerMapper : EntityTypeConfiguration<KonkurranseDeltaker>
+    class KonkurranseDeltakerMapper : IEntityTypeConfiguration<KonkurranseDeltaker>
     {
-        public KonkurranseDeltakerMapper()
+        public void Configure(EntityTypeBuilder<KonkurranseDeltaker> builder)
         {
-            ToTable("KonkurranseDeltaker");
+            builder.ToTable("KonkurranseDeltaker");
 
-            HasKey(k => new { k.KonkurranseID, k.KlasseID, k.PersonID });
+            builder.HasKey(k => new { k.KonkurranseID, k.KlasseID, k.PersonID });
 
-            Property(k => k.KonkurranseID).IsRequired();
-            Property(k => k.KlasseID).IsRequired().HasMaxLength(50);
-            Property(k => k.PersonID).IsRequired();
-            Property(k => k.TypeID).HasMaxLength(20);
-            Property(k => k.BetalingsNotat).HasMaxLength(255);
+            builder.Property(k => k.KonkurranseID).IsRequired();
+            builder.Property(k => k.KlasseID).IsRequired().HasMaxLength(50);
+            builder.Property(k => k.PersonID).IsRequired();
+            builder.Property(k => k.TypeID).HasMaxLength(20);
+            builder.Property(k => k.BetalingsNotat).HasMaxLength(255);
 
-            HasRequired(k => k.Konkurranse)
+            builder.HasOne(k => k.Konkurranse)
                 .WithMany(d => d.KonkurranseDeltakere)
                 .HasForeignKey(d => d.KonkurranseID);
 
-            HasRequired(k => k.KonkurranseKlasse)
+            builder.HasOne(k => k.KonkurranseKlasse)
                 .WithMany(d => d.KonkurranseDeltakere)
                 .HasForeignKey(d => new { d.KlasseID, d.TypeID });
 
-            HasRequired(k => k.Person)
+            builder.HasOne(k => k.Person)
                 .WithMany(d => d.KonkurranseDeltakere)
                 .HasForeignKey(d => d.PersonID);
 

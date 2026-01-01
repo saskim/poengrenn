@@ -1,54 +1,27 @@
-﻿using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Validation;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace Poengrenn.DAL.Models
 {
     public class PoengrennContext : DbContext
     {
-        public PoengrennContext()
+        public PoengrennContext(DbContextOptions<PoengrennContext> options) : base(options)
         {
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<PoengrennContext, Migrations.Configuration>("PoengrennContext"));
-
-            Configuration.ProxyCreationEnabled = false;
-            Configuration.LazyLoadingEnabled = false;
         }
 
-        public IDbSet<Konkurranse> Konkurranse { get; set; }
-        public IDbSet<KonkurranseDeltaker> KonkurranseDeltaker { get; set; }
-        public IDbSet<KonkurranseKlasse> KonkurranseKlasse { get; set; }
-        public IDbSet<KonkurranseType> KonkurranseType { get; set; }
-        public IDbSet<Person> Person { get; set; }
+        public DbSet<Konkurranse> Konkurranse { get; set; }
+        public DbSet<KonkurranseDeltaker> KonkurranseDeltaker { get; set; }
+        public DbSet<KonkurranseKlasse> KonkurranseKlasse { get; set; }
+        public DbSet<KonkurranseType> KonkurranseType { get; set; }
+        public DbSet<Person> Person { get; set; }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Configurations.Add(new KonkurranseMapper());
-            modelBuilder.Configurations.Add(new KonkurranseDeltakerMapper());
-            modelBuilder.Configurations.Add(new KonkurranseKlasseMapper());
-            modelBuilder.Configurations.Add(new KonkurranseTypeMapper());
-            modelBuilder.Configurations.Add(new PersonMapper());
-            base.OnModelCreating(modelBuilder);
-        }
-
-        public override int SaveChanges()
-        {
-            try
-            {
-                return base.SaveChanges();
-            }
-            catch (DbEntityValidationException e)
-            {
-                List<string> errors = new List<string>();
-                foreach (var eve in e.EntityValidationErrors)
-                {
-                    errors.Add("Entity of type " + eve.Entry.Entity.GetType().Name + " in state " + eve.Entry.State + " has the following validation errors:");
-                    foreach (var ve in eve.ValidationErrors)
-                    {
-                        errors.Add(" - Property: " + ve.PropertyName + ", Error: " + ve.ErrorMessage);
-                    }
-                }
-                throw new DbEntityValidationException(string.Concat(errors));
-            }
+            modelBuilder.ApplyConfiguration(new KonkurranseMapper());
+            modelBuilder.ApplyConfiguration(new KonkurranseDeltakerMapper());
+            modelBuilder.ApplyConfiguration(new KonkurranseKlasseMapper());
+            modelBuilder.ApplyConfiguration(new KonkurranseTypeMapper());
+            modelBuilder.ApplyConfiguration(new PersonMapper());
         }
     }
 }

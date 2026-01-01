@@ -2,7 +2,8 @@ namespace Poengrenn.DAL.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity.ModelConfiguration;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
     public partial class KonkurranseType
     {
@@ -21,18 +22,18 @@ namespace Poengrenn.DAL.Models
         public virtual ICollection<KonkurranseKlasse> KonkurranseKlasser { get; set; }
     }
 
-    class KonkurranseTypeMapper : EntityTypeConfiguration<KonkurranseType>
+    class KonkurranseTypeMapper : IEntityTypeConfiguration<KonkurranseType>
     {
-        public KonkurranseTypeMapper()
+        public void Configure(EntityTypeBuilder<KonkurranseType> builder)
         {
-            ToTable("KonkurranseType");
+            builder.ToTable("KonkurranseType");
 
-            HasKey(k => k.TypeID);
+            builder.HasKey(k => k.TypeID);
 
-            Property(k => k.TypeID).IsRequired().HasMaxLength(20);
-            Property(k => k.Navn).IsRequired().HasMaxLength(50);
-            Property(k => k.StandardAntallKonkurranser).IsRequired();
-            Property(k => k.Aktiv).IsRequired();
+            builder.Property(k => k.TypeID).IsRequired().HasMaxLength(20);
+            builder.Property(k => k.Navn).IsRequired().HasMaxLength(50);
+            builder.Property(k => k.StandardAntallKonkurranser).IsRequired();
+            builder.Property(k => k.Aktiv).IsRequired();
         }
     }
 }

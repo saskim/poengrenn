@@ -2,7 +2,8 @@ namespace Poengrenn.DAL.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity.ModelConfiguration;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
     public partial class Person
     {
@@ -22,20 +23,20 @@ namespace Poengrenn.DAL.Models
         public virtual ICollection<KonkurranseDeltaker> KonkurranseDeltakere { get; set; }
     }
 
-    class PersonMapper : EntityTypeConfiguration<Person>
+    class PersonMapper : IEntityTypeConfiguration<Person>
     {
-        public PersonMapper()
+        public void Configure(EntityTypeBuilder<Person> builder)
         {
-            ToTable("Person");
+            builder.ToTable("Person");
 
-            HasKey(k => k.PersonID);
+            builder.HasKey(k => k.PersonID);
 
-            Property(k => k.PersonID).IsRequired();
-            Property(k => k.Fornavn).IsRequired().HasMaxLength(100);
-            Property(k => k.Etternavn).IsRequired().HasMaxLength(100);
-            Property(k => k.Kjonn).HasMaxLength(10);
-            Property(k => k.Epost).HasMaxLength(255);
-            Property(k => k.Telefon).HasMaxLength(10);
+            builder.Property(k => k.PersonID).IsRequired();
+            builder.Property(k => k.Fornavn).IsRequired().HasMaxLength(100);
+            builder.Property(k => k.Etternavn).IsRequired().HasMaxLength(100);
+            builder.Property(k => k.Kjonn).HasMaxLength(10);
+            builder.Property(k => k.Epost).HasMaxLength(255);
+            builder.Property(k => k.Telefon).HasMaxLength(10);
         }
     }
 }

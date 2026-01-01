@@ -2,7 +2,8 @@ namespace Poengrenn.DAL.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity.ModelConfiguration;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
     public partial class KonkurranseKlasse
     {
@@ -26,29 +27,29 @@ namespace Poengrenn.DAL.Models
         public virtual KonkurranseType KonkurranseType { get; set; }
     }
 
-    class KonkurranseKlasseMapper : EntityTypeConfiguration<KonkurranseKlasse>
+    class KonkurranseKlasseMapper : IEntityTypeConfiguration<KonkurranseKlasse>
     {
-        public KonkurranseKlasseMapper()
+        public void Configure(EntityTypeBuilder<KonkurranseKlasse> builder)
         {
-            ToTable("KonkurranseKlasse");
+            builder.ToTable("KonkurranseKlasse");
 
-            HasKey(k => new { k.KlasseID, k.TypeID });
+            builder.HasKey(k => new { k.KlasseID, k.TypeID });
 
-            Property(k => k.KlasseID).IsRequired().HasMaxLength(50);
-            Property(k => k.TypeID).IsRequired().HasMaxLength(20);
-            Property(k => k.Navn).HasMaxLength(100);
-            Property(k => k.MinAlder).IsRequired();
-            Property(k => k.MaxAlder).IsRequired();
-            Property(k => k.Kjonn).HasMaxLength(10);
-            Property(k => k.ForsteStartnummer).IsRequired();
-            Property(k => k.SisteStartnummer).IsRequired();
-            Property(k => k.MedTidtaking).IsRequired();
-            Property(k => k.DistanseKm).HasPrecision(5, 2);
+            builder.Property(k => k.KlasseID).IsRequired().HasMaxLength(50);
+            builder.Property(k => k.TypeID).IsRequired().HasMaxLength(20);
+            builder.Property(k => k.Navn).HasMaxLength(100);
+            builder.Property(k => k.MinAlder).IsRequired();
+            builder.Property(k => k.MaxAlder).IsRequired();
+            builder.Property(k => k.Kjonn).HasMaxLength(10);
+            builder.Property(k => k.ForsteStartnummer).IsRequired();
+            builder.Property(k => k.SisteStartnummer).IsRequired();
+            builder.Property(k => k.MedTidtaking).IsRequired();
+            builder.Property(k => k.DistanseKm).HasPrecision(5, 2);
 
-            HasRequired(k => k.KonkurranseType)
+            builder.HasOne(k => k.KonkurranseType)
                 .WithMany(t => t.KonkurranseKlasser)
                 .HasForeignKey(k => k.TypeID)
-                .WillCascadeOnDelete(false);
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

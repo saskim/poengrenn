@@ -1,28 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
+using Microsoft.AspNetCore.Mvc;
 using Poengrenn.DAL.Models;
 using Poengrenn.DAL.EFRepository;
 
 namespace Poengrenn.API.Controllers
 {
-    [RoutePrefix("api/person")]
-    public class PersonController : ApiController
+    [ApiController]
+    [Route("api/person")]
+    public class PersonController : ControllerBase
     {
         private readonly EFPoengrennRepository<Person> _personInfoRepo;
 
-        public PersonController()
+        public PersonController(EFPoengrennRepository<Person> personInfoRepo)
         {
-            _personInfoRepo = new EFPoengrennRepository<Person>();
+            _personInfoRepo = personInfoRepo;
         }
 
 
         // GET api/persons
-        [Route("")]
-        [HttpGet]
+        [HttpGet("")]
         public IEnumerable<Person> Get()
         {
             return _personInfoRepo.Get();
@@ -30,8 +28,7 @@ namespace Poengrenn.API.Controllers
         }
 
         // GET api/persons/5
-        [Route("{id}")]
-        [HttpGet]
+        [HttpGet("{id}")]
         public Person Get(int id)
         {
             return _personInfoRepo.GetByID(id);
@@ -39,16 +36,14 @@ namespace Poengrenn.API.Controllers
         }
 
         // POST api/persons
-        [Route("")]
-        [HttpPost]
-        public Person Post([FromBody]Person person)
+        [HttpPost("")]
+        public Person Post([FromBody] Person person)
         {
             return _personInfoRepo.Insert(person);
         }
 
         // PUT api/persons/5
-        [Route("")]
-        [HttpPut]
+        [HttpPut("")]
         public Person Put(Person person)
         {
             var updatePerson = _personInfoRepo.GetByID(person.PersonID);
@@ -62,8 +57,7 @@ namespace Poengrenn.API.Controllers
         }
 
         // DELETE api/persons/5
-        [Route("")]
-        [HttpDelete]
+        [HttpDelete("")]
         public void Delete(int id)
         {
             

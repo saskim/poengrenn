@@ -11,9 +11,8 @@ namespace Poengrenn.DAL.EFRepository
     {
         // This class is just for setting up the correct DbContext
 
-        public EFPoengrennRepository() : base(new PoengrennContext())
+        public EFPoengrennRepository(PoengrennContext context) : base(context)
         {
-
         }
     }
 }

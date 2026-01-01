@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, SimpleChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/debounceTime';
@@ -40,6 +40,11 @@ export class UserLoginComponent implements OnInit {
 
   login() {
     this.errorMessage = "";
+    if (!this.model.brukernavn) {
+      this.setSelectedPerson(null);
+      this.errorMessage = "Det oppstod en feil med pålogging. Vennligst prøv igjen.";
+      return;
+    }
     this._authService.authenticate(this.model)
       .subscribe((user: LoginResponse) => {
         if (!user || user.rolle != 'user' || !user.token)

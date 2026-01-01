@@ -4,24 +4,22 @@ using Poengrenn.DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Poengrenn.API.Controllers
 {
-    [RoutePrefix("api/bruker")]
-    public class UserController : ApiController
+    [ApiController]
+    [Route("api/bruker")]
+    public class UserController : ControllerBase
     {
         private readonly EFPoengrennRepository<Person> _personInfoRepo;
 
-        public UserController()
+        public UserController(EFPoengrennRepository<Person> personInfoRepo)
         {
-            _personInfoRepo = new EFPoengrennRepository<Person>();
+            _personInfoRepo = personInfoRepo;
         }
         
-        [Route("login")]
-        [HttpPost]
+        [HttpPost("login")]
         public LoginResponse Post(LoginBruker bruker)
         {
             var loginResponse = new LoginResponse();
@@ -39,8 +37,7 @@ namespace Poengrenn.API.Controllers
                 if (personId == 0)
                     return null;
 
-                var personCtrl = new PersonController();
-                var person = personCtrl.Get(personId);
+                var person = _personInfoRepo.GetByID(personId);
                 var personIDer = _personInfoRepo.Get(p => p.Epost == bruker.Passord || p.Telefon == bruker.Passord).Select(x => x.PersonID);
                 if (person != null && ((person.Epost != null && person.Epost.ToLower() == bruker.Passord.ToLower()) || (person.Telefon != null && person.Telefon.Replace(" ", "") == bruker.Passord)))
                 {
@@ -52,8 +49,7 @@ namespace Poengrenn.API.Controllers
             return loginResponse;
         }
 
-        [Route("logout")]
-        [HttpPost]
+        [HttpPost("logout")]
         public void Post()
         {
             

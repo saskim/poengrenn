@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
+using Microsoft.AspNetCore.Mvc;
 using Poengrenn.DAL.Models;
 using Poengrenn.DAL.EFRepository;
 using Poengrenn.API.Models;
@@ -11,41 +9,39 @@ using Poengrenn.API.Models.Enums;
 
 namespace Poengrenn.API.Controllers
 {
-    [RoutePrefix("api/konkurranse")]
-    public class KonkurranseController : ApiController
+    [ApiController]
+    [Route("api/konkurranse")]
+    public class KonkurranseController : ControllerBase
     {
         private readonly EFPoengrennRepository<Konkurranse> _konkurranseRepo;
         private readonly EFPoengrennRepository<KonkurranseKlasse> _konkurranseKlasseRepo;
         private readonly EFPoengrennRepository<KonkurranseDeltaker> _konkurranseDeltagerRepo;
-        private readonly EFPoengrennRepository<Person> _personRepo;
 
-
-        public KonkurranseController()
+        public KonkurranseController(
+            EFPoengrennRepository<Konkurranse> konkurranseRepo,
+            EFPoengrennRepository<KonkurranseKlasse> konkurranseKlasseRepo,
+            EFPoengrennRepository<KonkurranseDeltaker> konkurranseDeltagerRepo)
         {
-            _konkurranseRepo = new EFPoengrennRepository<Konkurranse>();
-            _konkurranseKlasseRepo = new EFPoengrennRepository<KonkurranseKlasse>();
-            _konkurranseDeltagerRepo = new EFPoengrennRepository<KonkurranseDeltaker>();
-            _personRepo = new EFPoengrennRepository<Person>();
+            _konkurranseRepo = konkurranseRepo;
+            _konkurranseKlasseRepo = konkurranseKlasseRepo;
+            _konkurranseDeltagerRepo = konkurranseDeltagerRepo;
         }
 
         // GET api/konkurranse
-        [Route("")]
-        [HttpGet]
+        [HttpGet("")]
         public IEnumerable<Konkurranse> Get()
         {
             return _konkurranseRepo.Get();
         }
         // GET api/konkurranse/open
-        [Route("open")]
-        [HttpGet]
+        [HttpGet("open")]
         public IEnumerable<Konkurranse> GetOpen()
         {
             var dt = DateTime.Now;
             return _konkurranseRepo.Get(k => k.Dato >= dt);
         }
         // GET api/konkurranse/done
-        [Route("done")]
-        [HttpGet]
+        [HttpGet("done")]
         public IEnumerable<Konkurranse> GetDone()
         {
             var dt = DateTime.Now;
@@ -53,20 +49,17 @@ namespace Poengrenn.API.Controllers
         }
 
         // GET api/konkurranse/5
-        [Route("{id}")]
-        [HttpGet]
+        [HttpGet("{id}")]
         public Konkurranse Get(int id)
         {
             return _konkurranseRepo.GetByID(id);
         }
 
         // POST api/konkurranse
-        [Route("")]
-        [HttpPost]
+        [HttpPost("")]
         public IEnumerable<Konkurranse> Post(NyKonkurranse nyKonkurranse)
         {
             var konkurranser = new List<Konkurranse>();
-            var stdKonkurranseKlasser = _konkurranseKlasseRepo.Get(kk => kk.TypeID == nyKonkurranse.TypeID).ToList();
             var countDatoer = nyKonkurranse.Datoer?.Count;
             var serie = (countDatoer > 1) ? nyKonkurranse.TypeID + nyKonkurranse.Datoer.ElementAt(0).ToShortDateString() : null;
             for (var i = 0; i < countDatoer; i++)
@@ -87,8 +80,7 @@ namespace Poengrenn.API.Controllers
         }
 
         // PUT api/konkurranse/5
-        [Route("")]
-        [HttpPut]
+        [HttpPut("")]
         public Konkurranse Put(Konkurranse konkurranse)
         {
             var konkurranseUpdate = _konkurranseRepo.GetByID(konkurranse.KonkurranseID);
@@ -104,8 +96,7 @@ namespace Poengrenn.API.Controllers
 
 
         // DELETE api/konkurranse/5
-        [Route("")]
-        [HttpDelete]
+        [HttpDelete("")]
         public Konkurranse Delete(int id)
         {
             var konkurranseDelete = _konkurranseRepo.GetByID(id);
@@ -116,15 +107,13 @@ namespace Poengrenn.API.Controllers
 
 
         // GET api/konkurranse/5/deltaker
-        [Route("{id}/deltaker")]
-        [HttpGet]
+        [HttpGet("{id}/deltaker")]
         public IEnumerable<KonkurranseDeltaker> GetDeltakere(int id)
         {
             return _konkurranseDeltagerRepo.Get(d => d.KonkurranseID == id, null, _konkurranseDeltagerRepo.FindPropertyName(typeof(Person)));
         }
         // POST api/konkurranse/5/deltaker
-        [Route("{id}/deltaker")]
-        [HttpPost]
+        [HttpPost("{id}/deltaker")]
         public IEnumerable<KonkurranseDeltaker> PostDeltaker(int id, NyKonkurranseDeltaker deltaker)
         {
             var konkurranse = _konkurranseRepo.Get(d => d.KonkurranseID == id).FirstOrDefault();
@@ -174,8 +163,7 @@ namespace Poengrenn.API.Controllers
         }
 
         // PUT api/konkurranse/5/deltaker/2
-        [Route("{id}/deltaker")]
-        [HttpPut]
+        [HttpPut("{id}/deltaker")]
         public KonkurranseDeltaker PutDeltaker(int id, KonkurranseDeltaker deltaker)
         {
             var konkurranse = _konkurranseRepo.Get(d => d.KonkurranseID == id).FirstOrDefault();
