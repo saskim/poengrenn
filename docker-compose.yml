@@ -1,0 +1,46 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: poengrenn-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: Poengrenn
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - poengrenn-postgres-data:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: .
+      dockerfile: Poengrenn.API/Dockerfile
+    container_name: poengrenn-api
+    working_dir: /src/Poengrenn.API/Poengrenn.API
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__PoengrennContext: Host=postgres;Database=Poengrenn;Username=postgres;Password=postgres
+      DOTNET_USE_POLLING_FILE_WATCHER: "1"
+    volumes:
+      - ./Poengrenn.API:/src/Poengrenn.API
+      - ./Poengrenn.DAL:/src/Poengrenn.DAL
+    depends_on:
+      - postgres
+
+  web:
+    image: node:8
+    container_name: poengrenn-web
+    working_dir: /app
+    ports:
+      - "4200:4200"
+    command: sh -c "npm install && npm start -- --host 0.0.0.0 --port 4200"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - api
+
+volumes:
+  poengrenn-postgres-data:
