@@ -175,6 +175,22 @@ namespace Poengrenn.DAL.Migrations
                     b.HasKey("TypeID");
 
                     b.ToTable("KonkurranseType", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            TypeID = "1",
+                            Aktiv = true,
+                            Navn = "Telenorkarusellen",
+                            StandardAntallKonkurranser = 4
+                        },
+                        new
+                        {
+                            TypeID = "2",
+                            Aktiv = true,
+                            Navn = "Klubbmesterskap",
+                            StandardAntallKonkurranser = 1
+                        });
                 });
 
             modelBuilder.Entity("Poengrenn.DAL.Models.Person", b =>

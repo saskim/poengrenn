@@ -34,6 +34,12 @@ var app = builder.Build();
 
 app.UseCors("AllowAll");
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<PoengrennContext>();
+    db.Database.Migrate();
+}
+
 app.MapControllers();
 
 app.Run();

@@ -34,6 +34,22 @@ namespace Poengrenn.DAL.Models
             builder.Property(k => k.Navn).IsRequired().HasMaxLength(50);
             builder.Property(k => k.StandardAntallKonkurranser).IsRequired();
             builder.Property(k => k.Aktiv).IsRequired();
+
+            builder.HasData(
+                new KonkurranseType
+                {
+                    TypeID = "1",
+                    Navn = "Telenorkarusellen",
+                    StandardAntallKonkurranser = 4,
+                    Aktiv = true
+                },
+                new KonkurranseType
+                {
+                    TypeID = "2",
+                    Navn = "Klubbmesterskap",
+                    StandardAntallKonkurranser = 1,
+                    Aktiv = true
+                });
         }
     }
 }
