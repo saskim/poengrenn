@@ -14,9 +14,9 @@ services:
   api:
     build:
       context: .
-      dockerfile: Poengrenn.API/Dockerfile
+      dockerfile: backend/Dockerfile
     container_name: poengrenn-api
-    working_dir: /src/Poengrenn.API/Poengrenn.API
+    working_dir: /src/backend/Poengrenn.API
     ports:
       - "8080:8080"
     environment:
@@ -24,8 +24,7 @@ services:
       ConnectionStrings__PoengrennContext: Host=postgres;Database=Poengrenn;Username=postgres;Password=postgres
       DOTNET_USE_POLLING_FILE_WATCHER: "1"
     volumes:
-      - ./Poengrenn.API:/src/Poengrenn.API
-      - ./Poengrenn.DAL:/src/Poengrenn.DAL
+      - ./backend:/src/backend
     depends_on:
       - postgres
 

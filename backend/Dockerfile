@@ -8,15 +8,15 @@ RUN curl -sSL https://dot.net/v1/dotnet-install.sh \
 RUN dotnet tool install -g dotnet-ef --version 10.0.0-preview.7.*
 ENV PATH="${PATH}:/root/.dotnet/tools"
 
-COPY Poengrenn.API/Poengrenn.API/Poengrenn.API.csproj Poengrenn.API/Poengrenn.API/
-COPY Poengrenn.API/Poengrenn.DAL/Poengrenn.DAL.csproj Poengrenn.API/Poengrenn.DAL/
-COPY Poengrenn.API/Poengrenn.sln Poengrenn.API/
+COPY backend/Poengrenn.API/Poengrenn.API.csproj backend/Poengrenn.API/
+COPY backend/Poengrenn.DAL/Poengrenn.DAL.csproj backend/Poengrenn.DAL/
+COPY backend/Poengrenn.sln backend/
 
-RUN dotnet restore Poengrenn.API/Poengrenn.API/Poengrenn.API.csproj
+RUN dotnet restore backend/Poengrenn.API/Poengrenn.API.csproj
 
 COPY . .
 
-WORKDIR /src/Poengrenn.API/Poengrenn.API
+WORKDIR /src/backend/Poengrenn.API
 
 ENV ASPNETCORE_URLS=http://0.0.0.0:8080
 
