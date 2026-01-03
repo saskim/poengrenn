@@ -45,16 +45,19 @@ export class DateSelectorComponent implements OnInit {
     this.onMonthChange.emit(newDate);
   }
   onDateDelete() {
-    console.log(this.index);
+    this.dateTemp = null;
+    this.timeTemp = { hour: 17, minute: 0 };
     this.onDelete.emit(this.index);
+    this.onDateChange.next(null);
   }
 
   modelChange() {
-    console.log("Model changed " + this.index);
-    console.log(this.dateTemp);
-    console.log(this.timeTemp);
+    if (!this.dateTemp) {
+      this.onDateChange.next(null);
+      return;
+    }
+
     var emitDate = new Date(this.dateTemp.year, this.dateTemp.month - 1, this.dateTemp.day, this.timeTemp.hour, this.timeTemp.minute);
-    //this.onDateChange.emit(emitDate);
     this.onDateChange.next(emitDate);
   }
 }

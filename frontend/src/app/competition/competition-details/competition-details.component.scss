@@ -34,6 +34,36 @@
 .label-success {
     background-color: #5cb85c;
 }
+
+.related-persons-list {
+    list-style: none;
+    margin: 0.75rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.6rem;
+}
+
+.related-persons-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    background: #ffffff;
+    border: 1px solid #e6e1dd;
+    border-radius: 12px;
+    padding: 0.5rem 0.75rem;
+}
+
+.related-persons-list .label {
+    border-radius: 999px;
+    background: #2f9e44;
+    margin-left: 0.5rem;
+}
+
+.related-persons-list .btn {
+    padding: 0.35rem 0.9rem;
+    font-size: 0.85rem;
+}
 input[type="checkbox"] {
     width: 20px; 
     height: 20px;
@@ -52,4 +82,31 @@ input[type="checkbox"] {
         height: 20px;
         vertical-align: middle;
     }
+}
+
+.deltakere .btn.btn-secondary.btn-sm {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 999px;
+    background: #ece8e5;
+    border-color: #e1ddda;
+}
+
+.deltakere .btn.btn-secondary.btn-sm i {
+    font-size: 0.85rem;
+    line-height: 1;
+}
+
+.deltakere .card {
+    margin-top: 0.35rem;
+    border-radius: 12px;
+    box-shadow: 0 12px 26px rgba(15, 15, 15, 0.12);
+}
+
+.deltakere .list-group-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
 }

@@ -1,14 +1,16 @@
 <div class="card">
   <div class="card-block">
-    <button *ngIf="isAdmin()" type="submit" class="btn btn-primary float-right" (click)="openLotteryModal()">
-      Lotteri
-    </button>
-    <button *ngIf="isAdmin()" type="submit" class="btn btn-primary float-right mr-2" (click)="openEditResultsModal()">
-      <i class="fa fa-clock-o" aria-hidden="true"></i> Resultater...
-    </button>
-    <button *ngIf="isAdmin()" type="submit" class="btn btn-primary float-right mr-2" (click)="openEditCompetitionModal()">
-      <i class="fa fa-edit" aria-hidden="true"></i> Rediger...
-    </button>
+    <div class="float-right d-flex">
+      <button *ngIf="isAdmin()" type="submit" class="btn btn-primary" (click)="openEditCompetitionModal()">
+        <i class="fa fa-edit" aria-hidden="true"></i> Rediger...
+      </button>
+      <button *ngIf="isAdmin()" type="submit" class="btn btn-primary ml-2" (click)="openEditResultsModal()">
+        <i class="fa fa-clock-o" aria-hidden="true"></i> Resultater...
+      </button>
+      <button *ngIf="isAdmin()" type="submit" class="btn btn-primary ml-2" (click)="openLotteryModal()">
+        Lotteri
+      </button>
+    </div>
     <h4 class="card-title">{{competition?.navn}} <span class="status">{{compStatus?.displayText}}</span></h4>
     <h6 class="card-subtitle mb-2 text-muted">{{competition?.dato | date:'dd.MM.yyyy'}} kl. {{competition?.dato | date:'HH:mm'}}</h6>
 

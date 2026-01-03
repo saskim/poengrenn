@@ -37,14 +37,14 @@ namespace Poengrenn.API.Controllers
         [HttpGet("open")]
         public IEnumerable<Konkurranse> GetOpen()
         {
-            var dt = DateTime.Now;
+            var dt = DateTime.UtcNow;
             return _konkurranseRepo.Get(k => k.Dato >= dt);
         }
         // GET api/konkurranse/done
         [HttpGet("done")]
         public IEnumerable<Konkurranse> GetDone()
         {
-            var dt = DateTime.Now;
+            var dt = DateTime.UtcNow;
             return _konkurranseRepo.Get(k => k.Dato < dt).OrderByDescending(k => k.Dato);
         }
 
@@ -64,7 +64,7 @@ namespace Poengrenn.API.Controllers
             var serie = (countDatoer > 1) ? nyKonkurranse.TypeID + nyKonkurranse.Datoer.ElementAt(0).ToShortDateString() : null;
             for (var i = 0; i < countDatoer; i++)
             {
-                var dato = nyKonkurranse.Datoer.ElementAt(i);
+                var dato = NormalizeToUtc(nyKonkurranse.Datoer.ElementAt(i));
                 var konk = _konkurranseRepo.Insert(new Konkurranse
                 {
                     Navn = nyKonkurranse.Navn,
@@ -86,7 +86,7 @@ namespace Poengrenn.API.Controllers
             var konkurranseUpdate = _konkurranseRepo.GetByID(konkurranse.KonkurranseID);
             konkurranseUpdate.TypeID = konkurranse.TypeID;
             konkurranseUpdate.Serie = konkurranse.Serie;
-            konkurranseUpdate.Dato = konkurranse.Dato;
+            konkurranseUpdate.Dato = NormalizeToUtc(konkurranse.Dato);
             konkurranseUpdate.Navn = konkurranse.Navn;
             konkurranseUpdate.Status = konkurranse.Status.ToString();
             konkurranseUpdate.StartInterval = konkurranse.StartInterval;
@@ -247,6 +247,21 @@ namespace Poengrenn.API.Controllers
                 klasse = klasser.FirstOrDefault();
 
             return klasse;
+        }
+
+        private static DateTime? NormalizeToUtc(DateTime? value)
+        {
+            if (!value.HasValue)
+                return null;
+
+            var dt = value.Value;
+            if (dt.Kind == DateTimeKind.Utc)
+                return dt;
+
+            if (dt.Kind == DateTimeKind.Unspecified)
+                dt = DateTime.SpecifyKind(dt, DateTimeKind.Local);
+
+            return dt.ToUniversalTime();
         }
     }
 

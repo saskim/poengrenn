@@ -32,21 +32,21 @@ export class EditCompetitionModalComponent implements OnInit {
   ngOnInit() {
     this.tempStatus = this.competition.status;
     this.tempDate = new Date(this.competition.dato);
-    console.log(this.tempDate);
   }
 
   updateCompetition() {
-    this.competition.status = this.tempStatus;
-    
-    if (typeof(this.competition.dato) !== "string") {
-      let timezoneOffset = this.competition.dato.getTimezoneOffset();
-      this.competition.dato = new Date(this.competition.dato.valueOf() - (timezoneOffset * 60000));
-    }
-    
-    this._apiService.UpdateCompetition(this.competition)
-      .subscribe((result: Konkurranse) => {
-        console.log(result);
+    const payload: Partial<Konkurranse> = {
+      konkurranseID: this.competition.konkurranseID,
+      typeID: this.competition.typeID,
+      serie: this.competition.serie,
+      navn: this.competition.navn,
+      dato: this.competition.dato,
+      status: this.tempStatus,
+      startInterval: this.competition.startInterval
+    };
 
+    this._apiService.UpdateCompetition(payload as Konkurranse)
+      .subscribe((result: Konkurranse) => {
         this._activeModal.close("Updated");
       });
   }

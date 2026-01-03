@@ -12,22 +12,23 @@ export class AuthService {
   constructor(private _apiService: ApiService) { }
 
     loggedInUser() : LoginResponse {
-        return this.getUserFromLocalStorage();
+        return this.normalizeUser(this.getUserFromLocalStorage());
     }
     isAuthenticated() : boolean {
-        let user: LoginResponse = this.getUserFromLocalStorage();
+        let user: LoginResponse = this.normalizeUser(this.getUserFromLocalStorage());
         return (user && (user.rolle == "admin" || user.rolle == "user"));
     }
     isAdmin() : boolean {
-        let user: LoginResponse = this.getUserFromLocalStorage();
+        let user: LoginResponse = this.normalizeUser(this.getUserFromLocalStorage());
         return (user && user.rolle == "admin");
     }
 
     authenticate(loginData: LoginModel) : Observable<LoginResponse> {
         return this._apiService.Login(loginData)
             .pipe(map(response => {
-                localStorage.setItem('currentUser', JSON.stringify(response));
-                return response;
+                const normalized = this.normalizeUser(response as LoginResponse);
+                localStorage.setItem('currentUser', JSON.stringify(normalized));
+                return normalized;
             }));
     }
 
@@ -43,5 +44,22 @@ export class AuthService {
             return <LoginResponse>JSON.parse(value);
         }
         return null;
+    }
+
+    private normalizeUser(user: LoginResponse) : LoginResponse {
+        if (!user)
+            return null;
+
+        const anyUser = user as any;
+        if (anyUser.rolle === undefined && anyUser.Rolle !== undefined)
+            anyUser.rolle = anyUser.Rolle;
+        if (anyUser.brukernavn === undefined && anyUser.Brukernavn !== undefined)
+            anyUser.brukernavn = anyUser.Brukernavn;
+        if (anyUser.token === undefined && anyUser.Token !== undefined)
+            anyUser.token = anyUser.Token;
+        if (anyUser.personIDer === undefined && anyUser.PersonIDer !== undefined)
+            anyUser.personIDer = anyUser.PersonIDer;
+
+        return anyUser as LoginResponse;
     }
 }
