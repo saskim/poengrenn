@@ -11,27 +11,19 @@
         </select>
       </div>
 
-      <div class="row">
-        <div class="col-12 col-md-6">
+      <div class="date-list">
+        <div class="date-item">
           <app-date-selector [index]="0" [date]="model.datoer[0]" [minDate]="minDate" 
             (onMonthChange)="onMonthChange(0, $event)"
             (onDateChange)="setTempDato(0, $event)">
           </app-date-selector>
         </div>
 
-        <div class="col-12 col-md-6"></div>
-
-        <div class="col-12 col-md-6" *ngFor="let dato of model.datoer; let i = index;">
-
+        <div class="date-item" *ngFor="let dato of model.datoer; let i = index;">
           <app-date-selector *ngIf="i > 0" [index]="i" [date]="dato" [minDate]="minDate" 
             (onDateChange)="setTempDato(i, $event)"
             (onDelete)="removeTempDato(i)">
           </app-date-selector>
-          
-          
-          <!--<div *ngIf="i > 0" class="d-md-inline-flex">
-            <button type="submit" class="btn btn-secondary btn-sm" (click)="removeTempDato(i)"><i class="fa fa-remove text-danger" aria-hidden="true"></i> Fjern dato</button>
-          </div>-->
         </div>
       </div>
 

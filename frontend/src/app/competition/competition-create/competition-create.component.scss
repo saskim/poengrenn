@@ -1,0 +1,12 @@
+.date-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.date-item {
+  display: flex;
+}
+
+.date-item app-date-selector {
+  width: 100%;
+}

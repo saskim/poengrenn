@@ -53,7 +53,33 @@ export class CompetitionCreateComponent implements OnInit {
   addTempDato() {
     //let dt = this._parserFormatter.parse(new Date().toDateString())
     //this.tempDatoer.push(dt);
-    this.model.datoer.push(new Date());
+    const last = this.getLastSelectedDate();
+    const next = last ? new Date(last) : new Date();
+    next.setDate(next.getDate() + 7);
+    if (last) {
+      next.setHours(last.getHours(), last.getMinutes(), 0, 0);
+    }
+    this.model.datoer.push(next);
+  }
+
+  private getLastSelectedDate(): Date | null {
+    if (!this.model?.datoer?.length) {
+      return null;
+    }
+
+    for (let i = this.model.datoer.length - 1; i >= 0; i--) {
+      const value: any = this.model.datoer[i];
+      if (!value) {
+        continue;
+      }
+
+      const date = value instanceof Date ? value : new Date(value);
+      if (!isNaN(date.getTime())) {
+        return date;
+      }
+    }
+
+    return null;
   }
   removeTempDato(index) {
     //this.tempDatoer.splice(index, 1);
