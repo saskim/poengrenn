@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from 'app/_services/auth.service';
 
 @Component({
@@ -8,11 +8,12 @@ import { AuthService } from 'app/_services/auth.service';
   standalone: true,
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
-  imports: [CommonModule, RouterLink]
+  imports: [CommonModule, RouterLink, RouterLinkActive]
 })
 export class HeaderComponent implements OnInit {
 
   loggedInUser;
+  menuOpen = false;
 
   constructor(private _authService: AuthService) { }
 
@@ -28,5 +29,11 @@ export class HeaderComponent implements OnInit {
     return this._authService.isAdmin();
   }
 
-  
+  toggleMenu() {
+    this.menuOpen = !this.menuOpen;
+  }
+
+  closeMenu() {
+    this.menuOpen = false;
+  }
 }

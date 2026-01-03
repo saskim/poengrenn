@@ -1,33 +1,41 @@
-<nav class="navbar sticky-top navbar-toggleable-md navbar-inverse bg-primary">
-  <button class="navbar-toggler navbar-toggler-right" 
-    type="button" data-toggle="collapse" data-target="#navbarMenu" 
-    aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  
-  <a class="navbar-brand" routerLink="/">
-    <img src="assets/logo_header.png" height="49" class="d-inline-block align-top" alt="Flatås Langrenn">
-  </a>
-  <div class="collapse navbar-collapse" id="navbarMenu">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/konkurranser">Konkurranser</a>
-      </li>
-      <li class="nav-item" *ngIf="isAdmin()">
-        <a class="nav-link" routerLink="/konkurranseklasser">Konkurranseklasser</a>
-      </li>
-    </ul>
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item" *ngIf="!isAuth()">
-        <a class="nav-link" routerLink="/login"><i class="fa fa-user" aria-hidden="true"></i> Logg inn</a>
-      </li>
-      <li class="nav-item" *ngIf="!isAuth()">
-        <a class="nav-link" routerLink="/adminlogin"><i class="fa fa-lock" aria-hidden="true"></i> Admin</a>
-      </li>
-      <li class="nav-item" *ngIf="isAuth()">
-        <a class="nav-link" routerLink="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Logg ut {{(loggedInUser?.rolle === 'admin') ? loggedInUser?.brukernavn : ''}}</a>
-      </li>
-    </ul>
-  </div>
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" routerLink="/" (click)="closeMenu()">
+      <img class="brand__logo" src="assets/logo_header.png" alt="Flatås Langrenn">
+      <span class="brand__text">
+        <span class="brand__title">Flatås</span>
+        <span class="brand__subtitle">Langrenn</span>
+      </span>
+    </a>
 
-</nav>
+    <button
+      class="nav-toggle"
+      type="button"
+      aria-label="Toggle menu"
+      [attr.aria-expanded]="menuOpen"
+      (click)="toggleMenu()"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav class="site-nav" [class.is-open]="menuOpen">
+      <div class="site-nav__group">
+        <a routerLink="/konkurranser" routerLinkActive="is-active" (click)="closeMenu()">Konkurranser</a>
+        <a *ngIf="isAdmin()" routerLink="/konkurranseklasser" routerLinkActive="is-active" (click)="closeMenu()">Konkurranseklasser</a>
+      </div>
+      <div class="site-nav__group site-nav__auth">
+        <a *ngIf="!isAuth()" routerLink="/login" routerLinkActive="is-active" (click)="closeMenu()">
+          <i class="fa fa-user" aria-hidden="true"></i> Logg inn
+        </a>
+        <a *ngIf="!isAuth()" routerLink="/adminlogin" routerLinkActive="is-active" (click)="closeMenu()">
+          <i class="fa fa-lock" aria-hidden="true"></i> Admin
+        </a>
+        <a *ngIf="isAuth()" routerLink="/logout" routerLinkActive="is-active" (click)="closeMenu()">
+          <i class="fa fa-sign-out" aria-hidden="true"></i> Logg ut {{(loggedInUser?.rolle === 'admin') ? loggedInUser?.brukernavn : ''}}
+        </a>
+      </div>
+    </nav>
+  </div>
+</header>

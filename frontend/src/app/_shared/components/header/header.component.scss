@@ -1,0 +1,147 @@
+ :host {
+  display: block;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: linear-gradient(135deg, var(--brand-red) 0%, var(--brand-red-dark) 100%);
+  box-shadow: 0 10px 30px rgba(12, 12, 12, 0.18);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.75rem 1.25rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: #fff;
+}
+
+.brand__logo {
+  height: 40px;
+  width: auto;
+  max-width: 44px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.12);
+  padding: 6px;
+  object-fit: contain;
+}
+
+.brand__text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.brand__title {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.brand__subtitle {
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+
+.nav-toggle {
+  margin-left: auto;
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 10px;
+  padding: 0.55rem 0.65rem;
+  color: #fff;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: #fff;
+  border-radius: 999px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.site-nav {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.site-nav__group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.site-nav__auth {
+  padding-left: 1.5rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.site-nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 999px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.site-nav a.is-active,
+.site-nav a:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+@media (max-width: 900px) {
+  .site-header__inner {
+    flex-wrap: wrap;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+  }
+
+  .site-nav {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    padding: 0.5rem 0 1rem;
+    display: none;
+  }
+
+  .site-nav.is-open {
+    display: flex;
+  }
+
+  .site-nav__group,
+  .site-nav__auth {
+    flex-direction: column;
+    align-items: stretch;
+    border-left: none;
+    padding-left: 0;
+    gap: 0.5rem;
+  }
+
+  .site-nav a {
+    background: rgba(255, 255, 255, 0.12);
+  }
+}
