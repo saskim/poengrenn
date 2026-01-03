@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbDropdownModule, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
 import { ApiService } from 'app/_services/api.service';
 import { KonkurranseKlasse, KonkurranseType } from 'app/_models/models';
@@ -11,7 +11,7 @@ import { KonkurranseKlasse, KonkurranseType } from 'app/_models/models';
   standalone: true,
   templateUrl: './edit-competition-class-modal.component.html',
   styleUrls: ['./edit-competition-class-modal.component.scss'],
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgbDropdownModule],
   providers: [ApiService]
 })
 export class EditCompetitionClassModalComponent implements OnInit {
@@ -26,6 +26,22 @@ export class EditCompetitionClassModalComponent implements OnInit {
 
   ngOnInit() {
     
+  }
+
+  getSelectedTypeName(): string {
+    if (!this.competitionClass?.typeID || !this.competitionTypes) {
+      return 'Velg konkurransetype';
+    }
+    const match = this.competitionTypes.find(ct => ct.typeID == this.competitionClass.typeID);
+    return match?.navn || 'Velg konkurransetype';
+  }
+
+  getSelectedGenderName(): string {
+    if (!this.competitionClass?.kjonn || !this.genders) {
+      return 'Velg kjønn';
+    }
+    const match = this.genders.find(g => g.id == this.competitionClass.kjonn);
+    return match?.navn || 'Velg kjønn';
   }
 
   saveCompetitionClass() {

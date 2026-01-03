@@ -10,11 +10,25 @@
         <label class="font-weight-bold">Velg konkurransetype</label>
         <div class="row">
           <div class="col">
-            <select [(ngModel)]="competitionClass.typeID" class="form-control" name="typeID" disabled>
-              <option *ngFor="let t of competitionTypes" [ngValue]="t.typeID">
-                {{t?.navn}}
-              </option>
-            </select>
+            <div class="type-select" ngbDropdown>
+              <button class="btn type-select__toggle" type="button" ngbDropdownToggle disabled>
+                {{ getSelectedTypeName() }}
+              </button>
+              <div ngbDropdownMenu class="type-select__menu">
+                <button
+                  *ngFor="let t of competitionTypes"
+                  ngbDropdownItem
+                  type="button">
+                  {{t?.navn}}
+                </button>
+              </div>
+
+              <select [(ngModel)]="competitionClass.typeID" class="form-control type-select__native" name="typeID" disabled>
+                <option *ngFor="let t of competitionTypes" [ngValue]="t.typeID">
+                  {{t?.navn}}
+                </option>
+              </select>
+            </div>
           </div>
         </div>
         
@@ -27,9 +41,23 @@
 
           <div class="form-group col">
             <label class="font-weight-bold">Kjønn</label>
-            <select [(ngModel)]="competitionClass.kjonn" class="form-control" disabled name="kjonn">
-              <option *ngFor="let kjonn of genders" [ngValue]="kjonn?.id">{{kjonn?.navn}}</option>
-            </select>
+            <div class="type-select" ngbDropdown>
+              <button class="btn type-select__toggle" type="button" ngbDropdownToggle disabled>
+                {{ getSelectedGenderName() }}
+              </button>
+              <div ngbDropdownMenu class="type-select__menu">
+                <button
+                  *ngFor="let kjonn of genders"
+                  ngbDropdownItem
+                  type="button">
+                  {{kjonn?.navn}}
+                </button>
+              </div>
+
+              <select [(ngModel)]="competitionClass.kjonn" class="form-control type-select__native" disabled name="kjonn">
+                <option *ngFor="let kjonn of genders" [ngValue]="kjonn?.id">{{kjonn?.navn}}</option>
+              </select>
+            </div>
           </div>
         </div>
 

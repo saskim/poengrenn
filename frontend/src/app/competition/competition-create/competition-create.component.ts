@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbActiveModal, NgbModule, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModule, NgbDateParserFormatter, NgbDateStruct, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { ApiService } from 'app/_services/api.service';
 import { KonkurranseType, KonkurranseOpprett, KonkurranseKlasse } from 'app/_models/models';
@@ -12,7 +12,7 @@ import { DateSelectorComponent } from 'app/_shared/components/date-selector/date
   standalone: true,
   templateUrl: './competition-create.component.html',
   styleUrls: ['./competition-create.component.scss'],
-  imports: [CommonModule, FormsModule, DateSelectorComponent],
+  imports: [CommonModule, FormsModule, DateSelectorComponent, NgbDropdownModule],
   providers: [ApiService]
 })
 export class CompetitionCreateComponent implements OnInit {
@@ -37,7 +37,7 @@ export class CompetitionCreateComponent implements OnInit {
     this.defaultCompetitionType.navn = " Velg type konkurranse ";
 
     this.model = new KonkurranseOpprett();
-    this.model.typeID = this.defaultCompetitionType.typeID;
+    this.model.typeID = null;
     //this.tempDatoer = new Array<NgbDateStruct>(1);
     this.model.datoer = new Array<Date>(1);
     
@@ -97,7 +97,9 @@ export class CompetitionCreateComponent implements OnInit {
 
       if (!compYear)
         compYear = new Date().getFullYear();
-      this.model.navn = compType.navn + ' ' + compYear;
+      if (compType?.navn) {
+        this.model.navn = compType.navn + ' ' + compYear;
+      }
     } 
   }
 
@@ -132,6 +134,40 @@ export class CompetitionCreateComponent implements OnInit {
 
   private findCompetitionType(typeID: string): KonkurranseType {
     return this.competitionTypes.find(ct => ct.typeID == typeID);
+  }
+
+  getSelectedTypeName(): string | null {
+    if (!this.model?.typeID) {
+      return null;
+    }
+    return this.findCompetitionType(this.model.typeID)?.navn || null;
+  }
+
+  selectType(typeID: string | null) {
+    this.model.typeID = typeID;
+    if (typeID) {
+      this.setDefaultCompetitionName(0);
+    }
+  }
+
+  hasValidDates(): boolean {
+    if (!this.model?.datoer?.length) {
+      return false;
+    }
+    return this.model.datoer.every((value) => {
+      if (!value) {
+        return false;
+      }
+      const date = value instanceof Date ? value : new Date(value);
+      if (isNaN(date.getTime())) {
+        return false;
+      }
+      return date.getHours() >= 0 && date.getHours() <= 23 && date.getMinutes() >= 0 && date.getMinutes() <= 59;
+    });
+  }
+
+  hasValidTitle(): boolean {
+    return !!this.model?.navn && this.model.navn.trim().length > 0;
   }
   private findCompetitionYear(date: NgbDateStruct): number {
     if (date) 

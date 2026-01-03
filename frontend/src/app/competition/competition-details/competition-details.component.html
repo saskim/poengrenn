@@ -1,15 +1,20 @@
 <div class="card">
   <div class="card-block">
-    <div class="float-right d-flex">
-      <button *ngIf="isAdmin()" type="submit" class="btn btn-primary" (click)="openEditCompetitionModal()">
-        <i class="fa fa-edit" aria-hidden="true"></i> Rediger...
+    <div class="admin-actions" *ngIf="isAdmin()" ngbDropdown>
+      <button class="btn btn-primary admin-actions__toggle" type="button" ngbDropdownToggle aria-label="Flere valg">
+        Flere valg ...
       </button>
-      <button *ngIf="isAdmin()" type="submit" class="btn btn-primary ml-2" (click)="openEditResultsModal()">
-        <i class="fa fa-clock-o" aria-hidden="true"></i> Resultater...
-      </button>
-      <button *ngIf="isAdmin()" type="submit" class="btn btn-primary ml-2" (click)="openLotteryModal()">
-        Lotteri
-      </button>
+      <div ngbDropdownMenu class="admin-actions__menu">
+        <button ngbDropdownItem type="button" (click)="openEditCompetitionModal()">
+          <i class="fa fa-edit" aria-hidden="true"></i> Rediger konkurranse
+        </button>
+        <button ngbDropdownItem type="button" (click)="openEditResultsModal()">
+          <i class="fa fa-clock-o" aria-hidden="true"></i> Registrer resultater
+        </button>
+        <button ngbDropdownItem type="button" (click)="openLotteryModal()">
+          <i class="fa fa-gift" aria-hidden="true"></i> Trekk tilfeldige vinnere
+        </button>
+      </div>
     </div>
     <h4 class="card-title">{{competition?.navn}} <span class="status">{{compStatus?.displayText}}</span></h4>
     <h6 class="card-subtitle mb-2 text-muted">{{competition?.dato | date:'dd.MM.yyyy'}} kl. {{competition?.dato | date:'HH:mm'}}</h6>
@@ -132,7 +137,7 @@
       </div>  
       <table class="table table-striped">
         <thead>
-          <tr>
+          <tr class="filter-row">
             <th (click)="orderParticipantsBy('lagnummer')" class="clickable" *ngIf="hasTeams">Lag</th>
             <th (click)="orderParticipantsBy('startnummer')" class="clickable">#</th>
             <th (click)="orderParticipantsBy('fornavn')" class="clickable">Fornavn</th>
@@ -157,34 +162,37 @@
                   </span> -->
                 </div>
             </td>
-            <td>
+            <td data-label="Startnummer">
               <div class="input-group input-group-sm">
-                <input type="text" class="form-control form-control-sm" name="filterStartNumber" style="width: 50px" width="10"
+                <input type="text" class="form-control form-control-sm" name="filterStartNumber" placeholder="Startnummer"
+                  aria-label="Startnummer"
                   [ngModel]="filter.startNumber" (change)="onFilterStartNumber($event)" [ngClass]="{'text-alert': filter.startNumber}"/>
                 <span class="input-group-btn">
                   <button class="btn btn-secondary" type="button" (click)="onFilterStartNumber(null)"><i class="fa fa-times" aria-hidden="true"></i></button>
                 </span>
               </div>
             </td>
-            <td>
+            <td data-label="Fornavn">
               <div class="input-group input-group-sm">
-                <input type="text" class="form-control" name="filterFirstname" style="width: 130px"
+                <input type="text" class="form-control" name="filterFirstname" placeholder="Fornavn"
+                  aria-label="Fornavn"
                   [ngModel]="filter.firstname" (change)="onFilterFirstname($event)"/>
                 <span class="input-group-btn">
                   <button class="btn btn-secondary" type="button" (click)="onFilterFirstname(null)"><i class="fa fa-times" aria-hidden="true"></i></button>
                 </span>
               </div>
             </td>
-            <td>
+            <td data-label="Etternavn">
               <div class="input-group input-group-sm">
-                <input type="text" class="form-control" name="filterLastname" style="width: 130px"
+                <input type="text" class="form-control" name="filterLastname" placeholder="Etternavn"
+                  aria-label="Etternavn"
                   [ngModel]="filter.lastname" (change)="onFilterLastname($event)"/>
                 <span class="input-group-btn">
                   <button class="btn btn-secondary" type="button" (click)="onFilterLastname(null)"><i class="fa fa-times" aria-hidden="true"></i></button>
                 </span>
               </div>
             </td>
-            <td><!-- Filter gender -->
+            <td data-label="Kjønn"><!-- Filter gender -->
               <button (click)="showGenderFilter = !showGenderFilter" class="btn btn-secondary btn-sm" type="button" aria-haspopup="true" aria-expanded="false">
                 <span [ngClass]="{'text-alert': filter.genders.length > 0}">{{(filter.genders.length == 0) ? 'Velg' : filter.genders}}</span>
                 <i class="fa" [ngClass]="{'fa-angle-down': !showGenderFilter, 'fa-angle-up': showGenderFilter}" aria-hidden="true"></i>
@@ -201,7 +209,7 @@
                 </ul>
               </div>
             </td>
-            <td><!-- Filter klasseID -->
+            <td data-label="Klasse"><!-- Filter klasseID -->
               <button (click)="showClassIDFilter = !showClassIDFilter" class="btn btn-secondary btn-sm" type="button" aria-haspopup="true" aria-expanded="false">
                 <span [ngClass]="{'text-alert': filter.competitionClasses.length > 0}">{{(filter.competitionClasses.length == 0) ? 'Velg' : ((filter.competitionClasses.length == 1) ? filter.competitionClasses[0] : 'Flere valg')}}</span>
                 <i class="fa" [ngClass]="{'fa-angle-down': !showClassIDFilter, 'fa-angle-up': showClassIDFilter}" aria-hidden="true"></i>
@@ -238,29 +246,29 @@
             <td></td>
           </tr>
           <tr *ngFor="let deltaker of filteredParticpants">
-            <th scope="row" *ngIf="hasTeams">{{deltaker?.lagNummer}}</th>
-            <th scope="row">{{deltaker?.startNummer}}</th>
-            <td>{{deltaker?.person?.fornavn}}</td>
-            <td>{{deltaker?.person?.etternavn}}</td>
-            <td>{{deltaker?.person?.kjonn}}</td>
-            <td>{{getKonkurranseKlasseNavn(deltaker?.klasseID)}}</td>
-            <td>{{deltaker?.tidsforbruk}}</td>
-            <td *ngIf="isAdmin()">
+            <th scope="row" *ngIf="hasTeams" data-label="Lag">{{deltaker?.lagNummer}}</th>
+            <th scope="row" data-label="#">{{deltaker?.startNummer}}</th>
+            <td data-label="Fornavn">{{deltaker?.person?.fornavn}}</td>
+            <td data-label="Etternavn">{{deltaker?.person?.etternavn}}</td>
+            <td data-label="Kjønn">{{deltaker?.person?.kjonn}}</td>
+            <td data-label="Klasse">{{getKonkurranseKlasseNavn(deltaker?.klasseID)}}</td>
+            <td data-label="Tid">{{deltaker?.tidsforbruk}}</td>
+            <td *ngIf="isAdmin()" data-label="Tilstede">
               <label class="form-check-label">
                 <input class="form-check-input" type="checkbox" [checked]="deltaker?.tilstede" (change)="updateTilstede(deltaker)"/>
               </label>
             </td>
-            <td *ngIf="isAdmin()">
+            <td *ngIf="isAdmin()" data-label="Bet.">
               <label class="form-check-label">
                 <input class="form-check-input" type="checkbox" [checked]="deltaker?.betalt" (change)="updateBetalt(deltaker)"/>
               </label>
             </td>
-            <td *ngIf="isAdmin()">
+            <td *ngIf="isAdmin()" data-label="Notat">
                 <button type="button" class="btn  btn-sm" placement="bottom" ngbTooltip="{{deltaker?.betalingsNotat}}">
                     <i class="fa fa-commenting-o" [ngClass]="{'fa-commenting-o': deltaker?.betalingsNotat, 'fa-comment-o text-disabled': !deltaker?.betalingsNotat}" aria-hidden="true" title="{{deltaker?.betalingsNotat}}"></i>
                 </button>
             </td>
-            <td *ngIf="isAdmin()">
+            <td *ngIf="isAdmin()" data-label="Rediger">
               <div class="col"><button type="submit" class="btn btn-primary btn-sm" (click)="openEditCompetitionParticipant(deltaker)" name="editBtn">
                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
               </div>

@@ -39,11 +39,26 @@
 
           <div class="col">
             <label class="font-weight-bold">Konkurranseklasse</label>
-            <select [(ngModel)]="participant.klasseID" class="form-control" name="klasseID">
-              <option *ngFor="let c of matchingCompetitionClasses" [ngValue]="c.klasseID">
-                {{c?.navn}}
-              </option>
-            </select>
+            <div class="type-select" ngbDropdown>
+              <button class="btn type-select__toggle" type="button" ngbDropdownToggle>
+                {{ getSelectedClassName() }}
+              </button>
+              <div ngbDropdownMenu class="type-select__menu">
+                <button
+                  *ngFor="let c of matchingCompetitionClasses"
+                  ngbDropdownItem
+                  type="button"
+                  (click)="selectClass(c?.klasseID)">
+                  {{c?.navn}}
+                </button>
+              </div>
+
+              <select [(ngModel)]="participant.klasseID" class="form-control type-select__native" name="klasseID">
+                <option *ngFor="let c of matchingCompetitionClasses" [ngValue]="c.klasseID">
+                  {{c?.navn}}
+                </option>
+              </select>
+            </div>
           </div>
         </div>
         <div class="row">

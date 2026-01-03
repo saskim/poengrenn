@@ -3,8 +3,24 @@
     <h4 class="card-title">Opprett konkurranse</h4>
 
     <form #createCompetitionForm="ngForm" class="">
-      <div class="form-group">
-        <select [(ngModel)]="model.typeID" class="form-control" name="type" (change)="setDefaultCompetitionName(0)">
+      <div class="form-group type-select" ngbDropdown>
+        <button class="btn type-select__toggle" type="button" ngbDropdownToggle>
+          {{ getSelectedTypeName() || 'Velg type konkurranse' }}
+        </button>
+        <div ngbDropdownMenu class="type-select__menu">
+          <button ngbDropdownItem type="button" (click)="selectType(null)">Velg type konkurranse</button>
+          <button
+            *ngFor="let ct of competitionTypes"
+            ngbDropdownItem
+            type="button"
+            (click)="selectType(ct.typeID)"
+            [hidden]="ct.typeID == defaultCompetitionType.typeID">
+            {{ct?.navn}}
+          </button>
+        </div>
+
+        <select [(ngModel)]="model.typeID" class="form-control type-select__native" name="type" required (change)="setDefaultCompetitionName(0)">
+          <option [ngValue]="null">Velg type konkurranse</option>
           <option *ngFor="let ct of competitionTypes" [ngValue]="ct.typeID" [hidden]="ct.typeID == defaultCompetitionType.typeID">
             {{ct?.navn}}
           </option>
@@ -36,12 +52,12 @@
       <div class="row">
         <div class="form-group col">
           <label class="sr-only" for="navn">Navn</label>
-          <input [(ngModel)]="model.navn" type="text" class="form-control" name="navn" placeholder="Navn">
+          <input [(ngModel)]="model.navn" type="text" class="form-control" name="navn" placeholder="Navn" required>
         </div>
       </div>
       
       
-      <button type="submit" class="btn btn-primary" (click)="createCompetition()">Opprett konkurranse</button>
+      <button type="submit" class="btn btn-primary" [disabled]="!createCompetitionForm.valid || !model.typeID || !hasValidDates() || !hasValidTitle()" (click)="createCompetition()">Opprett konkurranse</button>
 
     </form>
   </div>

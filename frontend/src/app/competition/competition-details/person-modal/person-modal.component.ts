@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbDropdownModule, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { GENDERS } from 'app/_shared/constants/constants';
 
 import { ApiService } from 'app/_services/api.service';
@@ -13,7 +13,7 @@ import { KonkurranseDeltaker, Konkurranse, Person } from 'app/_models/models';
   standalone: true,
   templateUrl: './person-modal.component.html',
   styleUrls: ['./person-modal.component.scss'],
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgbDropdownModule],
   providers: []
 })
 export class PersonModalComponent implements OnInit {
@@ -106,5 +106,17 @@ export class PersonModalComponent implements OnInit {
                             .filter(e => e.fornavn.toLowerCase().startsWith(this.personModel.fornavn.toLowerCase()) &&
                                          e.etternavn.toLowerCase().startsWith(this.personModel.etternavn.toLowerCase()));
     }
+  }
+
+  getSelectedGenderName(): string {
+    if (!this.personModel?.kjonn || !this.genders) {
+      return 'Velg kjønn';
+    }
+    const match = this.genders.find(g => g.id == this.personModel.kjonn);
+    return match?.navn || 'Velg kjønn';
+  }
+
+  selectGender(genderId: string | null) {
+    this.personModel.kjonn = genderId;
   }
 }

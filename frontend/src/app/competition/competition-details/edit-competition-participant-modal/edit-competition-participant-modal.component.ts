@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbActiveModal, NgbModalOptions, NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbDropdownModule, NgbModalOptions, NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { ApiService } from 'app/_services/api.service';
 import { KonkurranseDeltaker, KonkurranseKlasse, Person } from 'app/_models/models';
@@ -13,7 +13,7 @@ declare var moment: any;
   standalone: true,
   templateUrl: './edit-competition-participant-modal.component.html',
   styleUrls: ['./edit-competition-participant-modal.component.scss'],
-  imports: [CommonModule, FormsModule, NgbTimepickerModule],
+  imports: [CommonModule, FormsModule, NgbDropdownModule, NgbTimepickerModule],
   providers: [ApiService]
 })
 
@@ -97,5 +97,17 @@ export class EditCompetitionParticipantModalComponent implements OnInit {
     }
 
     this.updateTidsforbruk();
+  }
+
+  getSelectedClassName(): string {
+    if (!this.participant?.klasseID || !this.matchingCompetitionClasses) {
+      return 'Velg klasse';
+    }
+    const match = this.matchingCompetitionClasses.find(c => c.klasseID == this.participant.klasseID);
+    return match?.navn || 'Velg klasse';
+  }
+
+  selectClass(classId: string | null) {
+    this.participant.klasseID = classId;
   }
 }

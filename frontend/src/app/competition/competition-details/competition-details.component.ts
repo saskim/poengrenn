@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
-import { NgbModal, NgbModalOptions, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbModal, NgbModalOptions, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { ApiService } from 'app/_services/api.service';
 import { AuthService } from 'app/_services/auth.service';
@@ -22,7 +22,7 @@ declare var moment: any;
   standalone: true,
   templateUrl: './competition-details.component.html',
   styleUrls: ['./competition-details.component.scss'],
-  imports: [CommonModule, FormsModule, RouterLink, NgbTypeaheadModule],
+  imports: [CommonModule, FormsModule, RouterLink, NgbTypeaheadModule, NgbDropdownModule],
   providers: []
 })
 export class CompetitionDetailsComponent implements OnInit {

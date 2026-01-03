@@ -7,11 +7,28 @@
         <label class="font-weight-bold">Velg konkurransetype</label>
         <div class="row">
           <div class="col">
-            <select [(ngModel)]="model.typeID" class="form-control" name="typeID" (change)="updateClassID()">
-              <option *ngFor="let t of competitionTypes" [ngValue]="t.typeID">
-                {{t?.navn}}
-              </option>
-            </select>
+            <div class="type-select" ngbDropdown>
+              <button class="btn type-select__toggle" type="button" ngbDropdownToggle>
+                {{ getSelectedTypeName() }}
+              </button>
+              <div ngbDropdownMenu class="type-select__menu">
+                <button ngbDropdownItem type="button" (click)="selectType(null)">Velg konkurransetype</button>
+                <button
+                  *ngFor="let t of competitionTypes"
+                  ngbDropdownItem
+                  type="button"
+                  (click)="selectType(t.typeID)">
+                  {{t?.navn}}
+                </button>
+              </div>
+
+              <select [(ngModel)]="model.typeID" class="form-control type-select__native" name="typeID" (change)="updateClassID()">
+                <option [ngValue]="null">Velg konkurransetype</option>
+                <option *ngFor="let t of competitionTypes" [ngValue]="t.typeID">
+                  {{t?.navn}}
+                </option>
+              </select>
+            </div>
           </div>
         </div>
         
@@ -22,9 +39,24 @@
           </div>
           <div class="form-group col">
             <label class="font-weight-bold">Kjønn</label>
-            <select [(ngModel)]="model.kjonn" class="form-control" required name="kjonn" (change)="updateClassID()">
-              <option *ngFor="let kjonn of genders" [ngValue]="kjonn?.id">{{kjonn?.navn}}</option>
-            </select>
+            <div class="type-select" ngbDropdown>
+              <button class="btn type-select__toggle" type="button" ngbDropdownToggle>
+                {{ getSelectedGenderName() }}
+              </button>
+              <div ngbDropdownMenu class="type-select__menu">
+                <button
+                  *ngFor="let kjonn of genders"
+                  ngbDropdownItem
+                  type="button"
+                  (click)="selectGender(kjonn?.id)">
+                  {{kjonn?.navn}}
+                </button>
+              </div>
+
+              <select [(ngModel)]="model.kjonn" class="form-control type-select__native" required name="kjonn" (change)="updateClassID()">
+                <option *ngFor="let kjonn of genders" [ngValue]="kjonn?.id">{{kjonn?.navn}}</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -99,35 +131,44 @@
 
     </form>
 
-    <div class="row font-weight-bold mt-5">
-      <div class="col">Tittel</div>
-      <div class="col">TypeID</div>
-      <div class="col">Min alder</div>
-      <div class="col">Max alder </div>
-      <div class="col">Kjønn</div>
-      <div class="col">Første startnummer</div>
-      <div class="col">Siste startnummer</div>
-      <div class="col">Distanse</div>
-      <div class="col">Med tidtaking</div>
-      <div class="col"></div>
-    </div>
-    <div class="row" *ngFor="let class of filterByTypeID(competitionClasses); let i = index; let isEven = even;" [class.evenRow]="isEven">
-      <div class="col">{{class?.navn}}</div><br/>
-      <div class="col"><span *ngIf="class.typeID != '0'">{{class.typeID}}</span></div>
-      <div class="col">{{class?.minAlder}}</div>
-      <div class="col">{{class?.maxAlder}}</div>
-      <div class="col">{{class?.kjonn}}</div>
-      <div class="col">{{class?.forsteStartnummer}}</div>
-      <div class="col">{{class?.sisteStartnummer}}</div>
-      <div class="col"><span *ngIf="class.distanseKm">{{class?.distanseKm}} km</span></div>
-      <div class="col">
-        <label class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" name="medTidtaking" [checked]="class.medTidtaking">
-          <span class="custom-control-indicator"></span>
-          <span class="custom-control-description"></span>
-        </label>
+    <div class="classes-table">
+      <div class="row font-weight-bold mt-5 classes-header">
+        <div class="col">Tittel</div>
+        <div class="col">TypeID</div>
+        <div class="col">Min alder</div>
+        <div class="col">Max alder </div>
+        <div class="col">Kjønn</div>
+        <div class="col">Første startnummer</div>
+        <div class="col">Siste startnummer</div>
+        <div class="col">Distanse</div>
+        <div class="col">Med tidtaking</div>
+        <div class="col"></div>
       </div>
-      <div class="col"><button type="submit" class="btn btn-primary btn-sm" (click)="openEditCompetitionClassModal(class)" name="editBtn"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></div>   
+      <div
+        class="row classes-row"
+        *ngFor="let class of filterByTypeID(competitionClasses); let i = index; let isEven = even;"
+        [class.evenRow]="isEven">
+        <div class="col classes-title" data-label="Tittel">{{class?.navn}}</div>
+        <div class="col" data-label="TypeID"><span *ngIf="class.typeID != '0'">{{class.typeID}}</span></div>
+        <div class="col" data-label="Min alder">{{class?.minAlder}}</div>
+        <div class="col" data-label="Max alder">{{class?.maxAlder}}</div>
+        <div class="col" data-label="Kjønn">{{class?.kjonn}}</div>
+        <div class="col" data-label="Første startnummer">{{class?.forsteStartnummer}}</div>
+        <div class="col" data-label="Siste startnummer">{{class?.sisteStartnummer}}</div>
+        <div class="col" data-label="Distanse"><span *ngIf="class.distanseKm">{{class?.distanseKm}} km</span></div>
+        <div class="col classes-checkbox" data-label="Med tidtaking">
+          <label class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" name="medTidtaking" [checked]="class.medTidtaking">
+            <span class="custom-control-indicator"></span>
+            <span class="custom-control-description"></span>
+          </label>
+        </div>
+        <div class="col classes-action" data-label="Rediger">
+          <button type="submit" class="btn btn-primary btn-sm" (click)="openEditCompetitionClassModal(class)" name="editBtn">
+            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

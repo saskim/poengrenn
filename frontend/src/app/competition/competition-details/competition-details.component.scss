@@ -84,6 +84,36 @@ input[type="checkbox"] {
     }
 }
 
+.admin-actions__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+}
+
+.admin-actions__menu {
+    border-radius: 12px;
+    border: 1px solid #e6e1dd;
+    box-shadow: 0 18px 30px rgba(0, 0, 0, 0.12);
+    padding: 0.35rem;
+    min-width: 200px;
+}
+
+.admin-actions__menu .dropdown-item {
+    border-radius: 10px;
+    padding: 0.5rem 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+}
+
+.admin-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
 .deltakere .btn.btn-secondary.btn-sm {
     display: inline-flex;
     align-items: center;
@@ -109,4 +139,147 @@ input[type="checkbox"] {
     display: flex;
     align-items: center;
     gap: 0.4rem;
+}
+
+@media (max-width: 720px) {
+    .admin-actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.5rem;
+    }
+
+    .admin-actions .btn,
+    .input-group .btn {
+        width: auto;
+    }
+
+    .admin-actions .btn {
+        padding: 0.45rem 0.9rem;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.35rem;
+        line-height: 1;
+        min-height: 2.25rem;
+        min-width: 7.75rem;
+        white-space: nowrap;
+        height: 2.5rem;
+        width: 100%;
+    }
+
+    .admin-actions .btn i {
+        font-size: 0.85rem;
+        line-height: 1;
+    }
+
+    .deltakere table.table {
+        display: block;
+        overflow: visible;
+        white-space: normal;
+    }
+
+    .deltakere thead {
+        display: none;
+    }
+
+    .deltakere .filter-row {
+        display: block;
+        border: 1px solid #e6e1dd;
+        border-radius: 14px;
+        padding: 0.75rem;
+        margin-bottom: 0.75rem;
+        background: #fff;
+        box-shadow: 0 10px 22px rgba(15, 15, 15, 0.08);
+    }
+
+    .deltakere .filter-row td {
+        display: block;
+        width: 100%;
+        padding: 0.35rem 0;
+        border: none;
+    }
+
+    .deltakere .filter-row td::before {
+        content: attr(data-label);
+        display: block;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--muted);
+        margin-bottom: 0.15rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    .deltakere tbody,
+    .deltakere tr,
+    .deltakere td,
+    .deltakere th {
+        display: block;
+        width: 100%;
+    }
+
+    .deltakere tr {
+        border: 1px solid #e6e1dd;
+        border-radius: 14px;
+        padding: 0.6rem;
+        margin-bottom: 0.6rem;
+        background: #fff;
+        box-shadow: 0 10px 22px rgba(15, 15, 15, 0.08);
+    }
+
+    .deltakere td,
+    .deltakere th {
+        border: none;
+        padding: 0.25rem 0;
+    }
+
+    .deltakere td::before,
+    .deltakere th::before {
+        content: attr(data-label);
+        display: block;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--muted);
+        margin-bottom: 0.1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    .deltakere td[data-label="Rediger"]::before {
+        content: "";
+        margin-bottom: 0;
+    }
+
+    .deltakere td[data-label="Rediger"] .btn {
+        width: 100%;
+    }
+
+    .deltakere td[data-label="Rediger"] .btn::after {
+        content: " Rediger";
+        font-weight: 600;
+    }
+
+    .input-group {
+        flex-wrap: wrap;
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .input-group-addon {
+        flex: 0 0 100%;
+        width: 100%;
+        white-space: nowrap;
+        margin-bottom: 0.35rem;
+    }
+
+    .input-group input.form-control {
+        min-width: 0;
+        flex: 1 1 auto;
+    }
+
+    .input-group-btn {
+        flex: 0 0 auto;
+        margin-left: 0.35rem;
+    }
 }

@@ -26,11 +26,26 @@
           <div class="row pt-3">
               <div class="form-group col">
                 <label class="font-weight-bold" for="navn">Status</label>
-                <select [(ngModel)]="tempStatus" class="form-control" name="status">
-                  <option *ngFor="let s of competitionStatuses" [ngValue]="s.id">
-                    {{s?.displayText}}
-                  </option>
-                </select>
+                <div class="type-select" ngbDropdown>
+                  <button class="btn type-select__toggle" type="button" ngbDropdownToggle>
+                    {{ getSelectedStatusName() }}
+                  </button>
+                  <div ngbDropdownMenu class="type-select__menu">
+                    <button
+                      *ngFor="let s of competitionStatuses"
+                      ngbDropdownItem
+                      type="button"
+                      (click)="selectStatus(s.id)">
+                      {{s?.displayText}}
+                    </button>
+                  </div>
+
+                  <select [(ngModel)]="tempStatus" class="form-control type-select__native" name="status">
+                    <option *ngFor="let s of competitionStatuses" [ngValue]="s.id">
+                      {{s?.displayText}}
+                    </option>
+                  </select>
+                </div>
               </div>
             <div class="form-group col">
               <label class="font-weight-bold" for="navn">Serie</label>

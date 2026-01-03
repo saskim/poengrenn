@@ -1,3 +1,83 @@
 .evenRow {
     background-color: #efefef;
 }
+
+.classes-table .classes-row {
+  align-items: center;
+}
+
+.classes-title {
+  font-weight: 600;
+}
+
+@media (max-width: 720px) {
+  .card form {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .row {
+    display: block;
+    margin: 0;
+  }
+
+  .col,
+  .col-12,
+  .col-md-6 {
+    padding: 0;
+    max-width: 100%;
+    flex: 0 0 100%;
+  }
+
+  .form-group {
+    margin-bottom: 0.75rem;
+  }
+
+  .input-group {
+    width: 100%;
+  }
+
+  .input-group .form-control,
+  .input-group select {
+    width: 100%;
+  }
+
+  .btn-primary {
+    width: 100%;
+  }
+
+  .classes-header {
+    display: none;
+  }
+
+  .classes-row {
+    background: #ffffff;
+    border: 1px solid #e6e1dd;
+    border-radius: 16px;
+    box-shadow: 0 12px 22px rgba(0, 0, 0, 0.08);
+    margin: 0 0 0.9rem;
+    padding: 0.6rem 0.8rem;
+  }
+
+  .classes-row.evenRow {
+    background: #ffffff;
+  }
+
+  .classes-row .col {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.35rem 0;
+  }
+
+  .classes-row .col::before {
+    color: var(--muted);
+    content: attr(data-label);
+    font-weight: 600;
+    margin-right: 1rem;
+  }
+
+  .classes-row .classes-action {
+    justify-content: flex-end;
+  }
+}
