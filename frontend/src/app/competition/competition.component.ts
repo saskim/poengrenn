@@ -1,14 +1,19 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 import { ApiService } from 'app/_services/api.service';
 import { AuthService } from 'app/_services/auth.service';
 
 import { Konkurranse } from 'app/_models/models';
+import { CompetitionCreateComponent } from './competition-create/competition-create.component';
 
 @Component({
   selector: 'app-competition',
+  standalone: true,
   templateUrl: './competition.component.html',
   styleUrls: ['./competition.component.scss'],
+  imports: [CommonModule, RouterLink, CompetitionCreateComponent],
   providers: [ ]
 })
 export class CompetitionComponent implements OnInit {

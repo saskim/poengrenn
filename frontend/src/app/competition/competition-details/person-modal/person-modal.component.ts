@@ -1,4 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { GENDERS } from 'app/_shared/constants/constants';
 
@@ -8,8 +10,10 @@ import { KonkurranseDeltaker, Konkurranse, Person } from 'app/_models/models';
 
 @Component({
   selector: 'app-create-person-modal-modal',
+  standalone: true,
   templateUrl: './person-modal.component.html',
   styleUrls: ['./person-modal.component.scss'],
+  imports: [CommonModule, FormsModule],
   providers: []
 })
 export class PersonModalComponent implements OnInit {

@@ -1,9 +1,10 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute  } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/map';
-import { NgbModal, NgbModalOptions  } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Observable } from 'rxjs';
+import { debounceTime, map } from 'rxjs/operators';
+import { NgbModal, NgbModalOptions, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { ApiService } from 'app/_services/api.service';
 import { AuthService } from 'app/_services/auth.service';
@@ -18,8 +19,10 @@ declare var moment: any;
 
 @Component({
   selector: 'app-competition-details',
+  standalone: true,
   templateUrl: './competition-details.component.html',
   styleUrls: ['./competition-details.component.scss'],
+  imports: [CommonModule, FormsModule, RouterLink, NgbTypeaheadModule],
   providers: []
 })
 export class CompetitionDetailsComponent implements OnInit {
@@ -402,11 +405,13 @@ export class CompetitionDetailsComponent implements OnInit {
   // TODO: Create component of the searchbox
   search = (text$: Observable<string>) =>
     text$
-      .debounceTime(200)
-      .map(term => {
+      .pipe(
+        debounceTime(200),
+        map(term => {
         return term == '' ? [] : this.filteredOnFirstnameAndLastname(term);
         //return term == '' ? [] :  this.persons.filter(p => p.fornavn.toLowerCase().indexOf(term.toLowerCase()) > -1 || p.etternavn.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10);
-      });
+        })
+      );
 
 
   private filteredOnFirstname(term: string) {

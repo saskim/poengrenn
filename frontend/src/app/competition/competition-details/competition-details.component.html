@@ -10,7 +10,7 @@
       <i class="fa fa-edit" aria-hidden="true"></i> Rediger...
     </button>
     <h4 class="card-title">{{competition?.navn}} <span class="status">{{compStatus?.displayText}}</span></h4>
-    <h6 class="card-subtitle mb-2 text-muted">{{competition?.dato | amDateFormat:'DD.MM.YYYY'}} kl. {{competition?.dato | amDateFormat:'HH:mm'}}</h6>
+    <h6 class="card-subtitle mb-2 text-muted">{{competition?.dato | date:'dd.MM.yyyy'}} kl. {{competition?.dato | date:'HH:mm'}}</h6>
 
 
     <div *ngIf="isLoggedIn() && !isDone" class="text-warning">

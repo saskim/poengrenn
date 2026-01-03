@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { Konkurranse, KonkurranseDeltaker } from 'app/_models/models';
@@ -5,8 +6,10 @@ import { Konkurranse, KonkurranseDeltaker } from 'app/_models/models';
 
 @Component({
   selector: 'app-lottery-modal',
+  standalone: true,
   templateUrl: './lottery-modal.component.html',
-  styleUrls: ['./lottery-modal.component.scss']
+  styleUrls: ['./lottery-modal.component.scss'],
+  imports: [CommonModule]
 })
 export class LotteryModalComponent implements OnInit {
 

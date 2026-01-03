@@ -1,4 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NgbModal, NgbModalOptions  } from '@ng-bootstrap/ng-bootstrap';
 
 import { ApiService } from 'app/_services/api.service';
@@ -10,8 +12,10 @@ import { EditCompetitionClassModalComponent } from './edit-competition-class-mod
 
 @Component({
   selector: 'app-competition-classes',
+  standalone: true,
   templateUrl: './competition-classes.component.html',
   styleUrls: ['./competition-classes.component.scss'],
+  imports: [CommonModule, FormsModule],
   providers: [ApiService]
 })
 export class CompetitionClassesComponent implements OnInit {

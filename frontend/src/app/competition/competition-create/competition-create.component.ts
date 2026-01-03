@@ -1,13 +1,18 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NgbActiveModal, NgbModule, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 import { ApiService } from 'app/_services/api.service';
 import { KonkurranseType, KonkurranseOpprett, KonkurranseKlasse } from 'app/_models/models';
+import { DateSelectorComponent } from 'app/_shared/components/date-selector/date-selector.component';
 
 @Component({
   selector: 'app-competition-create',
+  standalone: true,
   templateUrl: './competition-create.component.html',
   styleUrls: ['./competition-create.component.scss'],
+  imports: [CommonModule, FormsModule, DateSelectorComponent],
   providers: [ApiService]
 })
 export class CompetitionCreateComponent implements OnInit {

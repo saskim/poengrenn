@@ -1,14 +1,19 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { Konkurranse } from 'app/_models/models';
 import { COMP_STATUSES } from 'app/_shared/constants/constants';
 
 import { ApiService } from 'app/_services/api.service';
+import { DateSelectorComponent } from 'app/_shared/components/date-selector/date-selector.component';
 
 @Component({
   selector: 'app-edit-competition-modal',
+  standalone: true,
   templateUrl: './edit-competition-modal.component.html',
   styleUrls: ['./edit-competition-modal.component.scss'],
+  imports: [CommonModule, FormsModule, DateSelectorComponent],
   providers: [ApiService]
 })
 export class EditCompetitionModalComponent implements OnInit {

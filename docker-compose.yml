@@ -29,12 +29,12 @@ services:
       - postgres
 
   web:
-    image: node:8
+    image: node:20
     container_name: poengrenn-web
     working_dir: /app
     ports:
       - "4200:4200"
-    command: sh -c "npm install && npm start -- --host 0.0.0.0 --port 4200"
+    command: sh -c "corepack enable && corepack prepare pnpm@10.27.0 --activate && pnpm install && pnpm start --host 0.0.0.0 --port 4200"
     volumes:
       - ./frontend:/app
       - /app/node_modules

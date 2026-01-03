@@ -9,10 +9,10 @@
       <div class="d-flex justify-content-between w-100">
         <div><h5 class="">{{comp?.navn}}</h5></div>
         
-        <div><h5 class="" *ngIf="comp">{{comp?.dato | amDateFormat:'DD.MM.YYYY'}}</h5></div>
+        <div><h5 class="" *ngIf="comp">{{comp?.dato | date:'dd.MM.yyyy'}}</h5></div>
       
         <div class="">
-          kl. {{comp?.dato | amDateFormat:'HH:mm'}}
+          kl. {{comp?.dato | date:'HH:mm'}}
         </div>
       </div>
     </a>
@@ -29,10 +29,10 @@
         <div class="d-flex justify-content-between w-100">
           <div><h5 class="">{{comp?.navn}}</h5></div>
           
-          <div><h5 class="" *ngIf="comp">{{comp?.dato | amDateFormat:'DD.MM.YYYY'}}</h5></div>
+          <div><h5 class="" *ngIf="comp">{{comp?.dato | date:'dd.MM.yyyy'}}</h5></div>
         
           <div class="">
-            kl. {{comp?.dato | amDateFormat:'HH:mm'}}
+            kl. {{comp?.dato | date:'HH:mm'}}
           </div>
         </div>
       </a>

@@ -10,3 +10,5 @@ packages/
 *.min.js
 *.map
 releaseHistory/
+
+.pnpm-store/

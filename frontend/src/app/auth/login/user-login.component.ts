@@ -1,16 +1,20 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, SimpleChanges } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/map';
+import { Observable } from 'rxjs';
+import { debounceTime, map } from 'rxjs/operators';
+import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'app/_services/auth.service';
 import { ApiService } from 'app/_services/api.service';
 import { LoginModel, LoginResponse, Person } from 'app/_models/models';
 
 @Component({
   selector: 'app-user-login',
+  standalone: true,
   templateUrl: './user-login.component.html',
-  styleUrls: ['./user-login.component.scss']
+  styleUrls: ['./user-login.component.scss'],
+  imports: [CommonModule, FormsModule, NgbTypeaheadModule]
 })
 export class UserLoginComponent implements OnInit {
 
@@ -64,10 +68,12 @@ export class UserLoginComponent implements OnInit {
 
   search = (text$: Observable<string>) =>
     text$
-      .debounceTime(200)
-      .map(term => {
+      .pipe(
+        debounceTime(200),
+        map(term => {
         return term == '' ? [] :  this.persons.filter(p => p.fornavn.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10);
-      });
+        })
+      );
 
   searchFormatter(p: {fornavn: string, etternavn: string, fodselsar: number, personID: string}) {
     return p.fornavn + " " + p.etternavn + " (" + p.fodselsar + ")";

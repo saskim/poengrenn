@@ -1,18 +1,19 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input } from '@angular/core';
-import { NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule } from '@angular/forms';
+import { NgbActiveModal, NgbModalOptions, NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { ApiService } from 'app/_services/api.service';
 import { Konkurranse, KonkurranseDeltaker, KonkurranseLag, KonkurranseDeltakerTid, KonkurranseKlasse, Person } from 'app/_models/models';
 import { IDurationViewModel, DurationViewModel } from '../../models';
-import { TagContentType } from '@angular/compiler';
-import { Observable } from 'rxjs/Observable';
-import { resetFakeAsyncZone } from '@angular/core/testing';
 declare var moment: any;
 
 @Component({
   selector: 'app-register-competition-results-modal',
+  standalone: true,
   templateUrl: './register-competition-results-modal.component.html',
   styleUrls: ['./register-competition-results-modal.component.scss'],
+  imports: [CommonModule, FormsModule, NgbTimepickerModule],
   providers: [ApiService]
 })
 export class RegisterCompetitionResultsModalComponent implements OnInit {

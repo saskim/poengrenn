@@ -1,10 +1,14 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { NgbModule, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule } from '@angular/forms';
+import { NgbDateParserFormatter, NgbDateStruct, NgbDatepickerModule, NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-date-selector',
+  standalone: true,
   templateUrl: './date-selector.component.html',
-  styleUrls: ['./date-selector.component.scss']
+  styleUrls: ['./date-selector.component.scss'],
+  imports: [CommonModule, FormsModule, NgbDatepickerModule, NgbTimepickerModule]
 })
 export class DateSelectorComponent implements OnInit {
 

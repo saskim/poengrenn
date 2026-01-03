@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { LoginModel, LoginResponse } from 'app/_models/models';
 
 import { ApiService } from 'app/_services/api.service';
 
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class AuthService {
 
   constructor(private _apiService: ApiService) { }
@@ -24,10 +25,10 @@ export class AuthService {
 
     authenticate(loginData: LoginModel) : Observable<LoginResponse> {
         return this._apiService.Login(loginData)
-            .map(response => {
+            .pipe(map(response => {
                 localStorage.setItem('currentUser', JSON.stringify(response));
                 return response;
-            });
+            }));
     }
 
     logout() {

@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 import { Endpoints } from 'app/_shared/constants/endpoints';
 import { Konkurranse, KonkurranseOpprett, KonkurranseKlasse, KonkurranseDeltaker, NyKonkurranseDeltaker, KonkurranseType, Person, LoginModel, LoginResponse } from 'app/_models/models';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ApiService {
 
-  constructor(private _http: Http) { }
+  constructor(private _http: HttpClient) { }
 
   /* ----- COMPETITION ----- */
   /* Competition types */
@@ -104,46 +102,39 @@ export class ApiService {
 
     return this._http
       .post(url, body, this.getRequestOptions())
-      .map(res => res.json())
-      .catch(err => this.handleError(err)); 
+      .pipe(catchError(err => this.handleError(err)));
   }
   private get(url: string) : Observable<any> {
     console.log("--------- GET " + url);
 
     return this._http
       .get(url, this.getRequestOptions())
-      .map(res => res.json())
-      .catch(err => this.handleError(err));
+      .pipe(catchError(err => this.handleError(err)));
   }
   private put(url: string, obj: any) : Observable<any> {
     console.log("--------- PUT " + url);
 
     return this._http
       .put(url, obj, this.getRequestOptions())
-      .map(res => res.json())
-      .catch(err => this.handleError(err));
+      .pipe(catchError(err => this.handleError(err)));
   }
   private delete(url: string) : Observable<any> {
     console.log("--------- DELETE " + url);
 
     return this._http
       .delete(url, this.getRequestOptions())
-      .map(res => res.json())
-      .catch(err => this.handleError(err));
+      .pipe(catchError(err => this.handleError(err)));
   }
 
-  private getRequestOptions() : RequestOptions {
-    let headers = new Headers(
-    {
-        'Content-Type': 'application/json'
+  private getRequestOptions() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
     });
-    return new RequestOptions({
-      headers: headers
-    });
+    return { headers };
   }
 
-  private handleError(error: Response) {
+  private handleError(error: any) {
     console.error('An error occurred', error);
-    return Observable.throw(error.json() || 'Server error');
+    return throwError(() => error?.error || 'Server error');
   }
 }

@@ -1,4 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from 'app/_services/auth.service';
 import { ApiService } from 'app/_services/api.service';
@@ -6,8 +8,10 @@ import { LoginModel, LoginResponse } from 'app/_models/models';
 
 @Component({
   selector: 'app-admin-login',
+  standalone: true,
   templateUrl: './admin-login.component.html',
   styleUrls: ['./admin-login.component.scss'],
+  imports: [CommonModule, FormsModule],
   providers: [ApiService, AuthService]
 })
 export class AdminLoginComponent implements OnInit {
@@ -43,4 +47,3 @@ export class AdminLoginComponent implements OnInit {
       });
   }
 }
-
