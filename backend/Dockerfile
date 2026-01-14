@@ -1,9 +1,6 @@
-FROM mcr.microsoft.com/dotnet/sdk:10.0.101-noble-arm64v8 AS dev
+FROM mcr.microsoft.com/dotnet/sdk:10.0-preview AS dev
 
 WORKDIR /src
-
-RUN curl -sSL https://dot.net/v1/dotnet-install.sh \
-    | bash /dev/stdin --version 10.0.101 --install-dir /usr/share/dotnet
 
 RUN dotnet tool install -g dotnet-ef --version 10.0.0-preview.7.*
 ENV PATH="${PATH}:/root/.dotnet/tools"
