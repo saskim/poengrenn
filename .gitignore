@@ -12,3 +12,9 @@ packages/
 releaseHistory/
 
 .pnpm-store/
+
+.devcontainer/.env
+infra/parameters.json
+out.zip
+.env
+/out

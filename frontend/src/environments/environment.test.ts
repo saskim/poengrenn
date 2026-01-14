@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  restApiUrl: 'http://flatas-api.azurewebsites.net/api/'
+  restApiUrl: 'http://localhost:8080/api/'
 };

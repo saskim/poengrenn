@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  restApiUrl: 'http://flatas-api.azurewebsites.net/api/'
+  restApiUrl: 'https://YOUR_RAILWAY_BACKEND_URL/api/'
 };

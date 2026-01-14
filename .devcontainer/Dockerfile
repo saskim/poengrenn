@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/devcontainers/base:ubuntu-22.04
 
 ARG DOTNET_VERSION=10.0.101
 ARG DOTNET_EF_VERSION=10.0.0-preview.1.*
-ARG NODE_VERSION=20.18.1
+ARG NODE_VERSION=20.19.1
 ARG ANGULAR_CLI_VERSION=20.0.0
 
 SHELL ["/bin/bash", "-c"]
