@@ -1,0 +1,26 @@
+FROM mcr.microsoft.com/dotnet/sdk:10.0.101 AS build
+
+WORKDIR /src
+
+COPY Poengrenn.API/Poengrenn.API.csproj Poengrenn.API/
+COPY Poengrenn.DAL/Poengrenn.DAL.csproj Poengrenn.DAL/
+COPY Poengrenn.sln .
+
+RUN dotnet restore Poengrenn.API/Poengrenn.API.csproj
+
+COPY . .
+
+RUN dotnet publish Poengrenn.API/Poengrenn.API.csproj -c Release -o /app/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-preview AS runtime
+
+WORKDIR /app
+
+ENV ASPNETCORE_URLS=http://0.0.0.0:8080
+ENV PORT=8080
+
+COPY --from=build /app/publish .
+
+EXPOSE 8080
+
+ENTRYPOINT ["sh", "-c", "dotnet Poengrenn.API.dll --urls http://0.0.0.0:${PORT}"]

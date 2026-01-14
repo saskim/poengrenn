@@ -1,0 +1,136 @@
+<div class="modal-header">
+  <h4 class="modal-title">Rediger konkurranseklasse</h4>
+  <button type="button" class="close" aria-label="Lukk" (click)="_activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form #editCompetitionClassForm="ngForm" class="">
+      <div class="form-group">
+        <label class="font-weight-bold">Velg konkurransetype</label>
+        <div class="row">
+          <div class="col">
+            <div class="type-select" ngbDropdown>
+              <button class="btn type-select__toggle" type="button" ngbDropdownToggle disabled>
+                {{ getSelectedTypeName() }}
+              </button>
+              <div ngbDropdownMenu class="type-select__menu">
+                <button
+                  *ngFor="let t of competitionTypes"
+                  ngbDropdownItem
+                  type="button">
+                  {{t?.navn}}
+                </button>
+              </div>
+
+              <select [(ngModel)]="competitionClass.typeID" class="form-control type-select__native" name="typeID" disabled>
+                <option *ngFor="let t of competitionTypes" [ngValue]="t.typeID">
+                  {{t?.navn}}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row mt-3">
+          <div class="form-group col">
+            <label class="font-weight-bold" for="Tittel">Tittel</label>
+            <input [(ngModel)]="competitionClass.navn" type="text" class="form-control" name="tittel" placeholder="">
+          </div>
+
+
+          <div class="form-group col">
+            <label class="font-weight-bold">Kjønn</label>
+            <div class="type-select" ngbDropdown>
+              <button class="btn type-select__toggle" type="button" ngbDropdownToggle disabled>
+                {{ getSelectedGenderName() }}
+              </button>
+              <div ngbDropdownMenu class="type-select__menu">
+                <button
+                  *ngFor="let kjonn of genders"
+                  ngbDropdownItem
+                  type="button">
+                  {{kjonn?.navn}}
+                </button>
+              </div>
+
+              <select [(ngModel)]="competitionClass.kjonn" class="form-control type-select__native" disabled name="kjonn">
+                <option *ngFor="let kjonn of genders" [ngValue]="kjonn?.id">{{kjonn?.navn}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <label class="font-weight-bold">Alder</label>
+        <div class="row">
+          <div class="form-group col">
+            <label class="sr-only" for="minAlder">Alder (min)</label>
+            <div class="input-group">
+              <div class="input-group-addon">Fra</div>
+              <input [(ngModel)]="competitionClass.minAlder" disabled type="number" class="form-control" name="minAlder" placeholder="">
+              <div class="input-group-addon">år</div>
+            </div>
+          </div>
+          <div class="form-group col">
+            <label class="sr-only" for="maxAlder">Alder (max)</label>
+            <div class="input-group">
+              <div class="input-group-addon">Til og med</div>
+              <input [(ngModel)]="competitionClass.maxAlder" disabled type="number" class="form-control" name="maxAlder" placeholder="">
+              <div class="input-group-addon">år</div>
+            </div>
+          </div>
+        </div>
+
+        <label class="font-weight-bold">Startnummer</label>
+        <div class="row">
+          <div class="form-group col">
+            <label class="sr-only" for="forsteStartnummer">Første startnummer</label>
+            <div class="input-group">
+              <div class="input-group-addon">Fra</div>
+              <input [(ngModel)]="competitionClass.forsteStartnummer" type="number" required class="form-control" name="forsteStartnummer" placeholder="">
+            </div>
+          </div>
+          <div class="form-group col">
+            <label class="sr-only" for="sisteStartnummer">Siste startnummer</label>
+            <div class="input-group">
+              <div class="input-group-addon">Til og med</div>
+              <input [(ngModel)]="competitionClass.sisteStartnummer" type="number" required class="form-control" name="sisteStartnummer" placeholder="">
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col">
+            <div class="row">
+              <div class="col">
+                <label class="font-weight-bold" for="distanseKm">Distanse</label>
+                <div class="input-group">
+                  <input [(ngModel)]="competitionClass.distanseKm" type="number" required class="form-control" name="distanseKm" placeholder="">
+                  <div class="input-group-addon">km</div>
+                </div>
+              </div>
+              <div class="col">
+                <label class="font-weight-bold">Med tidtaking</label>
+                <div>
+                <label class="custom-control custom-checkbox">
+                  <input [(ngModel)]="competitionClass.medTidtaking" type="checkbox" class="custom-control-input" name="medTidtaking">
+                  <span class="custom-control-indicator"></span>
+                  <span class="custom-control-description"></span>
+                </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            
+          </div>
+        </div>
+      </div>
+
+    </form>
+</div>
+<div class="modal-footer">
+  <button type="submit" class="btn btn-primary" (click)="deleteCompetitionClass()">Slett</button>
+  <button type="submit" class="btn btn-primary" [disabled]="!editCompetitionClassForm.valid || competitionClass.kjonn === '0'" (click)="saveCompetitionClass()">Lagre</button>
+  <button type="button" class="btn btn-secondary" (click)="_activeModal.close('Close click')">Lukk</button>
+</div>

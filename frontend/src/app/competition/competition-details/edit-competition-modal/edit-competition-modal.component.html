@@ -1,0 +1,61 @@
+<div class="modal-header">
+    <h4 class="modal-title">
+      Rediger konkurranse 
+      <small class="text-muted">{{competition?.konkurranseID}}</small>
+    </h4>
+    <button type="button" class="close" aria-label="Lukk" (click)="_activeModal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #editCompetitionForm="ngForm" class="">
+      
+      <div class="form-group">
+          <div class="row pt-3">
+            <div class="form-group col">
+              <label class="font-weight-bold" for="navn">Navn</label>
+              <input [ngModel]="competition.navn" type="text" class="form-control" name="navn" placeholder="">
+            </div>
+            <div class="form-group col">
+              
+              <app-date-selector [index]="0" [date]="tempDate" [minDate]="minDate"
+                (onDateChange)="setDate(0, $event)">
+              </app-date-selector>
+            </div>
+          </div>
+          <div class="row pt-3">
+              <div class="form-group col">
+                <label class="font-weight-bold" for="navn">Status</label>
+                <div class="type-select" ngbDropdown>
+                  <button class="btn type-select__toggle" type="button" ngbDropdownToggle>
+                    {{ getSelectedStatusName() }}
+                  </button>
+                  <div ngbDropdownMenu class="type-select__menu">
+                    <button
+                      *ngFor="let s of competitionStatuses"
+                      ngbDropdownItem
+                      type="button"
+                      (click)="selectStatus(s.id)">
+                      {{s?.displayText}}
+                    </button>
+                  </div>
+
+                  <select [(ngModel)]="tempStatus" class="form-control type-select__native" name="status">
+                    <option *ngFor="let s of competitionStatuses" [ngValue]="s.id">
+                      {{s?.displayText}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            <div class="form-group col">
+              <label class="font-weight-bold" for="navn">Serie</label>
+              <input [ngModel]="competition.serie" type="text" class="form-control w-50" name="serie" placeholder="">
+            </div>
+          </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary" [disabled]="!editCompetitionForm.valid" (click)="updateCompetition()">Oppdater</button>
+    <button type="button" class="btn btn-secondary" (click)="_activeModal.close('Close click')">Lukk</button>
+  </div>

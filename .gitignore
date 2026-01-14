@@ -10,3 +10,11 @@ packages/
 *.min.js
 *.map
 releaseHistory/
+
+.pnpm-store/
+
+.devcontainer/.env
+infra/parameters.json
+out.zip
+.env
+/out

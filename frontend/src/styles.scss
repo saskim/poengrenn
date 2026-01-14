@@ -1,0 +1,437 @@
+/* You can add global styles to this file, and also import other style files */
+@use "bootstrap/scss/bootstrap" with (
+  $font-family-sans-serif: ("Helvetica Neue", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif),
+  $primary: #cf142b,
+  $body-bg: #f2f2f2,
+  $body-color: #535353,
+  $enable-rounded: false
+);
+
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Source+Sans+3:wght@400;600&display=swap");
+
+:root {
+  --brand-red: #cf142b;
+  --brand-red-dark: #9b0f22;
+  --ink: #1b1b1b;
+  --muted: #6b6b6b;
+  --paper: #f6f3f1;
+  --card: #ffffff;
+  --radius: 16px;
+  --shadow: 0 18px 40px rgba(15, 15, 15, 0.12);
+  --font-sans: "Sora", "Source Sans 3", system-ui, sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: radial-gradient(circle at top, #ffffff 0%, #f3f1ef 45%, #ebe7e3 100%);
+  color: var(--ink);
+}
+
+.container {
+  max-width: 1100px;
+}
+
+@media (max-width: 720px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .card {
+    padding: 1rem;
+  }
+
+  .card + .card {
+    margin-top: 1.25rem;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .btn + .btn {
+    margin-top: 0.5rem;
+  }
+
+  .float-right,
+  .float-left {
+    float: none !important;
+  }
+
+  .table-responsive {
+    border: 0;
+  }
+
+  table.table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+
+  .list-group-item {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .list-group-item .text-muted,
+  .list-group-item small {
+    display: block;
+    width: 100%;
+  }
+
+  .list-group-item .d-flex {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .list-group-item h5 {
+    margin-bottom: 0;
+  }
+
+}
+
+.card {
+  border: 1px solid #e4e0dc;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+}
+
+.card + .card {
+  margin-top: 2rem;
+}
+
+.card-title {
+  margin-bottom: 1rem;
+}
+
+.card .row {
+  row-gap: 1rem;
+}
+
+.card form {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.card .form-group {
+  margin-bottom: 0;
+}
+
+.card form .btn-primary {
+  margin-top: 0.5rem;
+}
+
+.card-block {
+  display: grid;
+  gap: 1rem;
+}
+
+.card h4,
+.card h5 {
+  letter-spacing: -0.01em;
+}
+
+.card h4 {
+  font-weight: 700;
+}
+
+.card h6 {
+  font-weight: 500;
+}
+
+.table th,
+.table td {
+  vertical-align: middle;
+}
+
+.btn-primary {
+  border-radius: 999px;
+  padding: 0.55rem 1.2rem;
+  font-weight: 600;
+}
+
+.btn-secondary {
+  background: #e7e4e1;
+  border-color: #e7e4e1;
+  color: #2c2c2c;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+  background: #d9d5d1;
+  border-color: #d9d5d1;
+  color: #1f1f1f;
+}
+
+.list-group {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #e6e1dd;
+  background: #fff;
+}
+
+.list-group-item {
+  border: none;
+  border-bottom: 1px solid #efeae6;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.list-group-item:last-child {
+  border-bottom: none;
+}
+
+.list-group-item-action {
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.list-group-item-action:hover {
+  background: #f7f4f1;
+  transform: translateY(-1px);
+}
+
+.list-group-item .text-muted,
+.list-group-item small {
+  color: var(--muted);
+}
+
+.form-control,
+select,
+textarea {
+  border-radius: 12px;
+  border: 1px solid #dedad6;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.98rem;
+  background-color: #f7f5f3;
+  color: var(--ink);
+}
+
+select.form-control {
+  appearance: none;
+  background-color: #ffffff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='10' viewBox='0 0 14 10'%3E%3Cpath d='M2 2l5 5 5-5' stroke='%236b6b6b' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  padding-right: 2.25rem;
+}
+
+.type-select {
+  position: relative;
+}
+
+.type-select__toggle {
+  width: 100%;
+  text-align: left;
+  border: 1px solid #dedad6;
+  border-radius: 12px;
+  padding: 0.6rem 2.25rem 0.6rem 0.75rem;
+  background: #ffffff;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.type-select__toggle:disabled {
+  background: #f1eeeb;
+  color: #9a9490;
+  cursor: not-allowed;
+}
+
+.type-select__toggle::after {
+  display: none;
+}
+
+.type-select__toggle::before {
+  content: "";
+  position: absolute;
+  right: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 10px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='10' viewBox='0 0 14 10'%3E%3Cpath d='M2 2l5 5 5-5' stroke='%236b6b6b' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+}
+
+.type-select__menu {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #e6e1dd;
+  box-shadow: 0 18px 30px rgba(0, 0, 0, 0.12);
+  padding: 0.35rem;
+}
+
+.type-select__menu .dropdown-item {
+  border-radius: 10px;
+  padding: 0.5rem 0.75rem;
+  font-weight: 600;
+}
+
+.type-select__menu .dropdown-item:hover,
+.type-select__menu .dropdown-item:focus {
+  background: #f3efec;
+}
+
+.type-select__native {
+  display: none;
+}
+
+select.form-control:disabled {
+  background-color: #e4e0dc;
+  color: #7f7873;
+}
+
+.form-control:disabled,
+textarea:disabled {
+  background-color: #e4e0dc;
+  color: #7f7873;
+  border-color: #d7d2cd;
+}
+
+input:disabled {
+  background-color: #e4e0dc;
+  color: #7f7873;
+  border-color: #d7d2cd;
+}
+
+.form-control:focus,
+select:focus,
+textarea:focus {
+  border-color: rgba(207, 20, 43, 0.45);
+  box-shadow: 0 0 0 3px rgba(207, 20, 43, 0.15);
+  background-color: #fff;
+}
+
+label {
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 0.35rem;
+}
+
+.modal-header .close {
+  align-items: center;
+  border: 1px solid rgba(45, 45, 45, 0.18);
+  border-radius: 10px;
+  color: var(--ink);
+  display: inline-flex;
+  height: 32px;
+  justify-content: center;
+  line-height: 1;
+  margin-left: auto;
+  opacity: 0.8;
+  padding: 0;
+  width: 32px;
+}
+
+.modal-header .close span {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.modal-header .close:hover,
+.modal-header .close:focus {
+  background: #f3efec;
+  opacity: 1;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.input-group {
+  align-items: stretch;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #dedad6;
+  flex-wrap: nowrap;
+}
+
+.input-group .form-control,
+.input-group select {
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  padding: 0.6rem 0.75rem;
+}
+
+.input-group .form-control:disabled,
+.input-group select:disabled {
+  background: transparent;
+  color: #7f7873;
+}
+
+.input-group:has(.form-control:disabled),
+.input-group:has(select:disabled) {
+  background: #f7f5f3;
+}
+
+.input-group-addon {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  background: #f1eeeb;
+  border: 0;
+  border-left: 1px solid #dedad6;
+  font-weight: 600;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.input-group .btn.btn-secondary,
+.input-group .input-group-action {
+  padding: 0.2rem 0.45rem;
+  min-width: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+.input-group-btn {
+  display: inline-flex;
+  align-items: center;
+}
+
+.input-group .btn.btn-secondary i,
+.input-group .input-group-action i {
+  font-size: 0.8rem;
+}
+
+.btn {
+  border-radius: 999px;
+}
+
+.btn:focus {
+  box-shadow: 0 0 0 3px rgba(207, 20, 43, 0.2);
+}
+
+.clickable { 
+    cursor: pointer;
+}
+.text-disabled {
+  color: #CCC;
+}
+
+.ng-valid[required], .ng-valid.required {
+  border-left: 5px solid #42A948; /* green */
+}
+
+.ng-invalid:not(form) {
+  border-left: 5px solid #a94442; /* red */
+}
+
+.float-right {
+  float: right;
+}
+.float-left {
+  float: left;
+}
+
+
+/* You can add global styles to this file, and also import other style files */

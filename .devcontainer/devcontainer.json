@@ -1,0 +1,33 @@
+{
+  "name": "poengrenn",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "workspaceFolder": "/workspaces/poengrenn",
+  "runArgs": [
+    "--env-file",
+    ".devcontainer/.env"
+  ],
+  "forwardPorts": [
+    8080,
+    4200,
+    5432
+  ],
+  "postCreateCommand": "dotnet --info",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/azure-cli:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csdevkit",
+        "ms-dotnettools.csharp",
+        "Angular.ng-template",
+        "openai.chatgpt",
+        "ms-ossdata.vscode-pgsql"
+      ]
+    }
+  }
+}
